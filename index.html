@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS-V // Global Cybernetic Operations Matrix</title>
+    <style>
+        :root {
+            --bg-deep: #030712;
+            --bg-panel: #0a0f1d;
+            --border-glow: #00ffcc55;
+            --neon-cyan: #00ffcc;
+            --neon-green: #00ff66;
+            --neon-amber: #ffb700;
+            --neon-rose: #ff0055;
+            --text-main: #c0d2ec;
+            --text-dim: #4b648c;
+            --font-mono: 'Courier New', Courier, monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: var(--font-mono);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Scanline Overlay */
+        body::after {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+            z-index: 999;
+            background-size: 100% 4px, 6px 100%;
+            pointer-events: none;
+        }
+
+        header {
+            background: var(--bg-panel);
+            border-bottom: 2px solid var(--neon-cyan);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 0 15px rgba(0, 255, 204, 0.2);
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 8px var(--neon-cyan);
+            letter-spacing: 2px;
+        }
+
+        .status-bar {
+            display: flex;
+            gap: 20px;
+            font-size: 0.85rem;
+        }
+
+        .status-item span {
+            color: var(--neon-amber);
+            font-weight: bold;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 280px 1fr 340px;
+            grid-template-rows: 1fr 220px;
+            flex: 1;
+            gap: 10px;
+            padding: 10px;
+            overflow: hidden;
+        }
+
+        .panel {
+            background: var(--bg-panel);
+            border: 1px solid var(--text-dim);
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .panel-header {
+            background: rgba(0, 255, 204, 0.07);
+            padding: 6px 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: var(--neon-cyan);
+            border-bottom: 1px solid var(--text-dim);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .panel-body {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            font-size: 0.85rem;
+        }
+
+        /* Target Tree / Nodes */
+        .node-item {
+            padding: 6px 8px;
+            margin-bottom: 4px;
+            background: rgba(255,255,255,0.02);
+            border-left: 3px solid var(--text-dim);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .node-item:hover {
+            background: rgba(0, 255, 204, 0.1);
+            border-left-color: var(--neon-cyan);
+        }
+
+        .node-item.active {
+            background: rgba(0, 255, 204, 0.15);
+            border-left-color: var(--neon-cyan);
+            box-shadow: inset 0 0 10px rgba(0,255,204,0.1);
+        }
+
+        .node-ip {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+        }
+
+        /* Terminal Display & Prompt */
+        #terminal-panel {
+            grid-column: 2;
+            grid-row: 1 / span 2;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #terminal-output {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .terminal-input-line {
+            display: flex;
+            padding: 10px 15px;
+            background: rgba(0,0,0,0.4);
+            border-top: 1px solid var(--text-dim);
+            align-items: center;
+        }
+
+        .prompt-symbol {
+            color: var(--neon-green);
+            margin-right: 8px;
+            font-weight: bold;
+        }
+
+        #terminal-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--neon-cyan);
+            font-family: var(--font-mono);
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        /* Feed Panels */
+        #packet-stream {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--neon-green);
+        }
+
+        .packet-line {
+            margin-bottom: 3px;
+            opacity: 0.8;
+        }
+
+        /* Action Buttons Grid */
+        .actions-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+
+        .cyber-btn {
+            background: rgba(0, 255, 204, 0.05);
+            border: 1px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            padding: 8px;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .cyber-btn:hover {
+            background: var(--neon-cyan);
+            color: var(--bg-deep);
+            box-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        .cyber-btn.danger {
+            border-color: var(--neon-rose);
+            color: var(--neon-rose);
+        }
+
+        .cyber-btn.danger:hover {
+            background: var(--neon-rose);
+            color: var(--bg-deep);
+            box-shadow: 0 0 10px var(--neon-rose);
+        }
+
+        /* Scrollbars */
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-deep);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--text-dim);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--neon-cyan);
+        }
+
+        .log-success { color: var(--neon-green); }
+        .log-warning { color: var(--neon-amber); }
+        .log-danger { color: var(--neon-rose); }
+        .log-info { color: var(--neon-cyan); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">NEXUS-V // GLOBAL OPS MATRIX</div>
+        <div class="status-bar">
+            <div class="status-item">TRACES: <span id="stat-traces">0%</span></div>
+            <div class="status-item">CREDITS: <span id="stat-credits">₿1,450</span></div>
+            <div class="status-item">ROOT ACCESS: <span id="stat-root">SECURED</span></div>
+            <div class="status-item">ACTIVE TARGET: <span id="stat-target">NONE</span></div>
+        </div>
+    </header>
+
+    <div class="main-grid">
+        <!-- Node Infrastructure Map -->
+        <div class="panel">
+            <div class="panel-header">Target Infrastructure</div>
+            <div class="panel-body" id="node-list">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+
+        <!-- Central Terminal Console -->
+        <div class="panel" id="terminal-panel">
+            <div class="panel-header">
+                <span>Secure Terminal Shell v9.42</span>
+                <span id="terminal-target-label">LOCAL_HOST</span>
+            </div>
+            <div id="terminal-output">NEXUS-V Cybernetic Terminal Initialized.
+Type 'help' to review available framework commands or select a target from the left matrix.
+----------------------------------------------------------------------------------
+</div>
+            <div class="terminal-input-line">
+                <span class="prompt-symbol">root@nexus-v:~#</span>
+                <input type="text" id="terminal-input" autofocus autocomplete="off" spellcheck="false">
+            </div>
+        </div>
+
+        <!-- Rapid Actions Panel -->
+        <div class="panel">
+            <div class="panel-header">Execution Suite</div>
+            <div class="panel-body">
+                <div style="font-size: 0.75rem; color: var(--text-dim); margin-bottom: 8px;">QUICK MACRO EXECUTION</div>
+                <div class="actions-grid">
+                    <button class="cyber-btn" onclick="runMacro('scan')">Full Port Scan</button>
+                    <button class="cyber-btn" onclick="runMacro('brute')">Brute Force</button>
+                    <button class="cyber-btn" onclick="runMacro('inject')">SQL/Buffer Inj</button>
+                    <button class="cyber-btn" onclick="runMacro('exfil')">Data Exfil</button>
+                    <button class="cyber-btn danger" onclick="runMacro('wipe')">Erase Logs</button>
+                    <button class="cyber-btn danger" onclick="runMacro('overload')">Grid Overload</button>
+                </div>
+                <div style="margin-top: 15px; font-size: 0.75rem; color: var(--text-dim); margin-bottom: 8px;">SYSTEM INTEGRITY</div>
+                <div id="integrity-status" style="font-size: 0.8rem; color: var(--neon-green);">STATUS: STABLE (0% TRACE DETECTED)</div>
+            </div>
+        </div>
+
+        <!-- Real-time Packet & Process Feed -->
+        <div class="panel">
+            <div class="panel-header">Live Telemetry & Packets</div>
+            <div class="panel-body" id="packet-stream">
+                <div class="packet-line">[SYS] Initializing socket proxy...</div>
+                <div class="packet-line">[NET] Routing traffic through Tor nodes...</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Game / Tool State
+        let gameState = {
+            credits: 1450,
+            traces: 0,
+            currentTarget: null,
+            nodes: [
+                { id: 'n1', name: 'Aegis Defense Node', ip: '194.28.14.2', status: 'Secure', firewall: 'Level 3 ICE', data: 'Military Hardware Specs', hacked: false },
+                { id: 'n2', name: 'OmniCorp Databank', ip: '82.165.191.1', status: 'Online', firewall: 'Level 5 Neural Wall', data: 'Financial Records & Cryptokeys', hacked: false },
+                { id: 'n3', name: 'Neo-Tokyo Power Grid', ip: '45.33.32.156', status: 'Vulnerable', firewall: 'Level 2 Subroutine', data: 'Substation Control Routines', hacked: false },
+                { id: 'n4', name: 'Blackmarket Proxy Cluster', ip: '107.189.3.9', status: 'Compromised', firewall: 'None', data: 'Encrypted Darknet Comms', hacked: true }
+            ]
+        };
+
+        const terminalOutput = document.getElementById('terminal-output');
+        const terminalInput = document.getElementById('terminal-input');
+        const nodeListContainer = document.getElementById('node-list');
+        const packetStream = document.getElementById('packet-stream');
+
+        // Initialize UI
+        function renderNodes() {
+            nodeListContainer.innerHTML = '';
+            gameState.nodes.forEach(node => {
+                const div = document.createElement('div');
+                div.className = `node-item ${gameState.currentTarget === node.ip ? 'active' : ''}`;
+                div.innerHTML = `
+                    <div style="font-weight: bold;">${node.name}</div>
+                    <div class="node-ip">${node.ip} [${node.status}]</div>
+                `;
+                div.onclick = () => selectTarget(node);
+                nodeListContainer.appendChild(div);
+            });
+            document.getElementById('stat-credits').innerText = '₿' + gameState.credits;
+            document.getElementById('stat-traces').innerText = gameState.traces + '%';
+        }
+
+        function selectTarget(node) {
+            gameState.currentTarget = node.ip;
+            document.getElementById('stat-target').innerText = node.name;
+            document.getElementById('terminal-target-label').innerText = node.ip;
+            appendTerminal(`\n[+] Target locked: ${node.name} (${node.ip})`, 'log-info');
+            appendTerminal(`    Firewall Profile: ${node.firewall} | Datastore: ${node.data}`, 'log-info');
+            renderNodes();
+        }
+
+        function appendTerminal(text, className = '') {
+            const span = document.createElement('div');
+            if (className) span.className = className;
+            span.innerText = text;
+            terminalOutput.appendChild(span);
+            terminalOutput.scrollTop = terminalOutput.scrollHeight;
+        }
+
+        // Terminal Command Processor
+        terminalInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                const cmd = terminalInput.value.trim();
+                terminalInput.value = '';
+                if (!cmd) return;
+
+                appendTerminal(`root@nexus-v:~# ${cmd}`);
+                processCommand(cmd);
+            }
+        });
+
+        function processCommand(fullCmd) {
+            const parts = fullCmd.split(' ');
+            const cmd = parts[0].toLowerCase();
+            const arg = parts[1];
+
+            switch(cmd) {
+                case 'help':
+                    appendTerminal(`AVAILABLE COMMANDS:
+  scan [ip/all]       - Scan target for open ports and backdoors
+  connect [ip]        - Establish active session to destination node
+  exploit [module]    - Launch selected offensive exploit routine
+  exfil               - Extract classified payload data from target
+  wipe                - Clear local traces and proxy footprints
+  nodes               - Display full matrix node inventory
+  clear               - Clear terminal viewport
+  su                  - Escalate kernel privileges`, 'log-info');
+                    break;
+
+                case 'clear':
+                    terminalOutput.innerHTML = '';
+                    break;
+
+                case 'nodes':
+                    appendTerminal('ACTIVE MATRIX NODES:', 'log-info');
+                    gameState.nodes.forEach(n => {
+                        appendTerminal(` - ${n.name} | IP: ${n.ip} | Status: ${n.status} | Hacked: ${n.hacked}`);
+                    });
+                    break;
+
+                case 'scan':
+                    if (!gameState.currentTarget) {
+                        appendTerminal('[-] ERROR: No target selected. Use node panel or connect command.', 'log-danger');
+                        return;
+                    }
+                    appendTerminal(`[I] Initiating deep packet probe on ${gameState.currentTarget}...`, 'log-info');
+                    setTimeout(() => {
+                        appendTerminal(`[+] Port 22 (SSH): Open`, 'log-success');
+                        appendTerminal(`[+] Port 80/443 (HTTPS): Open (Vulnerable Proxy)`, 'log-success');
+                        appendTerminal(`[!] Port 8080 (Neural Uplink): Locked behind ICE layer.`, 'log-warning');
+                        addTrace(5);
+                    }, 800);
+                    break;
+
+                case 'exploit':
+                    runMacro('inject');
+                    break;
+
+                case 'exfil':
+                    runMacro('exfil');
+                    break;
+
+                case 'wipe':
+                    runMacro('wipe');
+                    break;
+
+                default:
+                    appendTerminal(`[-] Command unrecognized: '${cmd}'. Type 'help' for directory listings.`, 'log-danger');
+            }
+        }
+
+        // Macro Execution Engine (Actions & Consequences)
+        function runMacro(action) {
+            const target = gameState.nodes.find(n => n.ip === gameState.currentTarget);
+            
+            switch(action) {
+                case 'scan':
+                    processCommand('scan');
+                    break;
+                case 'brute':
+                    if(!target) { appendTerminal('[-] Select a target node first.', 'log-danger'); return; }
+                    appendTerminal(`[~] Executing dictionary brute-force against ${target.name}...`, 'log-info');
+                    addTrace(10);
+                    setTimeout(() => {
+                        if(Math.random() > 0.3) {
+                            appendTerminal(`[+] Success! Administrative credentials acquired for ${target.ip}`, 'log-success');
+                            target.status = 'Compromised';
+                            renderNodes();
+                        } else {
+                            appendTerminal(`[-] Brute force blocked by defensive countermeasures. Trace increased.`, 'log-danger');
+                            addTrace(15);
+                        }
+                    }, 1000);
+                    break;
+
+                case 'inject':
+                    if(!target) { appendTerminal('[-] Select a target node first.', 'log-danger'); return; }
+                    appendTerminal(`[~] Injecting custom payload vector into ${target.ip} memory stack...`, 'log-info');
+                    addTrace(15);
+                    setTimeout(() => {
+                        appendTerminal(`[+] Memory overflow achieved. Bypassed ${target.firewall}`, 'log-success');
+                        target.hacked = true;
+                        target.status = 'Root Access';
+                        renderNodes();
+                    }, 1200);
+                    break;
+
+                case 'exfil':
+                    if(!target || !target.hacked) { appendTerminal('[-] Target must have root access established before data extraction.', 'log-danger'); return; }
+                    appendTerminal(`[~] Extracting payload data: "${target.data}"...`, 'log-info');
+                    setTimeout(() => {
+                        const payout = Math.floor(Math.random() * 800) + 500;
+                        gameState.credits += payout;
+                        appendTerminal(`[+] Exfiltration complete! Transferred ₿${payout} to anonymous wallet.`, 'log-success');
+                        renderNodes();
+                    }, 1000);
+                    break;
+
+                case 'wipe':
+                    appendTerminal(`[~] Purging system logs and cycling decoy proxy hops...`, 'log-warning');
+                    setTimeout(() => {
+                        gameState.traces = Math.max(0, gameState.traces - 40);
+                        renderNodes();
+                        appendTerminal(`[+] Trace level reduced. Footprints successfully masked.`, 'log-success');
+                    }, 800);
+                    break;
+
+                case 'overload':
+                    appendTerminal(`[!] WARNING: Initiating recursive power grid feedback loop...`, 'log-danger');
+                    addTrace(30);
+                    setTimeout(() => {
+                        appendTerminal(`[+] Grid node shutdown triggered. Massive market disruption caused.`, 'log-success');
+                        gameState.credits += 2500;
+                        renderNodes();
+                    }, 1500);
+                    break;
+            }
+        }
+
+        function addTrace(amount) {
+            gameState.traces = Math.min(100, gameState.traces + amount);
+            renderNodes();
+            if(gameState.traces >= 100) {
+                appendTerminal(`\n[FATAL] COUNTER-OFFENSIVE DETECTED. TRACE TRAPPED 100%. SYSTEM LOCKOUT INITIATED.`, 'log-danger');
+                document.body.style.filter = 'grayscale(100%) contrast(200%)';
+                setTimeout(() => {
+                    alert('TRACE COMPLETE. System compromised by defense agencies. Resetting matrix session...');
+                    window.location.reload();
+                }, 1500);
+            }
+        }
+
+        // Live Background Packet Stream Simulator
+        const packetSources = ['194.28.14.2', '82.165.191.1', '45.33.32.156', '10.0.4.55', '172.16.8.1'];
+        const packetTypes = ['SYN_ACK', 'TLS_HANDSHAKE', 'DATA_CHUNK', 'ICMP_ECHO', 'ICE_PROBE', 'SECURE_TUNNEL'];
+        
+        setInterval(() => {
+            const src = packetSources[Math.floor(Math.random() * packetSources.length)];
+            const type = packetTypes[Math.floor(Math.random() * packetTypes.length)];
+            const size = Math.floor(Math.random() * 1240) + 64;
+            
+            const line = document.createElement('div');
+            line.className = 'packet-line';
+            line.innerText = `[PKT] ${src} -> INGEST [${type}] (${size} bytes)`;
+            packetStream.appendChild(line);
+            
+            if (packetStream.childNodes.length > 30) {
+                packetStream.removeChild(packetStream.firstChild);
+            }
+            packetStream.scrollTop = packetStream.scrollHeight;
+        }, 600);
+
+        // Initial Selection
+        selectTarget(gameState.nodes[0]);
+    </script>
+</body>
+</html>
