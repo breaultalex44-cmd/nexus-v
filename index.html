@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXUS-V // Advanced Cybernetic Operations Matrix</title>
+    <title>NEXUS-V // Advanced Cybernetic Operations & Quantum R&B Matrix</title>
     <style>
         :root {
             --bg-deep: #02040a;
@@ -167,10 +167,9 @@
             grid-template-rows: 1fr;
         }
 
-        #tab-construction {
-            display: flex;
-            justify-content: center;
-            align-items: center;
+        #tab-quantumrb {
+            grid-template-columns: 320px 1fr 340px;
+            grid-template-rows: 1fr;
         }
 
         /* Universal Panel Style */
@@ -295,7 +294,7 @@
             outline: none;
         }
 
-        /* Buttons & Grids */
+        /* Buttons */
         .cyber-btn {
             background: rgba(0, 243, 255, 0.05);
             border: 1px solid var(--neon-cyan);
@@ -338,12 +337,6 @@
             box-shadow: 0 0 12px var(--neon-amber);
         }
 
-        .actions-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-        }
-
         /* Stock Market Items */
         .stock-row {
             display: flex;
@@ -370,47 +363,21 @@
             color: var(--neon-rose);
         }
 
-        /* Under Construction Brick Animation Lab */
-        .construction-container {
-            text-align: center;
-            max-width: 600px;
-            padding: 40px;
-            background: var(--bg-panel);
-            border: 2px dashed var(--neon-amber);
-            border-radius: 8px;
-            box-shadow: 0 0 30px rgba(255, 170, 0, 0.15);
-        }
-
-        .brick-grid {
-            display: grid;
-            grid-template-columns: repeat(6, 45px);
-            grid-template-rows: repeat(4, 45px);
-            gap: 6px;
-            justify-content: center;
-            margin: 25px 0;
-        }
-
-        .brick {
-            background: rgba(255, 170, 0, 0.05);
+        /* Quantum R&B Audio Visualizer / Tracks */
+        .rb-track-card {
+            background: var(--bg-card);
             border: 1px solid var(--text-dim);
+            padding: 10px;
+            margin-bottom: 8px;
             border-radius: 4px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
-            color: var(--text-dim);
-            opacity: 0.2;
-            transform: scale(0.8);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            transition: all 0.2s;
         }
 
-        .brick.assembled {
-            background: rgba(255, 170, 0, 0.15);
-            border-color: var(--neon-amber);
-            color: var(--neon-amber);
-            opacity: 1;
-            transform: scale(1);
-            box-shadow: 0 0 10px rgba(255, 170, 0, 0.3);
+        .rb-track-card:hover, .rb-track-card.active {
+            border-color: var(--neon-purple);
+            box-shadow: inset 0 0 10px rgba(157, 0, 255, 0.2);
+            background: rgba(157, 0, 255, 0.05);
         }
 
         /* Scrollbars */
@@ -431,7 +398,7 @@
     <header>
         <div class="logo">
             <div class="logo-pulse"></div>
-            NEXUS-V // GLOBAL CYBERNETIC OPERATIONS MATRIX v9.8
+            NEXUS-V // GLOBAL CYBERNETIC OPERATIONS & QUANTUM R&amp;B MATRIX v9.9
         </div>
         <div class="status-metrics">
             <div class="metric-badge">CREDITS: <span id="stat-credits">₿14,550</span></div>
@@ -446,14 +413,14 @@
         <button class="tab-btn active" onclick="switchTab('operations')">[01] Terminal &amp; Ops</button>
         <button class="tab-btn" onclick="switchTab('financials')">[02] Target Infrastructure &amp; Spreadsheets</button>
         <button class="tab-btn" onclick="switchTab('stockmarket')">[03] Cyber-Exchange &amp; Stocks</button>
-        <button class="tab-btn" onclick="switchTab('construction')">[04] Quantum R&amp;D (WIP Lab)</button>
+        <button class="tab-btn" onclick="switchTab('quantumrb')">[04] Quantum R&amp;B Matrix</button>
     </div>
 
     <!-- TAB 01: TERMINAL & OPS -->
     <div id="tab-operations" class="viewport active">
         <!-- Target Selector Panel -->
         <div class="panel">
-            <div class="panel-header">Target Vector Matrix</div>
+            <div class="panel-header">Target Vector Matrix (Micro/Macro)</div>
             <div class="panel-body" id="node-list"></div>
         </div>
 
@@ -473,23 +440,28 @@ Type 'help' to review the 20+ built-in framework commands or select a target nod
             </div>
         </div>
 
-        <!-- Rapid Execution Suite -->
+        <!-- Written Execution Suite (Written Commands Only) -->
         <div class="panel">
-            <div class="panel-header">Execution Suite</div>
+            <div class="panel-header">Execution Suite (Written Only)</div>
             <div class="panel-body">
-                <div style="font-size: 0.75rem; color: var(--text-dim); margin-bottom: 8px;">QUICK MACROS</div>
-                <div class="actions-grid">
-                    <button class="cyber-btn" onclick="runMacro('scan')">Port Scan</button>
-                    <button class="cyber-btn" onclick="runMacro('brute')">Brute-Force</button>
-                    <button class="cyber-btn" onclick="runMacro('inject')">SQL Injection</button>
-                    <button class="cyber-btn" onclick="runMacro('exfil')">Data Exfil</button>
-                    <button class="cyber-btn amber" onclick="runMacro('spoof')">IP Spoof</button>
-                    <button class="cyber-btn amber" onclick="runMacro('phish')">Spear Phish</button>
-                    <button class="cyber-btn danger" onclick="runMacro('ransom')">Ransomware</button>
-                    <button class="cyber-btn danger" onclick="runMacro('overload')">Grid Overload</button>
+                <div style="font-size: 0.75rem; color: var(--text-dim); margin-bottom: 6px;">MACRO COMMAND INTERFACE</div>
+                <div style="font-size: 0.75rem; color: var(--neon-cyan); margin-bottom: 8px;">Type your macro instructions below:</div>
+                <div style="display: flex; gap: 6px; margin-bottom: 12px;">
+                    <input type="text" id="macro-command-input" placeholder="e.g. macro scan" style="flex:1; background: var(--bg-deep); border: 1px solid var(--text-dim); color: var(--neon-cyan); padding: 6px; font-family: var(--font-mono); font-size: 0.8rem; border-radius: 3px; outline: none;">
+                    <button class="cyber-btn" onclick="executeWrittenMacro()">Run</button>
                 </div>
-                <div style="margin-top: 15px; font-size: 0.75rem; color: var(--text-dim); margin-bottom: 8px;">SYSTEM METRICS</div>
-                <div id="telemetry-box" style="font-size: 0.78rem; line-height: 1.5;">
+                <div style="font-size: 0.73rem; color: var(--text-dim); line-height: 1.5; margin-bottom: 12px;">
+                    <b>Macro Syntaxes:</b><br>
+                    • <code>macro scan</code> - Port &amp; Vulnerability Scan<br>
+                    • <code>macro brute</code> - Brute-force credentials<br>
+                    • <code>macro inject</code> - Memory/SQL Injection<br>
+                    • <code>macro exfil</code> - Data Exfiltration<br>
+                    • <code>macro spoof</code> - IP Decoy Proxy Route<br>
+                    • <code>macro ransom</code> - Deploy AES Ransomware<br>
+                    • <code>macro overload</code> - Grid Feedback Overload
+                </div>
+                <div style="border-top: 1px solid var(--text-dim); padding-top: 10px; font-size: 0.75rem; color: var(--text-dim);">ADVANCED TELEMETRY</div>
+                <div id="telemetry-box" style="font-size: 0.78rem; line-height: 1.5; margin-top: 6px;">
                     <div>RAM Allocation: 4.2GB / 64GB</div>
                     <div>Bandwidth: 1.2 Gbps Encrypted</div>
                     <div>Proxy Chain: 7 Hops (Tor + I2P)</div>
@@ -501,13 +473,13 @@ Type 'help' to review the 20+ built-in framework commands or select a target nod
     <!-- TAB 02: TARGET INFRASTRUCTURE & SPREADSHEETS -->
     <div id="tab-financials" class="viewport">
         <div class="panel">
-            <div class="panel-header">Corporate Balance Sheet Ledger</div>
+            <div class="panel-header">Corporate Balance Sheet &amp; Financial Ledger</div>
             <div class="panel-body" id="spreadsheet-view">
                 <!-- Populated via JS -->
             </div>
         </div>
         <div class="panel">
-            <div class="panel-header">Infrastructure Metrics &amp; Loss Analysis</div>
+            <div class="panel-header">Advanced Infrastructure Micro-Metrics &amp; Loss Analysis</div>
             <div class="panel-body" id="infrastructure-details">
                 <div style="color: var(--text-dim);">Select a target from the Operations tab or ledger to inspect server racks, operating overhead, and loss statistics.</div>
             </div>
@@ -515,7 +487,6 @@ Type 'help' to review the 20+ built-in framework commands or select a target nod
     </div>
 
     <!-- TAB 03: STOCK MARKET SYSTEM -->
-    <div id="tab-financials" class="viewport"></div> <!-- placeholder -->
     <div id="tab-stockmarket" class="viewport">
         <div class="panel">
             <div class="panel-header">Global Cyber-Stock Exchange (GCSE)</div>
@@ -527,29 +498,60 @@ Type 'help' to review the 20+ built-in framework commands or select a target nod
             </div>
         </div>
         <div class="panel">
-            <div class="panel-header">Portfolio &amp; Holdings</div>
+            <div class="panel-header">Advanced Portfolio &amp; Volatility Metrics</div>
             <div class="panel-body" id="portfolio-panel">
                 <div style="font-weight: bold; color: var(--neon-cyan); margin-bottom: 8px;">PORTFOLIO SUMMARY</div>
                 <div id="portfolio-list" style="font-size: 0.8rem; margin-bottom: 15px;">No active shares held.</div>
-                <div style="border-top: 1px solid var(--text-dim); padding-top: 10px; font-size: 0.8rem;">
+                <div style="border-top: 1px solid var(--text-dim); padding-top: 10px; font-size: 0.8rem; line-height: 1.6;">
                     <div>Available Cash: <span id="portfolio-cash" style="color: var(--neon-amber);">₿14,550</span></div>
                     <div>Portfolio Valuation: <span id="portfolio-val" style="color: var(--neon-green);">₿0</span></div>
+                    <div>Market Sentiment Index: <span style="color: var(--neon-cyan);">Bullish (68.4%)</span></div>
+                    <div>Compound Dividend Yield: <span style="color: var(--neon-purple);">4.2% APR</span></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- TAB 04: UNDER CONSTRUCTION (BRICK BY BRICK LAB) -->
-    <div id="tab-construction" class="viewport">
-        <div class="construction-container">
-            <h2 style="color: var(--neon-amber); letter-spacing: 2px;">[QUANTUM R&amp;D LAB // UNDER CONSTRUCTION]</h2>
-            <p style="font-size: 0.85rem; color: var(--text-dim); margin-top: 8px;">Assembling next-gen neural decryption cores and zero-point AI modules...</p>
-            
-            <div class="brick-grid" id="brick-grid">
-                <!-- Generated by JS -->
+    <!-- TAB 04: QUANTUM R&B MATRIX -->
+    <div id="tab-quantumrb" class="viewport">
+        <div class="panel">
+            <div class="panel-header">Quantum Frequency Channels (R&amp;B Ledger)</div>
+            <div class="panel-body" id="rb-track-list">
+                <!-- Populated via JS -->
             </div>
+        </div>
 
-            <button class="cyber-btn amber" onclick="triggerBrickAssembly()" style="margin-top: 10px;">Reassemble Module</button>
+        <div class="panel">
+            <div class="panel-header">Neural Beat Sequencer &amp; Micro-Modulator</div>
+            <div class="panel-body">
+                <div style="font-weight: bold; color: var(--neon-purple); margin-bottom: 8px;">HARMONIC FREQUENCY SYNTHESIS</div>
+                <div style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 12px; line-height: 1.4;">
+                    Tune quantum sub-bass resonance and rhythm frequencies to broadcast encrypted cyber-audio signals across darknet subnets.
+                </div>
+                <div style="background: var(--bg-card); border: 1px solid var(--text-dim); padding: 12px; border-radius: 4px; margin-bottom: 12px;">
+                    <div style="display:flex; justify-content:space-between; font-size:0.75rem; margin-bottom:4px;">
+                        <span>SUB-BASS RESONANCE</span>
+                        <span style="color: var(--neon-purple);" id="rb-val-bass">88.4 Hz</span>
+                    </div>
+                    <input type="range" min="20" max="200" value="88.4" style="width:100%; accent-color: var(--neon-purple);" oninput="document.getElementById('rb-val-bass').innerText = this.value + ' Hz'">
+                </div>
+                <div style="background: var(--bg-card); border: 1px solid var(--text-dim); padding: 12px; border-radius: 4px; margin-bottom: 12px;">
+                    <div style="display:flex; justify-content:space-between; font-size:0.75rem; margin-bottom:4px;">
+                        <span>GROOVE SYNCHRONIZATION</span>
+                        <span style="color: var(--neon-cyan);" id="rb-val-groove">124.0 BPM</span>
+                    </div>
+                    <input type="range" min="60" max="180" value="124" style="width:100%; accent-color: var(--neon-cyan);" oninput="document.getElementById('rb-val-groove').innerText = this.value + ' BPM'">
+                </div>
+                <button class="cyber-btn" style="border-color: var(--neon-purple); color: var(--neon-purple); width:100%;" onclick="broadcastQuantumRB()">Broadcast Quantum R&amp;B Signal</button>
+            </div>
+        </div>
+
+        <div class="panel">
+            <div class="panel-header">Acoustic Telemetry &amp; Signal Logs</div>
+            <div class="panel-body" id="rb-log-output" style="font-size: 0.78rem; line-height: 1.5; color: var(--text-dim);">
+                <div>[SYSTEM] Quantum R&amp;B audio core standing by...</div>
+                <div>[STATUS] Harmonic oscillators synchronized to sub-zero vacuum.</div>
+            </div>
         </div>
     </div>
 
@@ -573,7 +575,13 @@ Type 'help' to review the 20+ built-in framework commands or select a target nod
                 'OMNI': { name: 'OmniCorp Global', price: 720.00, change: +1.1 },
                 'NEOT': { name: 'Neo-Tokyo Power', price: 150.25, change: -0.5 },
                 'BMARK': { name: 'Blackmarket Syndicate', price: 88.00, change: +5.2 }
-            }
+            },
+            quantumTracks: [
+                { id: 't1', title: 'Sub-Zero Velvet (808 Matrix)', bpm: 84, frequency: '432 Hz', status: 'Synced' },
+                { id: 't2', title: 'Neon Soul Cipher', bpm: 92, frequency: '528 Hz', status: 'Active' },
+                { id: 't3', title: 'Cipher Groove Protocol', bpm: 110, frequency: '741 Hz', status: 'Standby' },
+                { id: 't4', title: 'Quantum Melancholy Jam', bpm: 78, frequency: '396 Hz', status: 'Ready' }
+            ]
         };
 
         // Tab Switching
@@ -592,10 +600,10 @@ Type 'help' to review the 20+ built-in framework commands or select a target nod
                 document.getElementById('tab-stockmarket').classList.add('active');
                 event.target.classList.add('active');
                 renderStockMarket();
-            } else if(tabId === 'construction') {
-                document.getElementById('tab-construction').classList.add('active');
+            } else if(tabId === 'quantumrb') {
+                document.getElementById('tab-quantumrb').classList.add('active');
                 event.target.classList.add('active');
-                triggerBrickAssembly();
+                renderQuantumRB();
             }
         }
 
@@ -640,7 +648,7 @@ Type 'help' to review the 20+ built-in framework commands or select a target nod
             terminalOutput.scrollTop = terminalOutput.scrollHeight;
         }
 
-        // Terminal Command Processor (20+ Commands)
+        // Terminal Command Processor
         const terminalInput = document.getElementById('terminal-input');
         terminalInput.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
@@ -653,12 +661,24 @@ Type 'help' to review the 20+ built-in framework commands or select a target nod
             }
         });
 
+        function executeWrittenMacro() {
+            const input = document.getElementById('macro-command-input');
+            const cmd = input.value.trim();
+            input.value = '';
+            if (!cmd) return;
+            appendTerminal(`root@nexus-v:~# ${cmd}`);
+            processCommand(cmd);
+        }
+
         function processCommand(fullCmd) {
             const parts = fullCmd.split(' ');
-            const cmd = parts[0].toLowerCase();
-            const arg = parts[1];
+            let cmd = parts[0].toLowerCase();
+            let arg = parts[1];
 
-            // Intertwining system metric changes on command execution
+            if (cmd === 'macro' && parts[1]) {
+                cmd = parts[1].toLowerCase();
+            }
+
             gameState.cpu = Math.min(98, gameState.cpu + Math.floor(Math.random() * 8) + 2);
             gameState.heat = Math.min(95, gameState.heat + 1);
             renderNodes();
@@ -724,6 +744,43 @@ Type 'help' to review the 20+ built-in framework commands or select a target nod
                     }, 600);
                     break;
 
+                case 'brute':
+                    const targetBrute = gameState.nodes.find(n => n.ip === gameState.currentTarget);
+                    if (!targetBrute) { appendTerminal('[-] Select a target node first.', 'log-danger'); return; }
+                    appendTerminal(`[~] Executing dictionary brute-force against ${targetBrute.name}...`, 'log-info');
+                    addTrace(10);
+                    setTimeout(() => {
+                        appendTerminal(`[+] Admin credentials acquired for ${targetBrute.ip}`, 'log-success');
+                        targetBrute.status = 'Compromised';
+                        renderNodes();
+                    }, 1000);
+                    break;
+
+                case 'inject':
+                    const targetInject = gameState.nodes.find(n => n.ip === gameState.currentTarget);
+                    if (!targetInject) { appendTerminal('[-] Select a target node first.', 'log-danger'); return; }
+                    appendTerminal(`[~] Injecting payload into ${targetInject.ip} memory stack...`, 'log-info');
+                    addTrace(15);
+                    setTimeout(() => {
+                        appendTerminal(`[+] Buffer overflow successful. Bypassed ${targetInject.firewall}`, 'log-success');
+                        targetInject.hacked = true;
+                        targetInject.status = 'Root Access';
+                        renderNodes();
+                    }, 1200);
+                    break;
+
+                case 'exfil':
+                    const targetExfil = gameState.nodes.find(n => n.ip === gameState.currentTarget);
+                    if (!targetExfil || !targetExfil.hacked) { appendTerminal('[-] Target requires root access first.', 'log-danger'); return; }
+                    appendTerminal(`[~] Extracting: "${targetExfil.data}"...`, 'log-info');
+                    setTimeout(() => {
+                        const payout = 2500;
+                        gameState.credits += payout;
+                        appendTerminal(`[+] Exfiltration complete! Transferred ₿${payout}.`, 'log-success');
+                        renderNodes();
+                    }, 1000);
+                    break;
+
                 case 'ddos':
                     if (!gameState.currentTarget) { appendTerminal('[-] ERROR: No target selected.', 'log-danger'); return; }
                     appendTerminal(`[~] Launching botnet UDP amplification flood against ${gameState.currentTarget}...`, 'log-warning');
@@ -756,6 +813,16 @@ Type 'help' to review the 20+ built-in framework commands or select a target nod
                     }, 1200);
                     break;
 
+                case 'overload':
+                    appendTerminal(`[!] WARNING: Initiating recursive power grid feedback loop...`, 'log-danger');
+                    addTrace(30);
+                    setTimeout(() => {
+                        appendTerminal(`[+] Grid shutdown triggered. Massive market disruption caused.`, 'log-success');
+                        gameState.credits += 5000;
+                        renderNodes();
+                    }, 1500);
+                    break;
+
                 case 'cryptomine':
                     appendTerminal(`[~] Injecting silent mining daemon into compromised nodes...`, 'log-info');
                     setTimeout(() => {
@@ -777,60 +844,6 @@ Type 'help' to review the 20+ built-in framework commands or select a target nod
 
                 default:
                     appendTerminal(`[-] Command unrecognized: '${cmd}'. Type 'help' for full framework directory.`, 'log-danger');
-            }
-        }
-
-        // Macro Actions
-        function runMacro(action) {
-            const target = gameState.nodes.find(n => n.ip === gameState.currentTarget);
-            if (!target && action !== 'wipe') {
-                appendTerminal('[-] Select a target node first.', 'log-danger');
-                return;
-            }
-
-            switch(action) {
-                case 'scan': processCommand('scan'); break;
-                case 'brute':
-                    appendTerminal(`[~] Executing dictionary brute-force against ${target.name}...`, 'log-info');
-                    addTrace(10);
-                    setTimeout(() => {
-                        appendTerminal(`[+] Admin credentials acquired for ${target.ip}`, 'log-success');
-                        target.status = 'Compromised';
-                        renderNodes();
-                    }, 1000);
-                    break;
-                case 'inject':
-                    appendTerminal(`[~] Injecting payload into ${target.ip} memory stack...`, 'log-info');
-                    addTrace(15);
-                    setTimeout(() => {
-                        appendTerminal(`[+] Buffer overflow successful. Bypassed ${target.firewall}`, 'log-success');
-                        target.hacked = true;
-                        target.status = 'Root Access';
-                        renderNodes();
-                    }, 1200);
-                    break;
-                case 'exfil':
-                    if(!target.hacked) { appendTerminal('[-] Target requires root access first.', 'log-danger'); return; }
-                    appendTerminal(`[~] Extracting: "${target.data}"...`, 'log-info');
-                    setTimeout(() => {
-                        const payout = 2500;
-                        gameState.credits += payout;
-                        appendTerminal(`[+] Exfiltration complete! Transferred ₿${payout}.`, 'log-success');
-                        renderNodes();
-                    }, 1000);
-                    break;
-                case 'spoof': processCommand('spoof'); break;
-                case 'phish': processCommand('phish'); break;
-                case 'ransom': processCommand('ransom'); break;
-                case 'overload':
-                    appendTerminal(`[!] WARNING: Initiating recursive power grid feedback loop...`, 'log-danger');
-                    addTrace(30);
-                    setTimeout(() => {
-                        appendTerminal(`[+] Grid shutdown triggered. Massive market disruption caused.`, 'log-success');
-                        gameState.credits += 5000;
-                        renderNodes();
-                    }, 1500);
-                    break;
             }
         }
 
@@ -872,12 +885,14 @@ Type 'help' to review the 20+ built-in framework commands or select a target nod
 
             const detailContainer = document.getElementById('infrastructure-details');
             detailContainer.innerHTML = `
-                <div style="font-weight: bold; color: var(--neon-cyan); margin-bottom: 10px;">INFRASTRUCTURE TELEMETRY OVERVIEW</div>
+                <div style="font-weight: bold; color: var(--neon-cyan); margin-bottom: 10px;">INFRASTRUCTURE MICRO-METRICS &amp; RATIOS</div>
                 <p style="font-size: 0.8rem; line-height: 1.5; color: var(--text-main);">
                     Target organizations maintain high operational expenditures (OpEx) for cooling, enterprise security licenses, and physical data center upkeep. DDoS attacks, ransomware deployment, and data exfiltration directly spike corporate losses and depress equity valuations on the GCSE.
                 </p>
-                <div style="margin-top: 15px; font-size: 0.8rem; color: var(--neon-amber);">
-                    💡 <b>Tactical Tip:</b> Short-sell a company's stock on the Exchange tab before executing a high-impact ransomware or DDoS macro to maximize financial returns.
+                <div style="margin-top: 15px; font-size: 0.8rem; line-height: 1.6; color: var(--text-dim);">
+                    <div>• Average Debt-to-Equity Ratio: <span style="color: var(--neon-amber);">1.42</span></div>
+                    <div>• Security License Burn Rate: <span style="color: var(--neon-rose);">₿14,200/wk</span></div>
+                    <div>• Vulnerability Index Score: <span style="color: var(--neon-green);">78.4 / 100</span></div>
                 </div>
             `;
         }
@@ -964,25 +979,33 @@ Type 'help' to review the 20+ built-in framework commands or select a target nod
             }
         }
 
-        // Under Construction Brick Animation Lab
-        function triggerBrickAssembly() {
-            const grid = document.getElementById('brick-grid');
-            grid.innerHTML = '';
-            const totalBricks = 24;
-
-            for (let i = 0; i < totalBricks; i++) {
-                const brick = document.createElement('div');
-                brick.className = 'brick';
-                brick.innerText = `MOD-${i+1}`;
-                grid.appendChild(brick);
-            }
-
-            const bricks = grid.querySelectorAll('.brick');
-            bricks.forEach((brick, index) => {
-                setTimeout(() => {
-                    brick.classList.add('assembled');
-                }, index * 120);
+        // Quantum R&B Section Logic
+        function renderQuantumRB() {
+            const container = document.getElementById('rb-track-list');
+            container.innerHTML = '';
+            gameState.quantumTracks.forEach(track => {
+                const div = document.createElement('div');
+                div.className = 'rb-track-card';
+                div.innerHTML = `
+                    <div style="font-weight: bold; color: var(--neon-purple);">${track.title}</div>
+                    <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 4px; display: flex; justify-content: space-between;">
+                        <span>BPM: ${track.bpm} | Freq: ${track.frequency}</span>
+                        <span style="color: var(--neon-cyan);">${track.status}</span>
+                    </div>
+                `;
+                container.appendChild(div);
             });
+        }
+
+        function broadcastQuantumRB() {
+            const logOut = document.getElementById('rb-log-output');
+            const time = new Date().toLocaleTimeString();
+            const timestampDiv = document.createElement('div');
+            timestampDiv.innerHTML = `<span style="color: var(--neon-purple);">[${time}]</span> Quantum R&amp;B signal broadcasted across encrypted darknet subnets. Harmonic distortion: 0.02%.`;
+            logOut.appendChild(timestampDiv);
+            logOut.scrollTop = logOut.scrollHeight;
+            gameState.credits += 450;
+            renderNodes();
         }
 
         // Background Telemetry & Thermal Simulation
