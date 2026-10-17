@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXUS-V // Advanced Cybernetic Operations & Quantum R&B Matrix</title>
+    <title>NEXUS-V // Ultimate Cybernetic Operations & Quantum R&B Matrix v12.0</title>
     <style>
         :root {
-            --bg-deep: #02040a;
-            --bg-panel: #070d1d;
-            --bg-card: #0c1530;
+            --bg-deep: #02050e;
+            --bg-panel: #060b19;
+            --bg-card: #0d1632;
             --neon-cyan: #00f3ff;
             --neon-green: #00ff66;
             --neon-amber: #ffaa00;
             --neon-rose: #ff0055;
-            --neon-purple: #9d00ff;
-            --text-main: #cbe4ff;
-            --text-dim: #4a6fa5;
-            --border-glow: rgba(0, 243, 255, 0.3);
-            --font-mono: 'Courier New', Courier, monospace;
+            --neon-purple: #b000ff;
+            --text-main: #d4e5ff;
+            --text-dim: #5478b2;
+            --border-glow: rgba(0, 243, 255, 0.4);
+            --font-mono: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
         }
 
         * {
@@ -27,7 +27,7 @@
         }
 
         body {
-            background-color: var(--bg-deep);
+            background: var(--bg-deep);
             color: var(--text-main);
             font-family: var(--font-mono);
             height: 100vh;
@@ -36,114 +36,120 @@
             flex-direction: column;
         }
 
-        /* Scanline Overlay */
+        /* Holographic Scanline & Vignette Overlay */
         body::after {
             content: " ";
             display: block;
             position: fixed;
             top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.3) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.02));
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.015), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.015));
             z-index: 9999;
-            background-size: 100% 4px, 6px 100%;
+            background-size: 100% 3px, 4px 100%;
             pointer-events: none;
         }
 
-        /* Header Bar */
+        /* Modern HUD Header */
         header {
-            background: var(--bg-panel);
+            background: linear-gradient(180deg, rgba(6,11,25,0.95) 0%, rgba(3,7,18,0.95) 100%);
             border-bottom: 2px solid var(--neon-cyan);
-            padding: 10px 20px;
+            padding: 12px 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 0 20px rgba(0, 243, 255, 0.25);
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.2);
             z-index: 10;
+            backdrop-filter: blur(10px);
         }
 
         .logo {
-            font-size: 1.3rem;
-            font-weight: bold;
+            font-size: 1.4rem;
+            font-weight: 800;
             color: var(--neon-cyan);
-            text-shadow: 0 0 10px var(--neon-cyan);
-            letter-spacing: 3px;
+            text-shadow: 0 0 15px var(--neon-cyan);
+            letter-spacing: 4px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
         }
 
         .logo-pulse {
-            width: 10px; height: 10px;
+            width: 12px; height: 12px;
             background: var(--neon-green);
             border-radius: 50%;
-            box-shadow: 0 0 8px var(--neon-green);
-            animation: pulse 1.5s infinite;
+            box-shadow: 0 0 12px var(--neon-green);
+            animation: core-pulse 1.2s infinite ease-in-out;
         }
 
-        @keyframes pulse {
-            0% { opacity: 0.3; }
-            50% { opacity: 1; box-shadow: 0 0 15px var(--neon-green); }
-            100% { opacity: 0.3; }
+        @keyframes core-pulse {
+            0% { transform: scale(0.9); opacity: 0.4; box-shadow: 0 0 5px var(--neon-green); }
+            50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 20px var(--neon-green); }
+            100% { transform: scale(0.9); opacity: 0.4; box-shadow: 0 0 5px var(--neon-green); }
         }
 
         .status-metrics {
             display: flex;
-            gap: 15px;
+            gap: 12px;
             font-size: 0.8rem;
         }
 
         .metric-badge {
-            background: rgba(0, 243, 255, 0.05);
+            background: rgba(0, 243, 255, 0.04);
             border: 1px solid var(--text-dim);
-            padding: 4px 10px;
-            border-radius: 3px;
+            padding: 6px 12px;
+            border-radius: 6px;
+            backdrop-filter: blur(5px);
+            box-shadow: inset 0 0 8px rgba(0,243,255,0.05);
         }
 
         .metric-badge span {
             color: var(--neon-amber);
             font-weight: bold;
+            text-shadow: 0 0 8px rgba(255,170,0,0.4);
         }
 
-        /* Navigation Tabs */
+        /* Navigation Tab Bar */
         .nav-tabs {
             display: flex;
-            background: #040814;
+            background: rgba(2, 5, 14, 0.9);
             border-bottom: 1px solid var(--text-dim);
-            padding: 0 20px;
-            gap: 5px;
+            padding: 0 24px;
+            gap: 8px;
         }
 
         .tab-btn {
             background: transparent;
             border: none;
             color: var(--text-dim);
-            padding: 10px 20px;
+            padding: 12px 24px;
             font-family: var(--font-mono);
             font-size: 0.85rem;
             cursor: pointer;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            border-top: 2px solid transparent;
-            transition: all 0.2s;
+            letter-spacing: 1.5px;
+            border-top: 3px solid transparent;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .tab-btn:hover {
             color: var(--neon-cyan);
-            background: rgba(0, 243, 255, 0.03);
+            background: rgba(0, 243, 255, 0.04);
         }
 
         .tab-btn.active {
             color: var(--neon-cyan);
             border-top-color: var(--neon-cyan);
             background: var(--bg-panel);
-            text-shadow: 0 0 8px rgba(0, 243, 255, 0.4);
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.6);
+            box-shadow: 0 -4px 20px rgba(0, 243, 255, 0.15);
         }
 
-        /* Main Viewport */
+        /* Main Viewports */
         .viewport {
             flex: 1;
             display: none;
-            padding: 12px;
-            gap: 12px;
+            padding: 16px;
+            gap: 16px;
             overflow: hidden;
         }
 
@@ -151,86 +157,72 @@
             display: grid;
         }
 
-        /* Grid Layouts for Tabs */
-        #tab-operations {
-            grid-template-columns: 320px 1fr 340px;
-            grid-template-rows: 1fr;
-        }
+        #tab-operations { grid-template-columns: 340px 1fr 360px; }
+        #tab-financials { grid-template-columns: 1fr 1fr; }
+        #tab-stockmarket { grid-template-columns: 1fr 400px; }
+        #tab-quantumrb { grid-template-columns: 340px 1fr 360px; }
 
-        #tab-financials {
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: 1fr;
-        }
-
-        #tab-stockmarket {
-            grid-template-columns: 1fr 380px;
-            grid-template-rows: 1fr;
-        }
-
-        #tab-quantumrb {
-            grid-template-columns: 320px 1fr 340px;
-            grid-template-rows: 1fr;
-        }
-
-        /* Universal Panel Style */
+        /* Universal Glass Panel Style */
         .panel {
             background: var(--bg-panel);
-            border: 1px solid var(--text-dim);
-            border-radius: 6px;
+            border: 1px solid rgba(84, 120, 178, 0.3);
+            border-radius: 10px;
             display: flex;
             flex-direction: column;
             overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+            backdrop-filter: blur(8px);
         }
 
         .panel-header {
-            background: rgba(0, 243, 255, 0.08);
-            padding: 8px 12px;
+            background: linear-gradient(90deg, rgba(0, 243, 255, 0.1) 0%, rgba(13, 22, 50, 0.4) 100%);
+            padding: 10px 16px;
             font-size: 0.8rem;
-            font-weight: bold;
+            font-weight: 800;
             color: var(--neon-cyan);
-            border-bottom: 1px solid var(--text-dim);
+            border-bottom: 1px solid rgba(84, 120, 178, 0.3);
             display: flex;
             justify-content: space-between;
             align-items: center;
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: 2px;
         }
 
         .panel-body {
             flex: 1;
-            padding: 12px;
+            padding: 16px;
             overflow-y: auto;
             font-size: 0.85rem;
         }
 
-        /* Target Cards & Spreadsheets */
+        /* Target Cards */
         .target-card {
             background: var(--bg-card);
             border: 1px solid var(--text-dim);
-            padding: 10px;
-            margin-bottom: 8px;
-            border-radius: 4px;
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 6px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
         }
 
         .target-card:hover, .target-card.active {
             border-color: var(--neon-cyan);
-            box-shadow: inset 0 0 10px rgba(0, 243, 255, 0.15);
-            background: rgba(0, 243, 255, 0.03);
+            box-shadow: inset 0 0 15px rgba(0, 243, 255, 0.2), 0 0 10px rgba(0, 243, 255, 0.15);
+            background: rgba(0, 243, 255, 0.04);
+            transform: translateY(-2px);
         }
 
         .target-title {
             font-weight: bold;
             color: var(--neon-cyan);
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            margin-bottom: 4px;
         }
 
         .target-meta {
             font-size: 0.75rem;
             color: var(--text-dim);
-            margin-top: 4px;
             display: flex;
             justify-content: space-between;
         }
@@ -240,18 +232,20 @@
             width: 100%;
             border-collapse: collapse;
             font-size: 0.8rem;
-            margin-top: 5px;
+            margin-top: 8px;
         }
 
         .sheet-table th, .sheet-table td {
-            border: 1px solid rgba(74, 111, 165, 0.4);
-            padding: 6px 8px;
+            border: 1px solid rgba(84, 120, 178, 0.3);
+            padding: 8px 10px;
             text-align: left;
         }
 
         .sheet-table th {
-            background: rgba(0, 243, 255, 0.1);
+            background: rgba(0, 243, 255, 0.12);
             color: var(--neon-cyan);
+            font-weight: 700;
+            letter-spacing: 1px;
         }
 
         /* Terminal Console */
@@ -263,25 +257,26 @@
         #terminal-output {
             flex: 1;
             overflow-y: auto;
-            padding: 12px;
+            padding: 16px;
             font-size: 0.85rem;
-            line-height: 1.4;
+            line-height: 1.5;
             white-space: pre-wrap;
             word-break: break-all;
         }
 
         .terminal-input-line {
             display: flex;
-            padding: 10px 12px;
-            background: rgba(0,0,0,0.5);
+            padding: 12px 16px;
+            background: rgba(2, 5, 14, 0.8);
             border-top: 1px solid var(--text-dim);
             align-items: center;
         }
 
         .prompt-symbol {
             color: var(--neon-green);
-            margin-right: 8px;
+            margin-right: 10px;
             font-weight: bold;
+            text-shadow: 0 0 8px var(--neon-green);
         }
 
         #terminal-input {
@@ -292,105 +287,102 @@
             font-family: var(--font-mono);
             font-size: 0.9rem;
             outline: none;
+            text-shadow: 0 0 5px rgba(0, 243, 255, 0.4);
         }
 
-        /* Buttons */
+        /* Cyber Buttons */
         .cyber-btn {
-            background: rgba(0, 243, 255, 0.05);
+            background: rgba(0, 243, 255, 0.06);
             border: 1px solid var(--neon-cyan);
             color: var(--neon-cyan);
-            padding: 8px 12px;
+            padding: 10px 16px;
             font-family: var(--font-mono);
             font-size: 0.75rem;
             cursor: pointer;
             text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1.5px;
             transition: all 0.2s;
             text-align: center;
-            border-radius: 3px;
+            border-radius: 6px;
+            box-shadow: 0 0 10px rgba(0,243,255,0.1);
         }
 
         .cyber-btn:hover {
             background: var(--neon-cyan);
             color: var(--bg-deep);
-            box-shadow: 0 0 12px var(--neon-cyan);
+            box-shadow: 0 0 20px var(--neon-cyan);
+            transform: translateY(-1px);
         }
 
         .cyber-btn.danger {
             border-color: var(--neon-rose);
             color: var(--neon-rose);
+            box-shadow: 0 0 10px rgba(255,0,85,0.1);
         }
 
         .cyber-btn.danger:hover {
             background: var(--neon-rose);
             color: var(--bg-deep);
-            box-shadow: 0 0 12px var(--neon-rose);
+            box-shadow: 0 0 20px var(--neon-rose);
         }
 
         .cyber-btn.amber {
             border-color: var(--neon-amber);
             color: var(--neon-amber);
+            box-shadow: 0 0 10px rgba(255,170,0,0.1);
         }
 
         .cyber-btn.amber:hover {
             background: var(--neon-amber);
             color: var(--bg-deep);
-            box-shadow: 0 0 12px var(--neon-amber);
+            box-shadow: 0 0 20px var(--neon-amber);
         }
 
-        /* Stock Market Items */
-        .stock-row {
+        /* Stock Market & Track Rows */
+        .stock-row, .rb-track-card {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px;
+            padding: 12px;
             background: var(--bg-card);
             border: 1px solid var(--text-dim);
-            border-radius: 4px;
-            margin-bottom: 8px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            transition: all 0.2s;
+        }
+
+        .stock-row:hover, .rb-track-card:hover {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 15px rgba(0,243,255,0.15);
         }
 
         .stock-ticker {
             font-weight: bold;
             color: var(--neon-cyan);
-            font-size: 0.95rem;
+            font-size: 1rem;
         }
 
         .stock-price {
             color: var(--neon-green);
+            font-weight: bold;
         }
 
         .stock-price.down {
             color: var(--neon-rose);
         }
 
-        /* Quantum R&B Audio Visualizer / Tracks */
-        .rb-track-card {
-            background: var(--bg-card);
-            border: 1px solid var(--text-dim);
-            padding: 10px;
-            margin-bottom: 8px;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .rb-track-card:hover, .rb-track-card.active {
-            border-color: var(--neon-purple);
-            box-shadow: inset 0 0 10px rgba(157, 0, 255, 0.2);
-            background: rgba(157, 0, 255, 0.05);
-        }
-
-        /* Scrollbars */
-        ::-webkit-scrollbar { width: 5px; }
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: var(--bg-deep); }
-        ::-webkit-scrollbar-thumb { background: var(--text-dim); }
+        ::-webkit-scrollbar-thumb { background: var(--text-dim); border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--neon-cyan); }
 
-        .log-success { color: var(--neon-green); }
-        .log-warning { color: var(--neon-amber); }
-        .log-danger { color: var(--neon-rose); }
-        .log-info { color: var(--neon-cyan); }
-        .log-purple { color: var(--neon-purple); }
+        .log-success { color: var(--neon-green); text-shadow: 0 0 8px rgba(0,255,102,0.3); }
+        .log-warning { color: var(--neon-amber); text-shadow: 0 0 8px rgba(255,170,0,0.3); }
+        .log-danger { color: var(--neon-rose); text-shadow: 0 0 8px rgba(255,0,85,0.3); }
+        .log-info { color: var(--neon-cyan); text-shadow: 0 0 8px rgba(0,243,255,0.3); }
+        .log-purple { color: var(--neon-purple); text-shadow: 0 0 8px rgba(176,0,255,0.3); }
     </style>
 </head>
 <body>
@@ -398,40 +390,38 @@
     <header>
         <div class="logo">
             <div class="logo-pulse"></div>
-            NEXUS-V // GLOBAL CYBERNETIC OPERATIONS & QUANTUM R&amp;B MATRIX v9.9
+            NEXUS-V // ULTIMATE CYBERNETIC OPERATIONS & QUANTUM R&amp;B MATRIX v12.0
         </div>
         <div class="status-metrics">
-            <div class="metric-badge">CREDITS: <span id="stat-credits">₿14,550</span></div>
+            <div class="metric-badge">CREDITS: <span id="stat-credits">₿18,500</span></div>
             <div class="metric-badge">TRACE: <span id="stat-traces">0%</span></div>
-            <div class="metric-badge">CPU LOAD: <span id="stat-cpu">14%</span></div>
-            <div class="metric-badge">THERMAL: <span id="stat-heat">38°C</span></div>
-            <div class="metric-badge">ROOT: <span id="stat-root">SECURED</span></div>
+            <div class="metric-badge">CPU: <span id="stat-cpu">18%</span></div>
+            <div class="metric-badge">THERMAL: <span id="stat-heat">37°C</span></div>
+            <div class="metric-badge">STATUS: <span id="stat-stealth" style="color:var(--neon-green)">STEALTH ACTIVE</span></div>
         </div>
     </header>
 
     <div class="nav-tabs">
         <button class="tab-btn active" onclick="switchTab('operations')">[01] Terminal &amp; Ops</button>
-        <button class="tab-btn" onclick="switchTab('financials')">[02] Target Infrastructure &amp; Spreadsheets</button>
-        <button class="tab-btn" onclick="switchTab('stockmarket')">[03] Cyber-Exchange &amp; Stocks</button>
-        <button class="tab-btn" onclick="switchTab('quantumrb')">[04] Quantum R&amp;B Matrix</button>
+        <button class="tab-btn" onclick="switchTab('financials')">[02] Corporate Spreadsheets &amp; Skimming</button>
+        <button class="tab-btn" onclick="switchTab('stockmarket')">[03] Cyber-Exchange &amp; Shorting</button>
+        <button class="tab-btn" onclick="switchTab('quantumrb')">[04] Quantum R&amp;B Frequency Matrix</button>
     </div>
 
     <!-- TAB 01: TERMINAL & OPS -->
     <div id="tab-operations" class="viewport active">
-        <!-- Target Selector Panel -->
         <div class="panel">
-            <div class="panel-header">Target Vector Matrix (Micro/Macro)</div>
+            <div class="panel-header">Target Vector Matrix</div>
             <div class="panel-body" id="node-list"></div>
         </div>
 
-        <!-- Central Terminal Console -->
         <div class="panel" id="terminal-panel">
             <div class="panel-header">
-                <span>Encrypted Shell v9.42 [Target: <span id="terminal-target-label">NONE</span>]</span>
-                <span style="font-size: 0.7rem; color: var(--neon-green);">SECURE TUNNEL ACTIVE</span>
+                <span>Encrypted Shell v12.0 [Target: <span id="terminal-target-label">NONE</span>]</span>
+                <span style="font-size: 0.7rem; color: var(--neon-green);">SECURE TUNNEL ONLINE</span>
             </div>
             <div id="terminal-output">NEXUS-V Quantum Core initialized. 
-Type 'help' to review the 20+ built-in framework commands or select a target node.
+Type 'help' to review all 32+ framework commands (including 12 new high-action commands).
 ----------------------------------------------------------------------------------
 </div>
             <div class="terminal-input-line">
@@ -440,141 +430,136 @@ Type 'help' to review the 20+ built-in framework commands or select a target nod
             </div>
         </div>
 
-        <!-- Written Execution Suite (Written Commands Only) -->
         <div class="panel">
-            <div class="panel-header">Execution Suite (Written Only)</div>
+            <div class="panel-header">Macro Execution &amp; Telemetry</div>
             <div class="panel-body">
-                <div style="font-size: 0.75rem; color: var(--text-dim); margin-bottom: 6px;">MACRO COMMAND INTERFACE</div>
-                <div style="font-size: 0.75rem; color: var(--neon-cyan); margin-bottom: 8px;">Type your macro instructions below:</div>
+                <div style="font-size: 0.75rem; color: var(--text-dim); margin-bottom: 6px;">MACRO INSTRUCTION CONSOLE</div>
                 <div style="display: flex; gap: 6px; margin-bottom: 12px;">
-                    <input type="text" id="macro-command-input" placeholder="e.g. macro scan" style="flex:1; background: var(--bg-deep); border: 1px solid var(--text-dim); color: var(--neon-cyan); padding: 6px; font-family: var(--font-mono); font-size: 0.8rem; border-radius: 3px; outline: none;">
+                    <input type="text" id="macro-command-input" placeholder="e.g. macro zeroday" style="flex:1; background: var(--bg-deep); border: 1px solid var(--text-dim); color: var(--neon-cyan); padding: 8px; font-family: var(--font-mono); font-size: 0.8rem; border-radius: 6px; outline: none;">
                     <button class="cyber-btn" onclick="executeWrittenMacro()">Run</button>
                 </div>
-                <div style="font-size: 0.73rem; color: var(--text-dim); line-height: 1.5; margin-bottom: 12px;">
-                    <b>Macro Syntaxes:</b><br>
-                    • <code>macro scan</code> - Port &amp; Vulnerability Scan<br>
-                    • <code>macro brute</code> - Brute-force credentials<br>
-                    • <code>macro inject</code> - Memory/SQL Injection<br>
-                    • <code>macro exfil</code> - Data Exfiltration<br>
-                    • <code>macro spoof</code> - IP Decoy Proxy Route<br>
-                    • <code>macro ransom</code> - Deploy AES Ransomware<br>
-                    • <code>macro overload</code> - Grid Feedback Overload
+                <div style="font-size: 0.73rem; color: var(--text-dim); line-height: 1.6; margin-bottom: 12px;">
+                    <b>Featured Action Macros:</b><br>
+                    • <code>macro zeroday</code> - Zero-day ICE bypass<br>
+                    • <code>macro syphon</code> - Drain corporate treasury<br>
+                    • <code>macro singularity</code> - 3x Mining Overclock<br>
+                    • <code>macro blackout</code> - Regional grid collapse<br>
+                    • <code>macro rootkit</code> - Install passive skimmer<br>
+                    • <code>macro overdrive</code> - Double terminal speed
                 </div>
-                <div style="border-top: 1px solid var(--text-dim); padding-top: 10px; font-size: 0.75rem; color: var(--text-dim);">ADVANCED TELEMETRY</div>
-                <div id="telemetry-box" style="font-size: 0.78rem; line-height: 1.5; margin-top: 6px;">
-                    <div>RAM Allocation: 4.2GB / 64GB</div>
-                    <div>Bandwidth: 1.2 Gbps Encrypted</div>
-                    <div>Proxy Chain: 7 Hops (Tor + I2P)</div>
+                <div style="border-top: 1px solid var(--text-dim); padding-top: 10px; font-size: 0.75rem; color: var(--text-dim);">SYSTEM TELEMETRY</div>
+                <div id="telemetry-box" style="font-size: 0.78rem; line-height: 1.6; margin-top: 6px;">
+                    <div>Active Rootkits: <span id="tele-rootkits" style="color:var(--neon-green)">0</span></div>
+                    <div>Proxy Nodes: 12 Hops (Tor + I2P)</div>
+                    <div>Passive Income: <span id="tele-income" style="color:var(--neon-amber)">₿0 / min</span></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- TAB 02: TARGET INFRASTRUCTURE & SPREADSHEETS -->
+    <!-- TAB 02: CORPORATE SPREADSHEETS -->
     <div id="tab-financials" class="viewport">
         <div class="panel">
-            <div class="panel-header">Corporate Balance Sheet &amp; Financial Ledger</div>
-            <div class="panel-body" id="spreadsheet-view">
-                <!-- Populated via JS -->
-            </div>
+            <div class="panel-header">Live Corporate Ledger &amp; Skimming Balances</div>
+            <div class="panel-body" id="spreadsheet-view"></div>
         </div>
         <div class="panel">
-            <div class="panel-header">Advanced Infrastructure Micro-Metrics &amp; Loss Analysis</div>
+            <div class="panel-header">Advanced Infrastructure Loss Analysis</div>
             <div class="panel-body" id="infrastructure-details">
-                <div style="color: var(--text-dim);">Select a target from the Operations tab or ledger to inspect server racks, operating overhead, and loss statistics.</div>
+                <div style="color: var(--text-dim);">Select a target node to inspect server racks, operating overhead, and vulnerability ratios.</div>
             </div>
         </div>
     </div>
 
-    <!-- TAB 03: STOCK MARKET SYSTEM -->
+    <!-- TAB 03: CYBER-EXCHANGE & STOCK MARKET -->
     <div id="tab-stockmarket" class="viewport">
         <div class="panel">
             <div class="panel-header">Global Cyber-Stock Exchange (GCSE)</div>
             <div class="panel-body">
-                <div style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 10px;">
-                    Invest or short-sell corporate stocks. Launching attacks against target corporations drops their stock value—profit from the crash!
+                <div style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 12px;">
+                    Buy shares or short-sell stocks before launching cyber-attacks or blackouts to maximize your profits!
                 </div>
                 <div id="stock-market-list"></div>
             </div>
         </div>
         <div class="panel">
-            <div class="panel-header">Advanced Portfolio &amp; Volatility Metrics</div>
+            <div class="panel-header">Portfolio &amp; Dividend Valuation</div>
             <div class="panel-body" id="portfolio-panel">
                 <div style="font-weight: bold; color: var(--neon-cyan); margin-bottom: 8px;">PORTFOLIO SUMMARY</div>
                 <div id="portfolio-list" style="font-size: 0.8rem; margin-bottom: 15px;">No active shares held.</div>
                 <div style="border-top: 1px solid var(--text-dim); padding-top: 10px; font-size: 0.8rem; line-height: 1.6;">
-                    <div>Available Cash: <span id="portfolio-cash" style="color: var(--neon-amber);">₿14,550</span></div>
+                    <div>Available Cash: <span id="portfolio-cash" style="color: var(--neon-amber);">₿18,500</span></div>
                     <div>Portfolio Valuation: <span id="portfolio-val" style="color: var(--neon-green);">₿0</span></div>
-                    <div>Market Sentiment Index: <span style="color: var(--neon-cyan);">Bullish (68.4%)</span></div>
-                    <div>Compound Dividend Yield: <span style="color: var(--neon-purple);">4.2% APR</span></div>
+                    <div>Market Sentiment: <span style="color: var(--neon-cyan);">Volatile / Exploitable</span></div>
+                    <div>Compound Dividend Yield: <span style="color: var(--neon-purple);">6.4% APR</span></div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- TAB 04: QUANTUM R&B MATRIX -->
+    <!-- TAB 04: QUANTUM R&B FREQUENCY MATRIX -->
     <div id="tab-quantumrb" class="viewport">
         <div class="panel">
-            <div class="panel-header">Quantum Frequency Channels (R&amp;B Ledger)</div>
-            <div class="panel-body" id="rb-track-list">
-                <!-- Populated via JS -->
-            </div>
+            <div class="panel-header">Quantum Frequency Channels</div>
+            <div class="panel-body" id="rb-track-list"></div>
         </div>
 
         <div class="panel">
-            <div class="panel-header">Neural Beat Sequencer &amp; Micro-Modulator</div>
+            <div class="panel-header">Neural Beat Sequencer &amp; Modulator</div>
             <div class="panel-body">
                 <div style="font-weight: bold; color: var(--neon-purple); margin-bottom: 8px;">HARMONIC FREQUENCY SYNTHESIS</div>
                 <div style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 12px; line-height: 1.4;">
-                    Tune quantum sub-bass resonance and rhythm frequencies to broadcast encrypted cyber-audio signals across darknet subnets.
+                    Tune quantum sub-bass resonance and groove frequencies to synchronize encrypted cyber-audio signals with terminal operations.
                 </div>
-                <div style="background: var(--bg-card); border: 1px solid var(--text-dim); padding: 12px; border-radius: 4px; margin-bottom: 12px;">
+                <div style="background: var(--bg-card); border: 1px solid var(--text-dim); padding: 12px; border-radius: 6px; margin-bottom: 12px;">
                     <div style="display:flex; justify-content:space-between; font-size:0.75rem; margin-bottom:4px;">
                         <span>SUB-BASS RESONANCE</span>
-                        <span style="color: var(--neon-purple);" id="rb-val-bass">88.4 Hz</span>
+                        <span style="color: var(--neon-purple);" id="rb-val-bass">92.0 Hz</span>
                     </div>
-                    <input type="range" min="20" max="200" value="88.4" style="width:100%; accent-color: var(--neon-purple);" oninput="document.getElementById('rb-val-bass').innerText = this.value + ' Hz'">
+                    <input type="range" min="20" max="250" value="92" style="width:100%; accent-color: var(--neon-purple);" oninput="document.getElementById('rb-val-bass').innerText = this.value + ' Hz'">
                 </div>
-                <div style="background: var(--bg-card); border: 1px solid var(--text-dim); padding: 12px; border-radius: 4px; margin-bottom: 12px;">
+                <div style="background: var(--bg-card); border: 1px solid var(--text-dim); padding: 12px; border-radius: 6px; margin-bottom: 12px;">
                     <div style="display:flex; justify-content:space-between; font-size:0.75rem; margin-bottom:4px;">
                         <span>GROOVE SYNCHRONIZATION</span>
-                        <span style="color: var(--neon-cyan);" id="rb-val-groove">124.0 BPM</span>
+                        <span style="color: var(--neon-cyan);" id="rb-val-groove">128.0 BPM</span>
                     </div>
-                    <input type="range" min="60" max="180" value="124" style="width:100%; accent-color: var(--neon-cyan);" oninput="document.getElementById('rb-val-groove').innerText = this.value + ' BPM'">
+                    <input type="range" min="60" max="200" value="128" style="width:100%; accent-color: var(--neon-cyan);" oninput="document.getElementById('rb-val-groove').innerText = this.value + ' BPM'">
                 </div>
-                <button class="cyber-btn" style="border-color: var(--neon-purple); color: var(--neon-purple); width:100%;" onclick="broadcastQuantumRB()">Broadcast Quantum R&amp;B Signal</button>
+                <button class="cyber-btn" style="border-color: var(--neon-purple); color: var(--neon-purple); width:100%;" onclick="broadcastQuantumRB()">Broadcast Quantum R&amp;B Signal (+₿600)</button>
             </div>
         </div>
 
         <div class="panel">
-            <div class="panel-header">Acoustic Telemetry &amp; Signal Logs</div>
-            <div class="panel-body" id="rb-log-output" style="font-size: 0.78rem; line-height: 1.5; color: var(--text-dim);">
-                <div>[SYSTEM] Quantum R&amp;B audio core standing by...</div>
-                <div>[STATUS] Harmonic oscillators synchronized to sub-zero vacuum.</div>
+            <div class="panel-header">Acoustic Telemetry Logs</div>
+            <div class="panel-body" id="rb-log-output" style="font-size: 0.78rem; line-height: 1.6; color: var(--text-dim);">
+                <div>[SYSTEM] Quantum R&amp;B audio matrix online...</div>
+                <div>[STATUS] Harmonic oscillators locked to sub-atomic frequencies.</div>
             </div>
         </div>
     </div>
 
     <script>
-        // Game & System State
         let gameState = {
-            credits: 14500,
+            credits: 18500,
             traces: 0,
-            cpu: 14,
-            heat: 38,
+            cpu: 18,
+            heat: 37,
+            rootkitsCount: 0,
+            passiveIncome: 0,
+            stealthActive: true,
             currentTarget: null,
             portfolio: {},
             nodes: [
-                { id: 'n1', name: 'Aegis Defense Node', ip: '194.28.14.2', status: 'Secure', firewall: 'Level 3 ICE', data: 'Military Hardware Specs', hacked: false, opCost: 1200, losses: 45000, earnings: 120000, employees: 420, racks: 18, stockTicker: 'AGIS', stockPrice: 340.50 },
-                { id: 'n2', name: 'OmniCorp Databank', ip: '82.165.191.1', status: 'Online', firewall: 'Level 5 Neural Wall', data: 'Financial Records & Cryptokeys', hacked: false, opCost: 3400, losses: 120000, earnings: 890000, employees: 2400, racks: 64, stockTicker: 'OMNI', stockPrice: 720.00 },
-                { id: 'n3', name: 'Neo-Tokyo Power Grid', ip: '45.33.32.156', status: 'Vulnerable', firewall: 'Level 2 Subroutine', data: 'Substation Control Routines', hacked: false, opCost: 800, losses: 15000, earnings: 95000, employees: 180, racks: 12, stockTicker: 'NEOT', stockPrice: 150.25 },
-                { id: 'n4', name: 'Blackmarket Proxy Cluster', ip: '107.189.3.9', status: 'Compromised', firewall: 'None', data: 'Encrypted Darknet Comms', hacked: true, opCost: 400, losses: 8000, earnings: 45000, employees: 35, racks: 8, stockTicker: 'BMARK', stockPrice: 88.00 }
+                { id: 'n1', name: 'Aegis Defense Node', ip: '194.28.14.2', status: 'Secure', firewall: 'Level 3 ICE', data: 'Military Hardware Specs', hacked: false, opCost: 1500, losses: 55000, earnings: 140000, stockTicker: 'AGIS', stockPrice: 380.00 },
+                { id: 'n2', name: 'OmniCorp Databank', ip: '82.165.191.1', status: 'Online', firewall: 'Level 5 Neural Wall', data: 'Financial Records & Cryptokeys', hacked: false, opCost: 4200, losses: 150000, earnings: 950000, stockTicker: 'OMNI', stockPrice: 790.00 },
+                { id: 'n3', name: 'Neo-Tokyo Power Grid', ip: '45.33.32.156', status: 'Vulnerable', firewall: 'Level 2 Subroutine', data: 'Substation Control Routines', hacked: false, opCost: 950, losses: 20000, earnings: 110000, stockTicker: 'NEOT', stockPrice: 165.00 },
+                { id: 'n4', name: 'Blackmarket Proxy Cluster', ip: '107.189.3.9', status: 'Compromised', firewall: 'None', data: 'Encrypted Darknet Comms', hacked: true, opCost: 500, losses: 10000, earnings: 50000, stockTicker: 'BMARK', stockPrice: 95.00 }
             ],
             stocks: {
-                'AGIS': { name: 'Aegis Defense Corp', price: 340.50, change: +2.4 },
-                'OMNI': { name: 'OmniCorp Global', price: 720.00, change: +1.1 },
-                'NEOT': { name: 'Neo-Tokyo Power', price: 150.25, change: -0.5 },
-                'BMARK': { name: 'Blackmarket Syndicate', price: 88.00, change: +5.2 }
+                'AGIS': { name: 'Aegis Defense Corp', price: 380.00, change: +3.2 },
+                'OMNI': { name: 'OmniCorp Global', price: 790.00, change: +1.5 },
+                'NEOT': { name: 'Neo-Tokyo Power', price: 165.00, change: -1.2 },
+                'BMARK': { name: 'Blackmarket Syndicate', price: 95.00, change: +4.8 }
             },
             quantumTracks: [
                 { id: 't1', title: 'Sub-Zero Velvet (808 Matrix)', bpm: 84, frequency: '432 Hz', status: 'Synced' },
@@ -584,7 +569,6 @@ Type 'help' to review the 20+ built-in framework commands or select a target nod
             ]
         };
 
-        // Tab Switching
         function switchTab(tabId) {
             document.querySelectorAll('.viewport').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -607,7 +591,6 @@ Type 'help' to review the 20+ built-in framework commands or select a target nod
             }
         }
 
-        // Render Nodes & UI
         function renderNodes() {
             const container = document.getElementById('node-list');
             container.innerHTML = '';
@@ -629,6 +612,8 @@ Type 'help' to review the 20+ built-in framework commands or select a target nod
             document.getElementById('stat-traces').innerText = gameState.traces + '%';
             document.getElementById('stat-cpu').innerText = gameState.cpu + '%';
             document.getElementById('stat-heat').innerText = gameState.heat + '°C';
+            document.getElementById('tele-rootkits').innerText = gameState.rootkitsCount;
+            document.getElementById('tele-income').innerText = '₿' + gameState.passiveIncome + ' / min';
         }
 
         function selectTarget(node) {
@@ -648,14 +633,12 @@ Type 'help' to review the 20+ built-in framework commands or select a target nod
             terminalOutput.scrollTop = terminalOutput.scrollHeight;
         }
 
-        // Terminal Command Processor
         const terminalInput = document.getElementById('terminal-input');
         terminalInput.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
                 const fullCmd = terminalInput.value.trim();
                 terminalInput.value = '';
                 if (!fullCmd) return;
-
                 appendTerminal(`root@nexus-v:~# ${fullCmd}`);
                 processCommand(fullCmd);
             }
@@ -673,40 +656,39 @@ Type 'help' to review the 20+ built-in framework commands or select a target nod
         function processCommand(fullCmd) {
             const parts = fullCmd.split(' ');
             let cmd = parts[0].toLowerCase();
-            let arg = parts[1];
 
             if (cmd === 'macro' && parts[1]) {
                 cmd = parts[1].toLowerCase();
             }
 
-            gameState.cpu = Math.min(98, gameState.cpu + Math.floor(Math.random() * 8) + 2);
-            gameState.heat = Math.min(95, gameState.heat + 1);
+            gameState.cpu = Math.min(99, gameState.cpu + 4);
+            gameState.heat = Math.min(98, gameState.heat + 1);
             renderNodes();
 
             switch(cmd) {
                 case 'help':
-                    appendTerminal(`AVAILABLE NEXUS-V COMMANDS (20+ FRAMEWORK SUITE):
-  1. scan [ip/all]      - Deep port and subsystem vulnerability scan
-  2. connect [ip]       - Establish secure socket session to node
-  3. exploit [mod]      - Launch offensive zero-day exploit routine
-  4. exfil              - Extract classified payload data from target
-  5. wipe               - Clear local proxy traces and footprints
-  6. ddos [ip]          - Flood target server with synthetic botnet traffic
-  7. spoof [ip]         - Route traffic through decoy proxy hops
-  8. rootfs             - Escalate kernel privileges and unlock subroutines
-  9. phish [ip]         - Deploy spear-phishing campaign against employees
-  10. ransom [ip]       - Encrypt operational databases for Bitcoin ransom
-  11. mitm              - Intercept man-in-the-middle encrypted data streams
-  12. backdoor [ip]     - Install persistent kernel backdoor
-  13. scrape            - Harvest deep financial ledger data
-  14. cryptomine        - Redirect idle target CPU cycles to mine crypto
-  15. icebreak          - Deploy quantum decrypter against ICE walls
-  16. sniff             - Capture active session tokens across local subnet
-  17. proxy [node]      - Switch active proxy routing layer
-  18. sysmon            - Display system health and thermal metrics
-  19. market            - Query real-time stock exchange ticker feeds
-  20. nodes             - Display full matrix node inventory
-  21. clear             - Clear terminal viewport`, 'log-info');
+                    appendTerminal(`NEXUS-V 32+ COMMAND SUITE:
+  [Core Ops]
+  1. scan [ip]        2. connect [ip]    3. exploit [mod]   4. exfil
+  5. wipe             6. ddos [ip]       7. spoof [ip]      8. rootfs
+  9. phish [ip]       10. ransom [ip]    11. mitm           12. backdoor [ip]
+  13. scrape          14. cryptomine     15. icebreak       16. sniff
+  17. proxy [node]    18. sysmon         19. market         20. nodes
+  
+  [12 Brand-New Action Commands]
+  21. zeroday [ip]    - Zero-day exploit, instant ICE bypass & market crash
+  22. satlink         - Orbital satellite uplink for clean bonus credits
+  23. deeptrace       - Deep structural analysis of corporate defense grids
+  24. singularity     - 3x Mining overclock for high-yield cryptocurrency
+  25. quantumjam      - Jam target security feeds & boost R&B harmonics
+  26. rootkit [ip]    - Install stealth kernel rootkit for passive income
+  27. syphon [ip]     - Drain corporate treasury directly into your wallet
+  28. ghostmode       - Engage optical stealth, freezing trace accumulation
+  29. neuralhack [ip] - Extract executive neural memories & stock data
+  30. blackout [ip]   - Regional power grid collapse & stock panic
+  31. cloneserver     - Deploy darknet server decoy to absorb traces
+  32. overdrive       - Double terminal output & profit multipliers
+  33. clear           - Clear terminal viewport`, 'log-info');
                     break;
 
                 case 'clear':
@@ -723,18 +705,153 @@ Type 'help' to review the 20+ built-in framework commands or select a target nod
                 case 'sysmon':
                     appendTerminal(`SYSTEM DIAGNOSTICS:
  - CPU Load: ${gameState.cpu}% | Thermal: ${gameState.heat}°C
- - Trace Level: ${gameState.traces}% | Available Credits: ₿${gameState.credits}
- - Active Proxy Chain: 7 Hops (Encrypted)`, 'log-info');
+ - Trace Level: ${gameState.traces}% | Credits: ₿${gameState.credits}
+ - Rootkits Active: ${gameState.rootkitsCount} | Passive Income: ₿${gameState.passiveIncome}/min`, 'log-info');
                     break;
 
                 case 'market':
                     appendTerminal(`REAL-TIME STOCK EXCHANGE TICKER:
- - AGIS (Aegis Defense): $${gameState.stocks['AGIS'].price} (${gameState.stocks['AGIS'].change}%)
- - OMNI (OmniCorp): $${gameState.stocks['OMNI'].price} (${gameState.stocks['OMNI'].change}%)
- - NEOT (Neo-Tokyo Power): $${gameState.stocks['NEOT'].price} (${gameState.stocks['NEOT'].change}%)
- - BMARK (Blackmarket): $${gameState.stocks['BMARK'].price} (${gameState.stocks['BMARK'].change}%)`, 'log-purple');
+ - AGIS: $${gameState.stocks['AGIS'].price} (${gameState.stocks['AGIS'].change}%)
+ - OMNI: $${gameState.stocks['OMNI'].price} (${gameState.stocks['OMNI'].change}%)
+ - NEOT: $${gameState.stocks['NEOT'].price} (${gameState.stocks['NEOT'].change}%)
+ - BMARK: $${gameState.stocks['BMARK'].price} (${gameState.stocks['BMARK'].change}%)`, 'log-purple');
                     break;
 
+                // --- 12 BRAND-NEW COMMANDS ---
+                case 'zeroday':
+                    if (!gameState.currentTarget) { appendTerminal('[-] ERROR: No target selected.', 'log-danger'); return; }
+                    appendTerminal(`[~] Deploying classified Zero-Day exploit against ${gameState.currentTarget}...`, 'log-warning');
+                    addTrace(12);
+                    setTimeout(() => {
+                        const target = gameState.nodes.find(n => n.ip === gameState.currentTarget);
+                        target.hacked = true;
+                        target.status = 'Root Access (0-Day)';
+                        gameState.credits += 4500;
+                        appendTerminal(`[+] Zero-day successful! Full root privileges secured. +₿4,500`, 'log-success');
+                        impactTargetStock(gameState.currentTarget, -18);
+                        renderNodes();
+                    }, 1000);
+                    break;
+
+                case 'satlink':
+                    appendTerminal(`[~] Establishing connection with Low-Earth Orbit military satellites...`, 'log-info');
+                    setTimeout(() => {
+                        gameState.credits += 2200;
+                        gameState.traces = Math.max(0, gameState.traces - 10);
+                        appendTerminal(`[+] Satellite relay secured! +₿2,200 transferred. Traces reduced by 10%.`, 'log-success');
+                        renderNodes();
+                    }, 900);
+                    break;
+
+                case 'deeptrace':
+                    if (!gameState.currentTarget) { appendTerminal('[-] ERROR: No target selected.', 'log-danger'); return; }
+                    appendTerminal(`[~] Running deep vulnerability heuristic scan on ${gameState.currentTarget}...`, 'log-info');
+                    setTimeout(() => {
+                        const target = gameState.nodes.find(n => n.ip === gameState.currentTarget);
+                        appendTerminal(`[+] Firewall weakness located: ${target.firewall} has open port 8080 backdoor.`, 'log-success');
+                    }, 800);
+                    break;
+
+                case 'singularity':
+                    appendTerminal(`[!] OVERCLOCKING Quantum mining cores into Singularity Mode...`, 'log-purple');
+                    setTimeout(() => {
+                        const mined = 5000;
+                        gameState.credits += mined;
+                        gameState.heat += 15;
+                        appendTerminal(`[+] Singularity mining cycle complete! Generated ₿${mined}. (Thermal +15°C)`, 'log-success');
+                        renderNodes();
+                    }, 1200);
+                    break;
+
+                case 'quantumjam':
+                    appendTerminal(`[~] Broadcasting Quantum Jamming frequencies across target subnets...`, 'log-info');
+                    setTimeout(() => {
+                        gameState.traces = Math.max(0, gameState.traces - 25);
+                        appendTerminal(`[+] Corporate defense feeds jammed! Traces dropped by 25%.`, 'log-success');
+                        renderNodes();
+                    }, 800);
+                    break;
+
+                case 'rootkit':
+                    const rTarget = gameState.nodes.find(n => n.ip === gameState.currentTarget);
+                    if (!rTarget || !rTarget.hacked) { appendTerminal('[-] Target must be compromised first.', 'log-danger'); return; }
+                    appendTerminal(`[~] Planting stealth kernel rootkit on ${rTarget.name}...`, 'log-warning');
+                    setTimeout(() => {
+                        gameState.rootkitsCount++;
+                        gameState.passiveIncome += 350;
+                        appendTerminal(`[+] Rootkit active! Passive skimming income increased by ₿350/min.`, 'log-success');
+                        renderNodes();
+                    }, 1000);
+                    break;
+
+                case 'syphon':
+                    const sTarget = gameState.nodes.find(n => n.ip === gameState.currentTarget);
+                    if (!sTarget || !sTarget.hacked) { appendTerminal('[-] Target requires root access.', 'log-danger'); return; }
+                    appendTerminal(`[~] Syphoning treasury reserves from ${sTarget.name}...`, 'log-warning');
+                    addTrace(15);
+                    setTimeout(() => {
+                        const bounty = 6000;
+                        gameState.credits += bounty;
+                        appendTerminal(`[+] Treasury syphon complete! ₿${bounty} extracted.`, 'log-success');
+                        impactTargetStock(gameState.currentTarget, -22);
+                        renderNodes();
+                    }, 1100);
+                    break;
+
+                case 'ghostmode':
+                    gameState.stealthActive = true;
+                    appendTerminal(`[+] Ghost Mode engaged. Trace accumulation suspended for 60 seconds.`, 'log-success');
+                    document.getElementById('stat-stealth').innerText = 'GHOST MODE';
+                    document.getElementById('stat-stealth').style.color = 'var(--neon-purple)';
+                    setTimeout(() => {
+                        gameState.stealthActive = false;
+                        document.getElementById('stat-stealth').innerText = 'STEALTH ACTIVE';
+                        document.getElementById('stat-stealth').style.color = 'var(--neon-green)';
+                    }, 60000);
+                    break;
+
+                case 'neuralhack':
+                    if (!gameState.currentTarget) { appendTerminal('[-] ERROR: No target selected.', 'log-danger'); return; }
+                    appendTerminal(`[~] Uplinked to executive neural implants on ${gameState.currentTarget}...`, 'log-purple');
+                    addTrace(8);
+                    setTimeout(() => {
+                        gameState.credits += 3000;
+                        appendTerminal(`[+] Neural data harvested! Insider trading tips & cryptokeys acquired (+₿3,000).`, 'log-success');
+                        renderNodes();
+                    }, 1000);
+                    break;
+
+                case 'blackout':
+                    if (!gameState.currentTarget) { appendTerminal('[!] WARNING: Initiating regional power grid blackout...', 'log-danger');
+                    addTrace(35);
+                    setTimeout(() => {
+                        gameState.credits += 8000;
+                        appendTerminal(`[+] Regional blackout successful! Grid offline, massive payouts secured (+₿8,000).`, 'log-success');
+                        impactTargetStock(gameState.currentTarget, -30);
+                        renderNodes();
+                    }, 1500);
+                    return; }
+                    break;
+
+                case 'cloneserver':
+                    appendTerminal(`[~] Spawning 16 darknet server decoys...`, 'log-info');
+                    setTimeout(() => {
+                        gameState.traces = 0;
+                        appendTerminal(`[+] All decoy servers deployed. Trace footprint completely wiped to 0%!`, 'log-success');
+                        renderNodes();
+                    }, 800);
+                    break;
+
+                case 'overdrive':
+                    appendTerminal(`[!] SYSTEM OVERDRIVE: Terminal processor frequency doubled!`, 'log-purple');
+                    setTimeout(() => {
+                        gameState.credits += 4000;
+                        appendTerminal(`[+] Overdrive cycle finished. Multiplier bonus credited (+₿4,000).`, 'log-success');
+                        renderNodes();
+                    }, 1000);
+                    break;
+
+                // --- STANDARD COMMANDS ---
                 case 'scan':
                     if (!gameState.currentTarget) { appendTerminal('[-] ERROR: No target selected.', 'log-danger'); return; }
                     appendTerminal(`[I] Probing ports on ${gameState.currentTarget}...`, 'log-info');
@@ -747,7 +864,7 @@ Type 'help' to review the 20+ built-in framework commands or select a target nod
                 case 'brute':
                     const targetBrute = gameState.nodes.find(n => n.ip === gameState.currentTarget);
                     if (!targetBrute) { appendTerminal('[-] Select a target node first.', 'log-danger'); return; }
-                    appendTerminal(`[~] Executing dictionary brute-force against ${targetBrute.name}...`, 'log-info');
+                    appendTerminal(`[~] Executing brute-force dictionary attack against ${targetBrute.name}...`, 'log-info');
                     addTrace(10);
                     setTimeout(() => {
                         appendTerminal(`[+] Admin credentials acquired for ${targetBrute.ip}`, 'log-success');
@@ -774,7 +891,7 @@ Type 'help' to review the 20+ built-in framework commands or select a target nod
                     if (!targetExfil || !targetExfil.hacked) { appendTerminal('[-] Target requires root access first.', 'log-danger'); return; }
                     appendTerminal(`[~] Extracting: "${targetExfil.data}"...`, 'log-info');
                     setTimeout(() => {
-                        const payout = 2500;
+                        const payout = 3000;
                         gameState.credits += payout;
                         appendTerminal(`[+] Exfiltration complete! Transferred ₿${payout}.`, 'log-success');
                         renderNodes();
@@ -786,26 +903,17 @@ Type 'help' to review the 20+ built-in framework commands or select a target nod
                     appendTerminal(`[~] Launching botnet UDP amplification flood against ${gameState.currentTarget}...`, 'log-warning');
                     addTrace(12);
                     setTimeout(() => {
-                        appendTerminal(`[+] Target servers overwhelmed! Operational losses incurred by company.`, 'log-success');
+                        appendTerminal(`[+] Target servers overwhelmed! Operational losses incurred.`, 'log-success');
                         impactTargetStock(gameState.currentTarget, -15);
                     }, 1000);
                     break;
 
-                case 'phish':
-                    if (!gameState.currentTarget) { appendTerminal('[-] ERROR: No target selected.', 'log-danger'); return; }
-                    appendTerminal(`[~] Deploying spear-phishing payload to corporate HR and admin emails...`, 'log-warning');
-                    addTrace(8);
-                    setTimeout(() => {
-                        appendTerminal(`[+] Credential harvest successful! Employee session tokens acquired.`, 'log-success');
-                    }, 900);
-                    break;
-
                 case 'ransom':
                     if (!gameState.currentTarget) { appendTerminal('[-] ERROR: No target selected.', 'log-danger'); return; }
-                    appendTerminal(`[!] Deploying AES-256 ransomware payload to ${gameState.currentTarget} database...`, 'log-danger');
-                    addTrace(25);
+                    appendTerminal(`[!] Deploying AES-256 ransomware payload to ${gameState.currentTarget}...`, 'log-danger');
+                    addTrace(22);
                     setTimeout(() => {
-                        const payout = 3500;
+                        const payout = 4500;
                         gameState.credits += payout;
                         appendTerminal(`[+] Ransom paid! ₿${payout} transferred to anonymous wallet.`, 'log-success');
                         impactTargetStock(gameState.currentTarget, -25);
@@ -813,30 +921,10 @@ Type 'help' to review the 20+ built-in framework commands or select a target nod
                     }, 1200);
                     break;
 
-                case 'overload':
-                    appendTerminal(`[!] WARNING: Initiating recursive power grid feedback loop...`, 'log-danger');
-                    addTrace(30);
-                    setTimeout(() => {
-                        appendTerminal(`[+] Grid shutdown triggered. Massive market disruption caused.`, 'log-success');
-                        gameState.credits += 5000;
-                        renderNodes();
-                    }, 1500);
-                    break;
-
-                case 'cryptomine':
-                    appendTerminal(`[~] Injecting silent mining daemon into compromised nodes...`, 'log-info');
-                    setTimeout(() => {
-                        const mined = 1200;
-                        gameState.credits += mined;
-                        appendTerminal(`[+] Mining cycle complete. Generated ₿${mined} in Monero/Bitcoin.`, 'log-success');
-                        renderNodes();
-                    }, 1000);
-                    break;
-
                 case 'wipe':
                     appendTerminal(`[~] Purging local logs and cycling proxy hops...`, 'log-info');
                     setTimeout(() => {
-                        gameState.traces = Math.max(0, gameState.traces - 40);
+                        gameState.traces = Math.max(0, gameState.traces - 45);
                         renderNodes();
                         appendTerminal(`[+] Traces successfully masked.`, 'log-success');
                     }, 700);
@@ -848,15 +936,16 @@ Type 'help' to review the 20+ built-in framework commands or select a target nod
         }
 
         function addTrace(amount) {
+            if (gameState.stealthActive) return;
             gameState.traces = Math.min(100, gameState.traces + amount);
             renderNodes();
             if(gameState.traces >= 100) {
-                alert('TRACE COMPLETE. Counter-offensive launched by defense agencies. Resetting matrix session...');
+                alert('TRACE COMPLETE. Counter-offensive launched by cyber defense agencies. Resetting matrix session...');
                 window.location.reload();
             }
         }
 
-        // Target Infrastructure & Spreadsheet View
+        // Spreadsheet View
         function renderSpreadsheet() {
             const container = document.getElementById('spreadsheet-view');
             let html = `
@@ -866,7 +955,7 @@ Type 'help' to review the 20+ built-in framework commands or select a target nod
                         <th>Op Cost / Day</th>
                         <th>Annual Losses</th>
                         <th>Earnings</th>
-                        <th>Servers</th>
+                        <th>Rootkit Skim</th>
                     </tr>
             `;
             gameState.nodes.forEach(n => {
@@ -876,28 +965,27 @@ Type 'help' to review the 20+ built-in framework commands or select a target nod
                         <td>₿${n.opCost.toLocaleString()}</td>
                         <td style="color: var(--neon-rose);">₿${n.losses.toLocaleString()}</td>
                         <td style="color: var(--neon-green);">₿${n.earnings.toLocaleString()}</td>
-                        <td>${n.racks} Racks</td>
+                        <td style="color: var(--neon-amber);">${n.hacked ? 'Active' : 'Locked'}</td>
                     </tr>
                 `;
             });
             html += `</table>`;
             container.innerHTML = html;
 
-            const detailContainer = document.getElementById('infrastructure-details');
-            detailContainer.innerHTML = `
-                <div style="font-weight: bold; color: var(--neon-cyan); margin-bottom: 10px;">INFRASTRUCTURE MICRO-METRICS &amp; RATIOS</div>
-                <p style="font-size: 0.8rem; line-height: 1.5; color: var(--text-main);">
-                    Target organizations maintain high operational expenditures (OpEx) for cooling, enterprise security licenses, and physical data center upkeep. DDoS attacks, ransomware deployment, and data exfiltration directly spike corporate losses and depress equity valuations on the GCSE.
+            document.getElementById('infrastructure-details').innerHTML = `
+                <div style="font-weight: bold; color: var(--neon-cyan); margin-bottom: 10px;">INFRASTRUCTURE LOSS ANALYSIS</div>
+                <p style="font-size: 0.8rem; line-height: 1.6; color: var(--text-main);">
+                    Corporate targets maintain massive operational overhead. Launching ransomware, zero-day exploits, or syphon attacks directly spikes corporate financial losses, depressing their stock value on the GCSE exchange.
                 </p>
                 <div style="margin-top: 15px; font-size: 0.8rem; line-height: 1.6; color: var(--text-dim);">
-                    <div>• Average Debt-to-Equity Ratio: <span style="color: var(--neon-amber);">1.42</span></div>
-                    <div>• Security License Burn Rate: <span style="color: var(--neon-rose);">₿14,200/wk</span></div>
-                    <div>• Vulnerability Index Score: <span style="color: var(--neon-green);">78.4 / 100</span></div>
+                    <div>• Active Rootkits Skimming: <span style="color: var(--neon-green);">${gameState.rootkitsCount} nodes</span></div>
+                    <div>• Total Passive Revenue: <span style="color: var(--neon-amber);">₿${gameState.passiveIncome} / min</span></div>
+                    <div>• Market Vulnerability Index: <span style="color: var(--neon-cyan);">84.2 / 100</span></div>
                 </div>
             `;
         }
 
-        // Advanced Stock Exchange System
+        // Stock Market & Portfolio
         function renderStockMarket() {
             const marketList = document.getElementById('stock-market-list');
             marketList.innerHTML = '';
@@ -918,17 +1006,13 @@ Type 'help' to review the 20+ built-in framework commands or select a target nod
                 `;
                 marketList.appendChild(div);
             }
-
             renderPortfolio();
         }
 
         function buyStock(ticker) {
             let stock = gameState.stocks[ticker];
             let cost = stock.price * 10;
-            if (gameState.credits < cost) {
-                alert('Insufficient credits to purchase shares.');
-                return;
-            }
+            if (gameState.credits < cost) { alert('Insufficient credits.'); return; }
             gameState.credits -= cost;
             gameState.portfolio[ticker] = (gameState.portfolio[ticker] || 0) + 10;
             renderStockMarket();
@@ -936,10 +1020,7 @@ Type 'help' to review the 20+ built-in framework commands or select a target nod
         }
 
         function sellStock(ticker) {
-            if (!gameState.portfolio[ticker] || gameState.portfolio[ticker] < 10) {
-                alert('You do not hold enough shares to sell.');
-                return;
-            }
+            if (!gameState.portfolio[ticker] || gameState.portfolio[ticker] < 10) { alert('No shares held.'); return; }
             let stock = gameState.stocks[ticker];
             let revenue = stock.price * 10;
             gameState.credits += revenue;
@@ -979,7 +1060,7 @@ Type 'help' to review the 20+ built-in framework commands or select a target nod
             }
         }
 
-        // Quantum R&B Section Logic
+        // Quantum R&B Section
         function renderQuantumRB() {
             const container = document.getElementById('rb-track-list');
             container.innerHTML = '';
@@ -1000,21 +1081,23 @@ Type 'help' to review the 20+ built-in framework commands or select a target nod
         function broadcastQuantumRB() {
             const logOut = document.getElementById('rb-log-output');
             const time = new Date().toLocaleTimeString();
-            const timestampDiv = document.createElement('div');
-            timestampDiv.innerHTML = `<span style="color: var(--neon-purple);">[${time}]</span> Quantum R&amp;B signal broadcasted across encrypted darknet subnets. Harmonic distortion: 0.02%.`;
-            logOut.appendChild(timestampDiv);
+            const div = document.createElement('div');
+            div.innerHTML = `<span style="color: var(--neon-purple);">[${time}]</span> Quantum R&amp;B frequency broadcasted! Encrypted harmonic subnets synchronized.`;
+            logOut.appendChild(div);
             logOut.scrollTop = logOut.scrollHeight;
-            gameState.credits += 450;
+            gameState.credits += 600;
             renderNodes();
         }
 
-        // Background Telemetry & Thermal Simulation
+        // Passive Income & Thermal Ticker
         setInterval(() => {
             gameState.heat = Math.max(35, gameState.heat + (Math.random() > 0.5 ? 1 : -1));
+            if (gameState.rootkitsCount > 0) {
+                gameState.credits += Math.round(gameState.passiveIncome / 12);
+            }
             renderNodes();
-        }, 3000);
+        }, 5000);
 
-        // Initial Setup
         renderNodes();
         selectTarget(gameState.nodes[0]);
     </script>
