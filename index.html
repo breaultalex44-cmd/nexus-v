@@ -34,6 +34,7 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            position: relative;
         }
 
         /* Holographic Scanline & Vignette Overlay */
@@ -91,6 +92,7 @@
             display: flex;
             gap: 12px;
             font-size: 0.8rem;
+            align-items: center;
         }
 
         .metric-badge {
@@ -115,6 +117,8 @@
             border-bottom: 1px solid var(--text-dim);
             padding: 0 24px;
             gap: 8px;
+            position: relative;
+            z-index: 10;
         }
 
         .tab-btn {
@@ -151,6 +155,7 @@
             padding: 16px;
             gap: 16px;
             overflow: hidden;
+            position: relative;
         }
 
         .viewport.active {
@@ -339,6 +344,18 @@
             box-shadow: 0 0 20px var(--neon-amber);
         }
 
+        .cyber-btn.purple {
+            border-color: var(--neon-purple);
+            color: var(--neon-purple);
+            box-shadow: 0 0 10px rgba(176,0,255,0.2);
+        }
+
+        .cyber-btn.purple:hover {
+            background: var(--neon-purple);
+            color: #fff;
+            box-shadow: 0 0 25px var(--neon-purple);
+        }
+
         /* Stock Market & Track Rows */
         .stock-row, .rb-track-card {
             display: flex;
@@ -383,16 +400,247 @@
         .log-danger { color: var(--neon-rose); text-shadow: 0 0 8px rgba(255,0,85,0.3); }
         .log-info { color: var(--neon-cyan); text-shadow: 0 0 8px rgba(0,243,255,0.3); }
         .log-purple { color: var(--neon-purple); text-shadow: 0 0 8px rgba(176,0,255,0.3); }
+
+        /* ==========================================================================
+           ADVANCED WORLD-CLASS TUTORIAL SYSTEM STYLES
+           ========================================================================== */
+        
+        /* Initial Prompt Modal */
+        #tut-init-modal {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(2, 5, 14, 0.92);
+            backdrop-filter: blur(12px);
+            z-index: 20000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
+        .tut-init-card {
+            background: var(--bg-panel);
+            border: 2px solid var(--neon-cyan);
+            box-shadow: 0 0 50px rgba(0, 243, 255, 0.3), inset 0 0 20px rgba(0, 243, 255, 0.1);
+            border-radius: 12px;
+            width: 520px;
+            max-width: 90vw;
+            padding: 32px;
+            text-align: center;
+            position: relative;
+            animation: modal-enter 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes modal-enter {
+            0% { transform: scale(0.8) translateY(30px); opacity: 0; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        .tut-init-title {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--neon-cyan);
+            letter-spacing: 3px;
+            margin-bottom: 12px;
+            text-shadow: 0 0 20px var(--neon-cyan);
+        }
+
+        .tut-init-sub {
+            font-size: 0.85rem;
+            color: var(--text-main);
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        .tut-init-btns {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        .tut-init-btn {
+            flex: 1;
+            padding: 14px 20px;
+            font-size: 0.9rem;
+        }
+
+        /* Active Highlight Box Overlay */
+        #tut-highlight-box {
+            position: fixed;
+            z-index: 10001;
+            pointer-events: none;
+            border: 2px dashed var(--neon-cyan);
+            border-radius: 8px;
+            box-shadow: 0 0 25px rgba(0, 243, 255, 0.5), inset 0 0 15px rgba(0, 243, 255, 0.2);
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            display: none;
+            animation: pulse-border 1.5s infinite ease-in-out;
+        }
+
+        @keyframes pulse-border {
+            0% { border-color: var(--neon-cyan); box-shadow: 0 0 20px rgba(0, 243, 255, 0.4); }
+            50% { border-color: var(--neon-purple); box-shadow: 0 0 35px rgba(176, 0, 255, 0.7); }
+            100% { border-color: var(--neon-cyan); box-shadow: 0 0 20px rgba(0, 243, 255, 0.4); }
+        }
+
+        /* Floating Animated Pointer Cursor */
+        #tut-cursor {
+            position: fixed;
+            width: 28px;
+            height: 28px;
+            z-index: 10005;
+            pointer-events: none;
+            transition: all 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+            display: none;
+            transform: translate(-50%, -50%);
+        }
+
+        #tut-cursor::before {
+            content: "➔";
+            font-size: 26px;
+            color: var(--neon-green);
+            text-shadow: 0 0 15px var(--neon-green);
+            display: block;
+            transform: rotate(-45deg);
+        }
+
+        /* Guidance Card HUD */
+        #tut-guidance-card {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 440px;
+            max-width: calc(100vw - 48px);
+            background: rgba(6, 11, 25, 0.96);
+            border: 2px solid var(--neon-cyan);
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 243, 255, 0.25);
+            backdrop-filter: blur(12px);
+            z-index: 10002;
+            padding: 18px 20px;
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .tut-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(84, 120, 178, 0.3);
+            padding-bottom: 8px;
+        }
+
+        .tut-step-tag {
+            font-size: 0.7rem;
+            background: rgba(0, 243, 255, 0.12);
+            color: var(--neon-cyan);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .tut-card-title {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #fff;
+            margin-top: 4px;
+        }
+
+        .tut-card-desc {
+            font-size: 0.8rem;
+            color: var(--text-main);
+            line-height: 1.5;
+        }
+
+        .tut-progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .tut-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        .tut-card-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .commander-btn-active {
+            background: var(--neon-purple) !important;
+            color: #fff !important;
+            box-shadow: 0 0 20px var(--neon-purple) !important;
+            animation: commander-glow 1s infinite alternate;
+        }
+
+        @keyframes commander-glow {
+            0% { box-shadow: 0 0 10px var(--neon-purple); }
+            100% { box-shadow: 0 0 30px var(--neon-purple), 0 0 10px var(--neon-cyan); }
+        }
     </style>
 </head>
 <body>
 
+    <!-- INITIAL TUTORIAL INVITATION MODAL -->
+    <div id="tut-init-modal">
+        <div class="tut-init-card">
+            <div class="tut-init-title">SYSTEM INIT TACTICAL PROTOCOL</div>
+            <div class="tut-init-sub">
+                Welcome Commander. NEXUS-V contains 32+ cybernetic commands, real-time corporate skimming ledgers, short-selling stock exchanges, and quantum sub-bass sound synthesis.
+                <br><br>
+                Would you like to initiate the guided interactive walk-through?
+            </div>
+            <div class="tut-init-btns">
+                <button class="cyber-btn tut-init-btn" onclick="startTutorialSystem()">Enter Tutorial</button>
+                <button class="cyber-btn danger tut-init-btn" onclick="declineTutorialSystem()">No Sir</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TUTORIAL OVERLAY ELEMENTS -->
+    <div id="tut-highlight-box"></div>
+    <div id="tut-cursor"></div>
+
+    <div id="tut-guidance-card">
+        <div class="tut-card-header">
+            <span class="tut-step-tag" id="tut-step-badge">STEP 1 / 8</span>
+            <span style="font-size: 0.7rem; color: var(--neon-green);" id="tut-status-indicator">LIVE GUIDANCE ACTIVE</span>
+        </div>
+        <div class="tut-card-title" id="tut-title">Target Lock Protocol</div>
+        <div class="tut-card-desc" id="tut-desc">Select a target node from the Target Vector Matrix to initiate an encrypted operational shell session.</div>
+        <div class="tut-progress-bar">
+            <div class="tut-progress-fill" id="tut-progress"></div>
+        </div>
+        <div class="tut-card-controls">
+            <button class="cyber-btn danger" style="padding: 6px 10px; font-size: 0.7rem;" onclick="exitTutorialSystem()">Exit Tutorial</button>
+            <div style="display: flex; gap: 6px;">
+                <button class="cyber-btn purple" style="padding: 6px 12px; font-size: 0.7rem;" id="tut-commander-btn" onclick="toggleCommanderMode()">🤖 Commander Mode</button>
+                <button class="cyber-btn" style="padding: 6px 12px; font-size: 0.7rem;" onclick="nextTutorialStep()">Next Step ➔</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- HEADER HUD -->
     <header>
         <div class="logo">
             <div class="logo-pulse"></div>
-            NEXUS-V // ULTIMATE CYBERNETIC OPERATIONS & QUANTUM R&amp;B MATRIX v12.0
+            NEXUS-V // ULTIMATE CYBERNETIC OPERATIONS &amp; QUANTUM R&amp;B MATRIX v12.0
         </div>
         <div class="status-metrics">
+            <button class="cyber-btn amber" id="hdr-tutorial-btn" style="padding: 5px 10px; font-size: 0.7rem; margin-right: 8px;" onclick="openTutorialModal()">[?] Tutorial</button>
             <div class="metric-badge">CREDITS: <span id="stat-credits">₿18,500</span></div>
             <div class="metric-badge">TRACE: <span id="stat-traces">0%</span></div>
             <div class="metric-badge">CPU: <span id="stat-cpu">18%</span></div>
@@ -401,16 +649,16 @@
         </div>
     </header>
 
-    <div class="nav-tabs">
-        <button class="tab-btn active" onclick="switchTab('operations')">[01] Terminal &amp; Ops</button>
-        <button class="tab-btn" onclick="switchTab('financials')">[02] Corporate Spreadsheets &amp; Skimming</button>
-        <button class="tab-btn" onclick="switchTab('stockmarket')">[03] Cyber-Exchange &amp; Shorting</button>
-        <button class="tab-btn" onclick="switchTab('quantumrb')">[04] Quantum R&amp;B Frequency Matrix</button>
+    <div class="nav-tabs" id="main-nav-tabs">
+        <button class="tab-btn active" id="tab-btn-ops" onclick="switchTab('operations')">[01] Terminal &amp; Ops</button>
+        <button class="tab-btn" id="tab-btn-fin" onclick="switchTab('financials')">[02] Corporate Spreadsheets &amp; Skimming</button>
+        <button class="tab-btn" id="tab-btn-stk" onclick="switchTab('stockmarket')">[03] Cyber-Exchange &amp; Shorting</button>
+        <button class="tab-btn" id="tab-btn-qrb" onclick="switchTab('quantumrb')">[04] Quantum R&amp;B Frequency Matrix</button>
     </div>
 
     <!-- TAB 01: TERMINAL & OPS -->
     <div id="tab-operations" class="viewport active">
-        <div class="panel">
+        <div class="panel" id="panel-target-matrix">
             <div class="panel-header">Target Vector Matrix</div>
             <div class="panel-body" id="node-list"></div>
         </div>
@@ -430,13 +678,13 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
             </div>
         </div>
 
-        <div class="panel">
+        <div class="panel" id="panel-macro-console">
             <div class="panel-header">Macro Execution &amp; Telemetry</div>
             <div class="panel-body">
                 <div style="font-size: 0.75rem; color: var(--text-dim); margin-bottom: 6px;">MACRO INSTRUCTION CONSOLE</div>
                 <div style="display: flex; gap: 6px; margin-bottom: 12px;">
                     <input type="text" id="macro-command-input" placeholder="e.g. macro zeroday" style="flex:1; background: var(--bg-deep); border: 1px solid var(--text-dim); color: var(--neon-cyan); padding: 8px; font-family: var(--font-mono); font-size: 0.8rem; border-radius: 6px; outline: none;">
-                    <button class="cyber-btn" onclick="executeWrittenMacro()">Run</button>
+                    <button class="cyber-btn" id="btn-run-macro" onclick="executeWrittenMacro()">Run</button>
                 </div>
                 <div style="font-size: 0.73rem; color: var(--text-dim); line-height: 1.6; margin-bottom: 12px;">
                     <b>Featured Action Macros:</b><br>
@@ -459,11 +707,11 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
 
     <!-- TAB 02: CORPORATE SPREADSHEETS -->
     <div id="tab-financials" class="viewport">
-        <div class="panel">
+        <div class="panel" id="panel-ledger-table">
             <div class="panel-header">Live Corporate Ledger &amp; Skimming Balances</div>
             <div class="panel-body" id="spreadsheet-view"></div>
         </div>
-        <div class="panel">
+        <div class="panel" id="panel-infra-analysis">
             <div class="panel-header">Advanced Infrastructure Loss Analysis</div>
             <div class="panel-body" id="infrastructure-details">
                 <div style="color: var(--text-dim);">Select a target node to inspect server racks, operating overhead, and vulnerability ratios.</div>
@@ -473,7 +721,7 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
 
     <!-- TAB 03: CYBER-EXCHANGE & STOCK MARKET -->
     <div id="tab-stockmarket" class="viewport">
-        <div class="panel">
+        <div class="panel" id="panel-gcse-exchange">
             <div class="panel-header">Global Cyber-Stock Exchange (GCSE)</div>
             <div class="panel-body">
                 <div style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 12px;">
@@ -482,7 +730,7 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
                 <div id="stock-market-list"></div>
             </div>
         </div>
-        <div class="panel">
+        <div class="panel" id="panel-portfolio">
             <div class="panel-header">Portfolio &amp; Dividend Valuation</div>
             <div class="panel-body" id="portfolio-panel">
                 <div style="font-weight: bold; color: var(--neon-cyan); margin-bottom: 8px;">PORTFOLIO SUMMARY</div>
@@ -499,12 +747,12 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
 
     <!-- TAB 04: QUANTUM R&B FREQUENCY MATRIX -->
     <div id="tab-quantumrb" class="viewport">
-        <div class="panel">
+        <div class="panel" id="panel-rb-channels">
             <div class="panel-header">Quantum Frequency Channels</div>
             <div class="panel-body" id="rb-track-list"></div>
         </div>
 
-        <div class="panel">
+        <div class="panel" id="panel-rb-sequencer">
             <div class="panel-header">Neural Beat Sequencer &amp; Modulator</div>
             <div class="panel-body">
                 <div style="font-weight: bold; color: var(--neon-purple); margin-bottom: 8px;">HARMONIC FREQUENCY SYNTHESIS</div>
@@ -516,20 +764,20 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
                         <span>SUB-BASS RESONANCE</span>
                         <span style="color: var(--neon-purple);" id="rb-val-bass">92.0 Hz</span>
                     </div>
-                    <input type="range" min="20" max="250" value="92" style="width:100%; accent-color: var(--neon-purple);" oninput="document.getElementById('rb-val-bass').innerText = this.value + ' Hz'">
+                    <input type="range" id="slider-sub-bass" min="20" max="250" value="92" style="width:100%; accent-color: var(--neon-purple);" oninput="document.getElementById('rb-val-bass').innerText = this.value + ' Hz'">
                 </div>
                 <div style="background: var(--bg-card); border: 1px solid var(--text-dim); padding: 12px; border-radius: 6px; margin-bottom: 12px;">
                     <div style="display:flex; justify-content:space-between; font-size:0.75rem; margin-bottom:4px;">
                         <span>GROOVE SYNCHRONIZATION</span>
                         <span style="color: var(--neon-cyan);" id="rb-val-groove">128.0 BPM</span>
                     </div>
-                    <input type="range" min="60" max="200" value="128" style="width:100%; accent-color: var(--neon-cyan);" oninput="document.getElementById('rb-val-groove').innerText = this.value + ' BPM'">
+                    <input type="range" id="slider-groove-sync" min="60" max="200" value="128" style="width:100%; accent-color: var(--neon-cyan);" oninput="document.getElementById('rb-val-groove').innerText = this.value + ' BPM'">
                 </div>
-                <button class="cyber-btn" style="border-color: var(--neon-purple); color: var(--neon-purple); width:100%;" onclick="broadcastQuantumRB()">Broadcast Quantum R&amp;B Signal (+₿600)</button>
+                <button class="cyber-btn" id="btn-broadcast-rb" style="border-color: var(--neon-purple); color: var(--neon-purple); width:100%;" onclick="broadcastQuantumRB()">Broadcast Quantum R&amp;B Signal (+₿600)</button>
             </div>
         </div>
 
-        <div class="panel">
+        <div class="panel" id="panel-rb-logs">
             <div class="panel-header">Acoustic Telemetry Logs</div>
             <div class="panel-body" id="rb-log-output" style="font-size: 0.78rem; line-height: 1.6; color: var(--text-dim);">
                 <div>[SYSTEM] Quantum R&amp;B audio matrix online...</div>
@@ -575,20 +823,21 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
             
             if(tabId === 'operations') {
                 document.getElementById('tab-operations').classList.add('active');
-                event.target.classList.add('active');
+                document.getElementById('tab-btn-ops').classList.add('active');
             } else if(tabId === 'financials') {
                 document.getElementById('tab-financials').classList.add('active');
-                event.target.classList.add('active');
+                document.getElementById('tab-btn-fin').classList.add('active');
                 renderSpreadsheet();
             } else if(tabId === 'stockmarket') {
                 document.getElementById('tab-stockmarket').classList.add('active');
-                event.target.classList.add('active');
+                document.getElementById('tab-btn-stk').classList.add('active');
                 renderStockMarket();
             } else if(tabId === 'quantumrb') {
                 document.getElementById('tab-quantumrb').classList.add('active');
-                event.target.classList.add('active');
+                document.getElementById('tab-btn-qrb').classList.add('active');
                 renderQuantumRB();
             }
+            if (tutorialActive) updateTutorialHighlight();
         }
 
         function renderNodes() {
@@ -597,6 +846,7 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
             gameState.nodes.forEach(node => {
                 const div = document.createElement('div');
                 div.className = `target-card ${gameState.currentTarget === node.ip ? 'active' : ''}`;
+                div.id = `node-card-${node.id}`;
                 div.innerHTML = `
                     <div class="target-title">${node.name}</div>
                     <div class="target-meta">
@@ -994,14 +1244,15 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
                 let stock = gameState.stocks[ticker];
                 let div = document.createElement('div');
                 div.className = 'stock-row';
+                div.id = `stock-row-${ticker}`;
                 div.innerHTML = `
                     <div>
                         <div class="stock-ticker">${ticker} - ${stock.name}</div>
                         <div style="font-size: 0.75rem; color: var(--text-dim);">Price: <span class="stock-price ${stock.change < 0 ? 'down' : ''}">$${stock.price.toFixed(2)} (${stock.change > 0 ? '+' : ''}${stock.change}%)</span></div>
                     </div>
                     <div style="display: flex; gap: 6px;">
-                        <button class="cyber-btn" onclick="buyStock('${ticker}')">Buy (10)</button>
-                        <button class="cyber-btn danger" onclick="sellStock('${ticker}')">Sell (10)</button>
+                        <button class="cyber-btn" id="btn-buy-${ticker}" onclick="buyStock('${ticker}')">Buy (10)</button>
+                        <button class="cyber-btn danger" id="btn-sell-${ticker}" onclick="sellStock('${ticker}')">Sell (10)</button>
                     </div>
                 `;
                 marketList.appendChild(div);
@@ -1100,6 +1351,289 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
 
         renderNodes();
         selectTarget(gameState.nodes[0]);
+
+        /* ==========================================================================
+           WORLD-CLASS INTERACTIVE TUTORIAL ENGINE & COMMANDER AI
+           ========================================================================== */
+
+        let currentTutorialStep = 0;
+        let tutorialActive = false;
+        let commanderMode = false;
+        let commanderTimer = null;
+
+        const tutorialSteps = [
+            {
+                title: "1. Target Vector Selection",
+                desc: "Select a target node from the matrix to target an IP. Notice how locking 'Aegis Defense Node' populates the terminal.",
+                tab: "operations",
+                targetId: "node-card-n1",
+                action: () => { selectTarget(gameState.nodes[0]); },
+                commanderAction: (cb) => {
+                    animateCursorTo("#node-card-n1", () => {
+                        selectTarget(gameState.nodes[0]);
+                        cb();
+                    });
+                }
+            },
+            {
+                title: "2. Terminal Command Execution",
+                desc: "The terminal executes cyber attacks. Type 'zeroday' or use Macro Console to bypass ICE & extract immediate payouts.",
+                tab: "operations",
+                targetId: "terminal-panel",
+                action: () => { processCommand('zeroday'); },
+                commanderAction: (cb) => {
+                    animateCursorTo("#terminal-input", () => {
+                        typeInTerminal("zeroday", () => {
+                            processCommand('zeroday');
+                            cb();
+                        });
+                    });
+                }
+            },
+            {
+                title: "3. Action Macro Console",
+                desc: "Macros trigger complex multi-layered attacks instantly. Type 'macro syphon' or click Run to drain corporate treasuries.",
+                tab: "operations",
+                targetId: "panel-macro-console",
+                action: () => { processCommand('syphon'); },
+                commanderAction: (cb) => {
+                    const inp = document.getElementById('macro-command-input');
+                    inp.value = "macro syphon";
+                    animateCursorTo("#btn-run-macro", () => {
+                        executeWrittenMacro();
+                        cb();
+                    });
+                }
+            },
+            {
+                title: "4. Corporate Spreadsheets & Skimming",
+                desc: "Inspect corporate balance sheets in real-time. Successful exploits spike target losses and unlock rootkit skimming streams.",
+                tab: "financials",
+                targetId: "panel-ledger-table",
+                action: () => { switchTab('financials'); },
+                commanderAction: (cb) => {
+                    animateCursorTo("#tab-btn-fin", () => {
+                        switchTab('financials');
+                        cb();
+                    });
+                }
+            },
+            {
+                title: "5. Cyber-Exchange Stock Trading",
+                desc: "Short target stocks prior to launching cyber attacks or blackouts, or acquire shares (e.g. AGIS) to earn compounding yields.",
+                tab: "stockmarket",
+                targetId: "panel-gcse-exchange",
+                action: () => { switchTab('stockmarket'); },
+                commanderAction: (cb) => {
+                    animateCursorTo("#tab-btn-stk", () => {
+                        switchTab('stockmarket');
+                        animateCursorTo("#btn-buy-AGIS", () => {
+                            buyStock('AGIS');
+                            cb();
+                        });
+                    });
+                }
+            },
+            {
+                title: "6. Portfolio & Dividend Valuation",
+                desc: "Track your active equity holdings, cash balances, and portfolio valuations here as market prices fluctuate in real time.",
+                tab: "stockmarket",
+                targetId: "panel-portfolio",
+                action: () => { switchTab('stockmarket'); },
+                commanderAction: (cb) => {
+                    animateCursorTo("#panel-portfolio", () => {
+                        cb();
+                    });
+                }
+            },
+            {
+                title: "7. Quantum R&B Frequency Sequencer",
+                desc: "Tune sub-bass resonance and groove synchronization to stabilize terminal ops and broadcast sub-atomic harmonic signals.",
+                tab: "quantumrb",
+                targetId: "panel-rb-sequencer",
+                action: () => { switchTab('quantumrb'); },
+                commanderAction: (cb) => {
+                    animateCursorTo("#tab-btn-qrb", () => {
+                        switchTab('quantumrb');
+                        animateCursorTo("#btn-broadcast-rb", () => {
+                            broadcastQuantumRB();
+                            cb();
+                        });
+                    });
+                }
+            },
+            {
+                title: "8. Complete Operational Mastery",
+                desc: "You have mastered all core systems of NEXUS-V! Click 'Exit Tutorial' anytime to return to a clean slate.",
+                tab: "operations",
+                targetId: "hdr-tutorial-btn",
+                action: () => { switchTab('operations'); },
+                commanderAction: (cb) => {
+                    animateCursorTo("#tab-btn-ops", () => {
+                        switchTab('operations');
+                        cb();
+                    });
+                }
+            }
+        ];
+
+        function openTutorialModal() {
+            document.getElementById('tut-init-modal').style.display = 'flex';
+            document.getElementById('tut-init-modal').style.opacity = '1';
+        }
+
+        function declineTutorialSystem() {
+            document.getElementById('tut-init-modal').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('tut-init-modal').style.display = 'none';
+            }, 500);
+        }
+
+        function startTutorialSystem() {
+            declineTutorialSystem();
+            tutorialActive = true;
+            currentTutorialStep = 0;
+            document.getElementById('tut-guidance-card').style.display = 'flex';
+            document.getElementById('tut-highlight-box').style.display = 'block';
+            document.getElementById('tut-cursor').style.display = 'block';
+            renderTutorialStep();
+        }
+
+        function exitTutorialSystem() {
+            tutorialActive = false;
+            commanderMode = false;
+            if (commanderTimer) clearTimeout(commanderTimer);
+            document.getElementById('tut-guidance-card').style.display = 'none';
+            document.getElementById('tut-highlight-box').style.display = 'none';
+            document.getElementById('tut-cursor').style.display = 'none';
+            const cmdBtn = document.getElementById('tut-commander-btn');
+            cmdBtn.classList.remove('commander-btn-active');
+            cmdBtn.innerText = "🤖 Commander Mode";
+        }
+
+        function renderTutorialStep() {
+            if (!tutorialActive) return;
+            const step = tutorialSteps[currentTutorialStep];
+            
+            // Ensure target tab is active
+            if (step.tab) {
+                switchTab(step.tab);
+            }
+
+            document.getElementById('tut-step-badge').innerText = `STEP ${currentTutorialStep + 1} / ${tutorialSteps.length}`;
+            document.getElementById('tut-title').innerText = step.title;
+            document.getElementById('tut-desc').innerText = step.desc;
+            
+            const progressPct = ((currentTutorialStep + 1) / tutorialSteps.length) * 100;
+            document.getElementById('tut-progress').style.width = `${progressPct}%`;
+
+            updateTutorialHighlight();
+
+            if (commanderMode) {
+                runCommanderStep();
+            }
+        }
+
+        function updateTutorialHighlight() {
+            const step = tutorialSteps[currentTutorialStep];
+            if (!step || !step.targetId) return;
+
+            const targetElem = document.getElementById(step.targetId);
+            if (!targetElem) return;
+
+            const rect = targetElem.getBoundingClientRect();
+            const highlightBox = document.getElementById('tut-highlight-box');
+            
+            highlightBox.style.top = `${rect.top - 6}px`;
+            highlightBox.style.left = `${rect.left - 6}px`;
+            highlightBox.style.width = `${rect.width + 12}px`;
+            highlightBox.style.height = `${rect.height + 12}px`;
+
+            if (!commanderMode) {
+                const cursor = document.getElementById('tut-cursor');
+                cursor.style.top = `${rect.top + rect.height / 2}px`;
+                cursor.style.left = `${rect.left + rect.width / 2}px`;
+            }
+        }
+
+        function nextTutorialStep() {
+            if (currentTutorialStep < tutorialSteps.length - 1) {
+                currentTutorialStep++;
+                renderTutorialStep();
+            } else {
+                exitTutorialSystem();
+            }
+        }
+
+        function toggleCommanderMode() {
+            commanderMode = !commanderMode;
+            const cmdBtn = document.getElementById('tut-commander-btn');
+            if (commanderMode) {
+                cmdBtn.classList.add('commander-btn-active');
+                cmdBtn.innerText = "🤖 Commander AUTO";
+                document.getElementById('tut-status-indicator').innerText = "COMMANDER AI ACTIVE";
+                document.getElementById('tut-status-indicator').style.color = "var(--neon-purple)";
+                runCommanderStep();
+            } else {
+                cmdBtn.classList.remove('commander-btn-active');
+                cmdBtn.innerText = "🤖 Commander Mode";
+                document.getElementById('tut-status-indicator').innerText = "LIVE GUIDANCE ACTIVE";
+                document.getElementById('tut-status-indicator').style.color = "var(--neon-green)";
+                if (commanderTimer) clearTimeout(commanderTimer);
+            }
+        }
+
+        function runCommanderStep() {
+            if (!commanderMode || !tutorialActive) return;
+            const step = tutorialSteps[currentTutorialStep];
+            if (step && step.commanderAction) {
+                step.commanderAction(() => {
+                    commanderTimer = setTimeout(() => {
+                        if (commanderMode && tutorialActive) {
+                            if (currentTutorialStep < tutorialSteps.length - 1) {
+                                currentTutorialStep++;
+                                renderTutorialStep();
+                            } else {
+                                exitTutorialSystem();
+                            }
+                        }
+                    }, 1800);
+                });
+            }
+        }
+
+        function animateCursorTo(selector, callback) {
+            const elem = document.querySelector(selector);
+            if (!elem) { if(callback) callback(); return; }
+            const rect = elem.getBoundingClientRect();
+            const cursor = document.getElementById('tut-cursor');
+            
+            cursor.style.top = `${rect.top + rect.height / 2}px`;
+            cursor.style.left = `${rect.left + rect.width / 2}px`;
+
+            setTimeout(() => {
+                if (callback) callback();
+            }, 800);
+        }
+
+        function typeInTerminal(text, callback) {
+            const input = document.getElementById('terminal-input');
+            input.value = '';
+            let idx = 0;
+            const interval = setInterval(() => {
+                input.value += text[idx];
+                idx++;
+                if (idx >= text.length) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        input.value = '';
+                        if (callback) callback();
+                    }, 300);
+                }
+            }, 80);
+        }
+
+        window.addEventListener('resize', updateTutorialHighlight);
     </script>
 </body>
 </html>
