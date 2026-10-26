@@ -14,6 +14,8 @@
             --neon-amber: #ffaa00;
             --neon-rose: #ff0055;
             --neon-purple: #b000ff;
+            --neon-red: #ff2222;
+            --neon-gold: #ffd700;
             --text-main: #d4e5ff;
             --text-dim: #5478b2;
             --border-glow: rgba(0, 243, 255, 0.4);
@@ -356,6 +358,18 @@
             box-shadow: 0 0 25px var(--neon-purple);
         }
 
+        .cyber-btn.gold {
+            border-color: var(--neon-gold);
+            color: var(--neon-gold);
+            box-shadow: 0 0 10px rgba(255,215,0,0.2);
+        }
+
+        .cyber-btn.gold:hover {
+            background: var(--neon-gold);
+            color: #000;
+            box-shadow: 0 0 25px var(--neon-gold);
+        }
+
         /* Stock Market & Track Rows */
         .stock-row, .rb-track-card {
             display: flex;
@@ -400,13 +414,14 @@
         .log-danger { color: var(--neon-rose); text-shadow: 0 0 8px rgba(255,0,85,0.3); }
         .log-info { color: var(--neon-cyan); text-shadow: 0 0 8px rgba(0,243,255,0.3); }
         .log-purple { color: var(--neon-purple); text-shadow: 0 0 8px rgba(176,0,255,0.3); }
+        .log-gold { color: var(--neon-gold); text-shadow: 0 0 8px rgba(255,215,0,0.4); }
 
         /* ==========================================================================
-           ADVANCED WORLD-CLASS TUTORIAL SYSTEM STYLES
+           ADVANCED TUTORIAL & ADMIN CHEAT PANEL STYLES
            ========================================================================== */
         
         /* Initial Prompt Modal */
-        #tut-init-modal {
+        #tut-init-modal, #admin-login-modal {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(2, 5, 14, 0.92);
@@ -419,6 +434,8 @@
             transition: opacity 0.5s ease;
         }
 
+        #admin-login-modal { display: none; }
+
         .tut-init-card {
             background: var(--bg-panel);
             border: 2px solid var(--neon-cyan);
@@ -430,6 +447,11 @@
             text-align: center;
             position: relative;
             animation: modal-enter 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .admin-card {
+            border-color: var(--neon-red);
+            box-shadow: 0 0 50px rgba(255, 34, 34, 0.4), inset 0 0 20px rgba(255, 34, 34, 0.15);
         }
 
         @keyframes modal-enter {
@@ -590,6 +612,105 @@
             0% { box-shadow: 0 0 10px var(--neon-purple); }
             100% { box-shadow: 0 0 30px var(--neon-purple), 0 0 10px var(--neon-cyan); }
         }
+
+        /* ADMIN CHEAT PANEL HUD WINDOW */
+        #admin-panel-overlay {
+            position: fixed;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 780px;
+            max-width: 95vw;
+            background: rgba(6, 11, 25, 0.97);
+            border: 2px solid var(--neon-red);
+            box-shadow: 0 0 50px rgba(255, 34, 34, 0.5), inset 0 0 30px rgba(255, 0, 85, 0.2);
+            border-radius: 12px;
+            backdrop-filter: blur(15px);
+            z-index: 15000;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .admin-header {
+            background: linear-gradient(90deg, rgba(255,0,85,0.3) 0%, rgba(176,0,255,0.3) 100%);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--neon-rose);
+        }
+
+        .admin-title {
+            color: var(--neon-gold);
+            font-weight: 900;
+            letter-spacing: 2px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 0 0 10px var(--neon-gold);
+        }
+
+        .admin-body {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .admin-section {
+            background: rgba(255, 0, 85, 0.05);
+            border: 1px solid rgba(255, 0, 85, 0.3);
+            border-radius: 8px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .admin-section-title {
+            color: var(--neon-rose);
+            font-size: 0.85rem;
+            font-weight: bold;
+            border-bottom: 1px dashed rgba(255,0,85,0.4);
+            padding-bottom: 6px;
+            letter-spacing: 1px;
+        }
+
+        .mode-select-btn {
+            padding: 10px;
+            font-size: 0.75rem;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .mode-select-btn.active-mode {
+            background: var(--neon-rose);
+            color: #fff;
+            box-shadow: 0 0 15px var(--neon-rose);
+        }
+
+        .admin-grid-btns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .full-cmd-indicator {
+            padding: 10px;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid var(--neon-green);
+            color: var(--neon-green);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            text-align: center;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -606,6 +727,22 @@
             <div class="tut-init-btns">
                 <button class="cyber-btn tut-init-btn" onclick="startTutorialSystem()">Enter Tutorial</button>
                 <button class="cyber-btn danger tut-init-btn" onclick="declineTutorialSystem()">No Sir</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN LOGIN MODAL -->
+    <div id="admin-login-modal">
+        <div class="tut-init-card admin-card">
+            <div class="tut-init-title" style="color: var(--neon-red); text-shadow: 0 0 20px var(--neon-red);">RESTRICTED ADMIN CLEARANCE</div>
+            <div class="tut-init-sub">
+                SECURITY CHECKPOINT ACTIVATED.<br>
+                Enter Administrator Override Key to unlock Full Command & Cheat Matrix:
+            </div>
+            <input type="password" id="admin-pass-input" placeholder="Enter Password..." style="width: 100%; padding: 12px; background: #000; border: 1px solid var(--neon-red); color: var(--neon-gold); font-family: var(--font-mono); text-align: center; font-size: 1.1rem; border-radius: 6px; outline: none; margin-bottom: 20px;">
+            <div class="tut-init-btns">
+                <button class="cyber-btn danger tut-init-btn" onclick="submitAdminPassword()">Authenticate</button>
+                <button class="cyber-btn tut-init-btn" onclick="closeAdminLoginModal()">Cancel</button>
             </div>
         </div>
     </div>
@@ -633,6 +770,65 @@
         </div>
     </div>
 
+    <!-- ADMIN CHEAT PANEL OVERLAY -->
+    <div id="admin-panel-overlay">
+        <div class="admin-header">
+            <div class="admin-title">⚡ NEXUS-V ADMIN CHEAT &amp; FULL COMMAND MATRIX ⚡</div>
+            <button class="cyber-btn danger" style="padding: 4px 10px; font-size: 0.7rem;" onclick="toggleAdminPanel(false)">X CLOSE</button>
+        </div>
+        <div class="admin-body">
+            <!-- FULL COMMAND AUTOPILOT SECTION -->
+            <div class="admin-section" style="grid-column: span 2;">
+                <div class="admin-section-title">🤖 FULL COMMAND AUTOPILOT SYSTEM</div>
+                <div style="display: flex; gap: 12px; align-items: center;">
+                    <button class="cyber-btn gold" id="btn-toggle-fullcommand" style="padding: 12px 20px; font-size: 0.85rem;" onclick="toggleFullCommand()">ENABLE FULL COMMAND</button>
+                    <div class="full-cmd-indicator" id="fullcommand-status-text" style="flex: 1; border-color: var(--neon-rose); color: var(--neon-rose);">
+                        AUTOPILOT: INACTIVE
+                    </div>
+                </div>
+                <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 4px;">
+                    Select Autopilot Expertise Mode:
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+                    <button class="cyber-btn mode-select-btn active-mode" id="mode-btn-normal" onclick="setFullCommandMode('normally')">
+                        <span>1. Play Normally</span>
+                        <small style="opacity:0.7">Basic Loop</small>
+                    </button>
+                    <button class="cyber-btn mode-select-btn" id="mode-btn-expertise" onclick="setFullCommandMode('expertise')">
+                        <span>2. Expertise</span>
+                        <small style="opacity:0.7">+Stocks &amp; Rootkits</small>
+                    </button>
+                    <button class="cyber-btn mode-select-btn" id="mode-btn-pro" onclick="setFullCommandMode('professionalism')">
+                        <span>3. Professionalism</span>
+                        <small style="opacity:0.7">Full Matrix Mastery</small>
+                    </button>
+                </div>
+            </div>
+
+            <!-- RESOURCES & GOD MODES -->
+            <div class="admin-section">
+                <div class="admin-section-title">💎 RESOURCE &amp; CHEAT OVERRIDES</div>
+                <div class="admin-grid-btns">
+                    <button class="cyber-btn gold" onclick="adminAddCredits(1000000)">+₿1,000,000</button>
+                    <button class="cyber-btn danger" onclick="adminResetTrace()">Reset Trace 0%</button>
+                    <button class="cyber-btn purple" onclick="adminToggleGodMode()" id="admin-godmode-btn">God Stealth: OFF</button>
+                    <button class="cyber-btn" onclick="adminMaxRootkits()">Max Rootkits (10)</button>
+                </div>
+            </div>
+
+            <!-- INSTANT ATTACK CHEATS -->
+            <div class="admin-section">
+                <div class="admin-section-title">🔥 INSTANT EXECUTION MATRIX</div>
+                <div class="admin-grid-btns">
+                    <button class="cyber-btn danger" onclick="adminHackAllNodes()">Hack All Nodes</button>
+                    <button class="cyber-btn amber" onclick="adminCrashMarket()">Crash Stock Market</button>
+                    <button class="cyber-btn gold" onclick="adminPumpPortfolio()">Pump All Stocks</button>
+                    <button class="cyber-btn purple" onclick="adminSuperOverdrive()">Super Overdrive</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- HEADER HUD -->
     <header>
         <div class="logo">
@@ -640,7 +836,8 @@
             NEXUS-V // ULTIMATE CYBERNETIC OPERATIONS &amp; QUANTUM R&amp;B MATRIX v12.0
         </div>
         <div class="status-metrics">
-            <button class="cyber-btn amber" id="hdr-tutorial-btn" style="padding: 5px 10px; font-size: 0.7rem; margin-right: 8px;" onclick="openTutorialModal()">[?] Tutorial</button>
+            <button class="cyber-btn amber" id="hdr-tutorial-btn" style="padding: 5px 10px; font-size: 0.7rem; margin-right: 4px;" onclick="openTutorialModal()">[?] Tutorial</button>
+            <button class="cyber-btn danger" id="hdr-admin-btn" style="padding: 5px 10px; font-size: 0.7rem; margin-right: 8px; display: none;" onclick="toggleAdminPanel(true)">⚡ ADMIN PANEL</button>
             <div class="metric-badge">CREDITS: <span id="stat-credits">₿18,500</span></div>
             <div class="metric-badge">TRACE: <span id="stat-traces">0%</span></div>
             <div class="metric-badge">CPU: <span id="stat-cpu">18%</span></div>
@@ -795,6 +992,10 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
             rootkitsCount: 0,
             passiveIncome: 0,
             stealthActive: true,
+            godMode: false,
+            adminUnlocked: false,
+            fullCommandActive: false,
+            fullCommandMode: 'normally', // 'normally', 'expertise', 'professionalism'
             currentTarget: null,
             portfolio: {},
             nodes: [
@@ -914,6 +1115,20 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
             gameState.cpu = Math.min(99, gameState.cpu + 4);
             gameState.heat = Math.min(98, gameState.heat + 1);
             renderNodes();
+
+            // Secret Admin Trigger Command
+            if (cmd === 'admin101') {
+                if (gameState.adminUnlocked) {
+                    toggleAdminPanel(true);
+                    appendTerminal('[+] Admin Panel loaded.', 'log-gold');
+                } else {
+                    document.getElementById('admin-login-modal').style.display = 'flex';
+                    document.getElementById('admin-pass-input').value = '';
+                    document.getElementById('admin-pass-input').focus();
+                    appendTerminal('[!] Security prompt initiated for Admin Panel...', 'log-warning');
+                }
+                return;
+            }
 
             switch(cmd) {
                 case 'help':
@@ -1054,9 +1269,11 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
                     document.getElementById('stat-stealth').innerText = 'GHOST MODE';
                     document.getElementById('stat-stealth').style.color = 'var(--neon-purple)';
                     setTimeout(() => {
-                        gameState.stealthActive = false;
-                        document.getElementById('stat-stealth').innerText = 'STEALTH ACTIVE';
-                        document.getElementById('stat-stealth').style.color = 'var(--neon-green)';
+                        if (!gameState.godMode) {
+                            gameState.stealthActive = false;
+                            document.getElementById('stat-stealth').innerText = 'STEALTH ACTIVE';
+                            document.getElementById('stat-stealth').style.color = 'var(--neon-green)';
+                        }
                     }, 60000);
                     break;
 
@@ -1186,7 +1403,7 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
         }
 
         function addTrace(amount) {
-            if (gameState.stealthActive) return;
+            if (gameState.stealthActive || gameState.godMode) return;
             gameState.traces = Math.min(100, gameState.traces + amount);
             renderNodes();
             if(gameState.traces >= 100) {
@@ -1353,6 +1570,213 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
         selectTarget(gameState.nodes[0]);
 
         /* ==========================================================================
+           ADMIN PANEL & ADVANCED FULL COMMAND AUTOPILOT ENGINE
+           ========================================================================== */
+
+        function submitAdminPassword() {
+            const pass = document.getElementById('admin-pass-input').value;
+            if (pass === 'boogie2007') {
+                gameState.adminUnlocked = true;
+                document.getElementById('admin-login-modal').style.display = 'none';
+                document.getElementById('hdr-admin-btn').style.display = 'inline-block';
+                toggleAdminPanel(true);
+                appendTerminal('[+] ACCESS GRANTED: Admin Panel & Full Command unlocked!', 'log-gold');
+            } else {
+                alert('ACCESS DENIED: Invalid Admin Password.');
+                document.getElementById('admin-pass-input').value = '';
+            }
+        }
+
+        function closeAdminLoginModal() {
+            document.getElementById('admin-login-modal').style.display = 'none';
+        }
+
+        function toggleAdminPanel(show) {
+            const panel = document.getElementById('admin-panel-overlay');
+            panel.style.display = show ? 'flex' : 'none';
+        }
+
+        function setFullCommandMode(mode) {
+            gameState.fullCommandMode = mode;
+            document.querySelectorAll('.mode-select-btn').forEach(btn => btn.classList.remove('active-mode'));
+            if (mode === 'normally') document.getElementById('mode-btn-normal').classList.add('active-mode');
+            if (mode === 'expertise') document.getElementById('mode-btn-expertise').classList.add('active-mode');
+            if (mode === 'professionalism') document.getElementById('mode-btn-pro').classList.add('active-mode');
+            appendTerminal(`[ADMIN] Autopilot Mode updated to: ${mode.toUpperCase()}`, 'log-gold');
+        }
+
+        let fullCommandLoopTimer = null;
+
+        function toggleFullCommand() {
+            gameState.fullCommandActive = !gameState.fullCommandActive;
+            const btn = document.getElementById('btn-toggle-fullcommand');
+            const statusTxt = document.getElementById('fullcommand-status-text');
+
+            if (gameState.fullCommandActive) {
+                btn.innerText = "DISABLE FULL COMMAND";
+                btn.className = "cyber-btn danger";
+                statusTxt.innerText = `AUTOPILOT: ACTIVE (${gameState.fullCommandMode.toUpperCase()})`;
+                statusTxt.style.borderColor = "var(--neon-green)";
+                statusTxt.style.color = "var(--neon-green)";
+                document.getElementById('tut-cursor').style.display = 'block';
+                appendTerminal('[+] FULL COMMAND AUTOPILOT INITIALIZED.', 'log-gold');
+                runFullCommandLoop();
+            } else {
+                btn.innerText = "ENABLE FULL COMMAND";
+                btn.className = "cyber-btn gold";
+                statusTxt.innerText = "AUTOPILOT: INACTIVE";
+                statusTxt.style.borderColor = "var(--neon-rose)";
+                statusTxt.style.color = "var(--neon-rose)";
+                document.getElementById('tut-cursor').style.display = 'none';
+                if (fullCommandLoopTimer) clearTimeout(fullCommandLoopTimer);
+                appendTerminal('[!] FULL COMMAND AUTOPILOT DISENGAGED.', 'log-warning');
+            }
+        }
+
+        function runFullCommandLoop() {
+            if (!gameState.fullCommandActive) return;
+
+            const mode = gameState.fullCommandMode;
+            let actionSequence = [];
+
+            if (mode === 'normally') {
+                actionSequence = [
+                    { tab: 'operations', selector: '#node-card-n1', action: () => selectTarget(gameState.nodes[0]) },
+                    { tab: 'operations', selector: '#terminal-input', typeCmd: 'scan' },
+                    { tab: 'operations', selector: '#terminal-input', typeCmd: 'zeroday' },
+                    { tab: 'operations', selector: '#terminal-input', typeCmd: 'syphon' },
+                    { tab: 'operations', selector: '#terminal-input', typeCmd: 'wipe' }
+                ];
+            } else if (mode === 'expertise') {
+                actionSequence = [
+                    { tab: 'operations', selector: '#node-card-n2', action: () => selectTarget(gameState.nodes[1]) },
+                    { tab: 'operations', selector: '#terminal-input', typeCmd: 'zeroday' },
+                    { tab: 'operations', selector: '#terminal-input', typeCmd: 'rootkit' },
+                    { tab: 'operations', selector: '#terminal-input', typeCmd: 'satlink' },
+                    { tab: 'stockmarket', selector: '#tab-btn-stk', action: () => switchTab('stockmarket') },
+                    { tab: 'stockmarket', selector: '#btn-buy-AGIS', action: () => buyStock('AGIS') },
+                    { tab: 'operations', selector: '#tab-btn-ops', action: () => switchTab('operations') },
+                    { tab: 'operations', selector: '#terminal-input', typeCmd: 'singularity' },
+                    { tab: 'operations', selector: '#terminal-input', typeCmd: 'cloneserver' }
+                ];
+            } else if (mode === 'professionalism') {
+                // Highly complex professional execution across all tabs
+                actionSequence = [
+                    { tab: 'operations', selector: '#node-card-n3', action: () => selectTarget(gameState.nodes[2]) },
+                    { tab: 'operations', selector: '#terminal-input', typeCmd: 'deeptrace' },
+                    { tab: 'operations', selector: '#terminal-input', typeCmd: 'ghostmode' },
+                    { tab: 'operations', selector: '#terminal-input', typeCmd: 'neuralhack' },
+                    { tab: 'operations', selector: '#terminal-input', typeCmd: 'blackout' },
+                    { tab: 'financials', selector: '#tab-btn-fin', action: () => switchTab('financials') },
+                    { tab: 'stockmarket', selector: '#tab-btn-stk', action: () => switchTab('stockmarket') },
+                    { tab: 'stockmarket', selector: '#btn-buy-OMNI', action: () => buyStock('OMNI') },
+                    { tab: 'quantumrb', selector: '#tab-btn-qrb', action: () => switchTab('quantumrb') },
+                    { tab: 'quantumrb', selector: '#btn-broadcast-rb', action: () => broadcastQuantumRB() },
+                    { tab: 'operations', selector: '#tab-btn-ops', action: () => switchTab('operations') },
+                    { tab: 'operations', selector: '#terminal-input', typeCmd: 'overdrive' },
+                    { tab: 'operations', selector: '#terminal-input', typeCmd: 'cloneserver' }
+                ];
+            }
+
+            let seqIdx = 0;
+            function executeNextInSeq() {
+                if (!gameState.fullCommandActive) return;
+
+                const step = actionSequence[seqIdx];
+                if (step.tab) switchTab(step.tab);
+
+                animateCursorTo(step.selector, () => {
+                    if (step.typeCmd) {
+                        typeInTerminal(step.typeCmd, () => {
+                            processCommand(step.typeCmd);
+                            finishStep();
+                        });
+                    } else if (step.action) {
+                        step.action();
+                        finishStep();
+                    } else {
+                        finishStep();
+                    }
+                });
+
+                function finishStep() {
+                    seqIdx = (seqIdx + 1) % actionSequence.length;
+                    fullCommandLoopTimer = setTimeout(executeNextInSeq, 1200);
+                }
+            }
+
+            executeNextInSeq();
+        }
+
+        /* ADMIN CHEAT FUNCTIONS */
+        function adminAddCredits(amt) {
+            gameState.credits += amt;
+            renderNodes();
+            appendTerminal(`[ADMIN CHEAT] Added ₿${amt.toLocaleString()} credits!`, 'log-gold');
+        }
+
+        function adminResetTrace() {
+            gameState.traces = 0;
+            renderNodes();
+            appendTerminal(`[ADMIN CHEAT] Traces completely wiped to 0%!`, 'log-gold');
+        }
+
+        function adminToggleGodMode() {
+            gameState.godMode = !gameState.godMode;
+            const btn = document.getElementById('admin-godmode-btn');
+            btn.innerText = `God Stealth: ${gameState.godMode ? 'ON' : 'OFF'}`;
+            if (gameState.godMode) {
+                document.getElementById('stat-stealth').innerText = 'GOD MODE';
+                document.getElementById('stat-stealth').style.color = 'var(--neon-gold)';
+                appendTerminal(`[ADMIN CHEAT] GOD STEALTH ENGAGED (Infinite trace immunity).`, 'log-gold');
+            } else {
+                document.getElementById('stat-stealth').innerText = 'STEALTH ACTIVE';
+                document.getElementById('stat-stealth').style.color = 'var(--neon-green)';
+            }
+        }
+
+        function adminMaxRootkits() {
+            gameState.rootkitsCount = 10;
+            gameState.passiveIncome = 3500;
+            renderNodes();
+            appendTerminal(`[ADMIN CHEAT] 10 Max Rootkits deployed! Passive income boost active.`, 'log-gold');
+        }
+
+        function adminHackAllNodes() {
+            gameState.nodes.forEach(n => {
+                n.hacked = true;
+                n.status = 'Root Access (Admin)';
+            });
+            renderNodes();
+            appendTerminal(`[ADMIN CHEAT] All network target nodes fully compromised!`, 'log-gold');
+        }
+
+        function adminCrashMarket() {
+            for (let t in gameState.stocks) {
+                gameState.stocks[t].price = Math.max(5, gameState.stocks[t].price * 0.2);
+                gameState.stocks[t].change = -45.0;
+            }
+            if (document.getElementById('tab-stockmarket').classList.contains('active')) renderStockMarket();
+            appendTerminal(`[ADMIN CHEAT] Global stock exchange crashed by 80%! Short positions maximized.`, 'log-gold');
+        }
+
+        function adminPumpPortfolio() {
+            for (let t in gameState.stocks) {
+                gameState.stocks[t].price *= 2.5;
+                gameState.stocks[t].change = +150.0;
+            }
+            if (document.getElementById('tab-stockmarket').classList.contains('active')) renderStockMarket();
+            appendTerminal(`[ADMIN CHEAT] All corporate stock valuations hyper-pumped 250%!`, 'log-gold');
+        }
+
+        function adminSuperOverdrive() {
+            gameState.credits += 100000;
+            gameState.passiveIncome += 2000;
+            renderNodes();
+            appendTerminal(`[ADMIN CHEAT] SUPER OVERDRIVE ACTIVATED (+₿100k Cash & +₿2k/min Income).`, 'log-gold');
+        }
+
+        /* ==========================================================================
            WORLD-CLASS INTERACTIVE TUTORIAL ENGINE & COMMANDER AI
            ========================================================================== */
 
@@ -1505,7 +1929,9 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
             if (commanderTimer) clearTimeout(commanderTimer);
             document.getElementById('tut-guidance-card').style.display = 'none';
             document.getElementById('tut-highlight-box').style.display = 'none';
-            document.getElementById('tut-cursor').style.display = 'none';
+            if (!gameState.fullCommandActive) {
+                document.getElementById('tut-cursor').style.display = 'none';
+            }
             const cmdBtn = document.getElementById('tut-commander-btn');
             cmdBtn.classList.remove('commander-btn-active');
             cmdBtn.innerText = "🤖 Commander Mode";
@@ -1549,7 +1975,7 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
             highlightBox.style.width = `${rect.width + 12}px`;
             highlightBox.style.height = `${rect.height + 12}px`;
 
-            if (!commanderMode) {
+            if (!commanderMode && !gameState.fullCommandActive) {
                 const cursor = document.getElementById('tut-cursor');
                 cursor.style.top = `${rect.top + rect.height / 2}px`;
                 cursor.style.left = `${rect.left + rect.width / 2}px`;
@@ -1608,6 +2034,7 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
             const rect = elem.getBoundingClientRect();
             const cursor = document.getElementById('tut-cursor');
             
+            cursor.style.display = 'block';
             cursor.style.top = `${rect.top + rect.height / 2}px`;
             cursor.style.left = `${rect.left + rect.width / 2}px`;
 
