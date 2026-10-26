@@ -7,8 +7,8 @@
     <style>
         :root {
             --bg-deep: #02050e;
-            --bg-panel: #060b19;
-            --bg-card: #0d1632;
+            --bg-panel: rgba(6, 11, 25, 0.85);
+            --bg-card: rgba(13, 22, 50, 0.7);
             --neon-cyan: #00f3ff;
             --neon-green: #00ff66;
             --neon-amber: #ffaa00;
@@ -37,6 +37,18 @@
             display: flex;
             flex-direction: column;
             position: relative;
+        }
+
+        /* Canvas Matrix Rain Background */
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            opacity: 0.22;
+            pointer-events: none;
         }
 
         /* Holographic Scanline & Vignette Overlay */
@@ -158,6 +170,7 @@
             gap: 16px;
             overflow: hidden;
             position: relative;
+            z-index: 2;
         }
 
         .viewport.active {
@@ -416,10 +429,6 @@
         .log-purple { color: var(--neon-purple); text-shadow: 0 0 8px rgba(176,0,255,0.3); }
         .log-gold { color: var(--neon-gold); text-shadow: 0 0 8px rgba(255,215,0,0.4); }
 
-        /* ==========================================================================
-           ADVANCED TUTORIAL & ADMIN CHEAT PANEL STYLES
-           ========================================================================== */
-        
         /* Initial Prompt Modal */
         #tut-init-modal, #admin-login-modal {
             position: fixed;
@@ -715,6 +724,9 @@
 </head>
 <body>
 
+    <!-- MATRIX CANVAS BACKGROUND -->
+    <canvas id="matrix-canvas"></canvas>
+
     <!-- INITIAL TUTORIAL INVITATION MODAL -->
     <div id="tut-init-modal">
         <div class="tut-init-card">
@@ -813,6 +825,7 @@
                     <button class="cyber-btn danger" onclick="adminResetTrace()">Reset Trace 0%</button>
                     <button class="cyber-btn purple" onclick="adminToggleGodMode()" id="admin-godmode-btn">God Stealth: OFF</button>
                     <button class="cyber-btn" onclick="adminMaxRootkits()">Max Rootkits (10)</button>
+                    <button class="cyber-btn danger" style="grid-column: span 2;" onclick="resetSaveData()">Wipe Save Data (localStorage)</button>
                 </div>
             </div>
 
@@ -836,6 +849,7 @@
             NEXUS-V // ULTIMATE CYBERNETIC OPERATIONS &amp; QUANTUM R&amp;B MATRIX v12.0
         </div>
         <div class="status-metrics">
+            <button class="cyber-btn purple" id="hdr-audio-btn" style="padding: 5px 10px; font-size: 0.7rem; margin-right: 4px;" onclick="toggleAudioMute()">🔊 Audio: ON</button>
             <button class="cyber-btn amber" id="hdr-tutorial-btn" style="padding: 5px 10px; font-size: 0.7rem; margin-right: 4px;" onclick="openTutorialModal()">[?] Tutorial</button>
             <button class="cyber-btn danger" id="hdr-admin-btn" style="padding: 5px 10px; font-size: 0.7rem; margin-right: 8px; display: none;" onclick="toggleAdminPanel(true)">⚡ ADMIN PANEL</button>
             <div class="metric-badge">CREDITS: <span id="stat-credits">₿18,500</span></div>
@@ -961,7 +975,7 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
                         <span>SUB-BASS RESONANCE</span>
                         <span style="color: var(--neon-purple);" id="rb-val-bass">92.0 Hz</span>
                     </div>
-                    <input type="range" id="slider-sub-bass" min="20" max="250" value="92" style="width:100%; accent-color: var(--neon-purple);" oninput="document.getElementById('rb-val-bass').innerText = this.value + ' Hz'">
+                    <input type="range" id="slider-sub-bass" min="20" max="250" value="92" style="width:100%; accent-color: var(--neon-purple);" oninput="updateBassSlider(this.value)">
                 </div>
                 <div style="background: var(--bg-card); border: 1px solid var(--text-dim); padding: 12px; border-radius: 6px; margin-bottom: 12px;">
                     <div style="display:flex; justify-content:space-between; font-size:0.75rem; margin-bottom:4px;">
@@ -984,7 +998,201 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
     </div>
 
     <script>
-        let gameState = {
+        // ==========================================
+        // 1. CANVAS MATRIX RAIN BACKGROUND
+        // ==========================================
+        const matrixCanvas = document.getElementById('matrix-canvas');
+        const mCtx = matrixCanvas.getContext('2d');
+
+        function resizeMatrixCanvas() {
+            matrixCanvas.width = window.innerWidth;
+            matrixCanvas.height = window.innerHeight;
+        }
+        resizeMatrixCanvas();
+        window.addEventListener('resize', resizeMatrixCanvas);
+
+        const matrixChars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEF<>[]{}/*=+#';
+        const fontSize = 14;
+        let columns = Math.floor(matrixCanvas.width / fontSize);
+        let drops = Array(columns).fill(1);
+
+        function drawMatrixRain() {
+            mCtx.fillStyle = 'rgba(2, 5, 14, 0.08)';
+            mCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+
+            const newColumns = Math.floor(matrixCanvas.width / fontSize);
+            if (newColumns !== columns) {
+                columns = newColumns;
+                drops = Array(columns).fill(1);
+            }
+
+            for (let i = 0; i < drops.length; i++) {
+                const char = matrixChars[Math.floor(Math.random() * matrixChars.length)];
+                
+                // Color gradient between Cyan and Green
+                if (Math.random() > 0.85) {
+                    mCtx.fillStyle = '#00f3ff';
+                } else {
+                    mCtx.fillStyle = '#00ff66';
+                }
+
+                mCtx.font = fontSize + 'px monospace';
+                mCtx.fillText(char, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+            requestAnimationFrame(drawMatrixRain);
+        }
+        drawMatrixRain();
+
+        // ==========================================
+        // 2. WEB AUDIO API SYNTHESIS ENGINE
+        // ==========================================
+        let audioCtx = null;
+        let audioMuted = false;
+
+        function initAudioContext() {
+            if (!audioCtx) {
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                if (AudioContextClass) {
+                    audioCtx = new AudioContextClass();
+                }
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function toggleAudioMute() {
+            audioMuted = !audioMuted;
+            const btn = document.getElementById('hdr-audio-btn');
+            if (audioMuted) {
+                btn.innerText = '🔇 Audio: OFF';
+                btn.className = 'cyber-btn danger';
+            } else {
+                btn.innerText = '🔊 Audio: ON';
+                btn.className = 'cyber-btn purple';
+                initAudioContext();
+            }
+        }
+
+        // Terminal Typing Beep Sound
+        function playTerminalBeep(freq = 880, duration = 0.03, type = 'sine') {
+            if (audioMuted) return;
+            initAudioContext();
+            if (!audioCtx) return;
+
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                
+                gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch(e) {}
+        }
+
+        // Command Execution Audio Feedback
+        function playCommandSound(isError = false) {
+            if (audioMuted) return;
+            initAudioContext();
+            if (!audioCtx) return;
+
+            try {
+                const now = audioCtx.currentTime;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                if (isError) {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(160, now);
+                    osc.frequency.exponentialRampToValueAtTime(60, now + 0.18);
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.linearRampToValueAtTime(0.001, now + 0.18);
+                } else {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(440, now);
+                    osc.frequency.setValueAtTime(880, now + 0.06);
+                    gain.gain.setValueAtTime(0.06, now);
+                    gain.gain.linearRampToValueAtTime(0.001, now + 0.12);
+                }
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start(now);
+                osc.stop(now + 0.2);
+            } catch(e) {}
+        }
+
+        // Quantum R&B Synth Sub-Bass Oscillator Engine
+        function playQuantumSubBass(frequency = 92) {
+            if (audioMuted) return;
+            initAudioContext();
+            if (!audioCtx) return;
+
+            try {
+                const now = audioCtx.currentTime;
+                
+                // Deep Sine Sub Oscillator
+                const subOsc = audioCtx.createOscillator();
+                const subGain = audioCtx.createGain();
+                subOsc.type = 'sine';
+                subOsc.frequency.setValueAtTime(frequency, now);
+                subOsc.frequency.exponentialRampToValueAtTime(frequency * 0.75, now + 1.2);
+
+                subGain.gain.setValueAtTime(0.35, now);
+                subGain.gain.exponentialRampToValueAtTime(0.001, now + 1.3);
+
+                subOsc.connect(subGain);
+                subGain.connect(audioCtx.destination);
+
+                // Warm Sawtooth Modulated Layer
+                const warmOsc = audioCtx.createOscillator();
+                const warmGain = audioCtx.createGain();
+                const filter = audioCtx.createBiquadFilter();
+
+                warmOsc.type = 'sawtooth';
+                warmOsc.frequency.setValueAtTime(frequency * 1.5, now);
+                
+                filter.type = 'lowpass';
+                filter.frequency.setValueAtTime(frequency * 2.5, now);
+                filter.frequency.exponentialRampToValueAtTime(60, now + 1.0);
+
+                warmGain.gain.setValueAtTime(0.12, now);
+                warmGain.gain.exponentialRampToValueAtTime(0.001, now + 1.1);
+
+                warmOsc.connect(filter);
+                filter.connect(warmGain);
+                warmGain.connect(audioCtx.destination);
+
+                subOsc.start(now);
+                subOsc.stop(now + 1.3);
+                warmOsc.start(now);
+                warmOsc.stop(now + 1.1);
+            } catch(e) {}
+        }
+
+        function updateBassSlider(val) {
+            document.getElementById('rb-val-bass').innerText = val + ' Hz';
+            playQuantumSubBass(parseFloat(val));
+        }
+
+        // ==========================================
+        // 3. GAME STATE & LOCALSTORAGE PERSISTENCE
+        // ==========================================
+        const DEFAULT_GAME_STATE = {
             credits: 18500,
             traces: 0,
             cpu: 18,
@@ -995,8 +1203,8 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
             godMode: false,
             adminUnlocked: false,
             fullCommandActive: false,
-            fullCommandMode: 'normally', // 'normally', 'expertise', 'professionalism'
-            currentTarget: null,
+            fullCommandMode: 'normally',
+            currentTarget: '194.28.14.2',
             portfolio: {},
             nodes: [
                 { id: 'n1', name: 'Aegis Defense Node', ip: '194.28.14.2', status: 'Secure', firewall: 'Level 3 ICE', data: 'Military Hardware Specs', hacked: false, opCost: 1500, losses: 55000, earnings: 140000, stockTicker: 'AGIS', stockPrice: 380.00 },
@@ -1017,6 +1225,41 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
                 { id: 't4', title: 'Quantum Melancholy Jam', bpm: 78, frequency: '396 Hz', status: 'Ready' }
             ]
         };
+
+        let gameState = loadSaveData();
+
+        function loadSaveData() {
+            try {
+                const saved = localStorage.getItem('NEXUS_V_SAVEDATA');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    return parsed;
+                }
+            } catch(e) {
+                console.warn('LocalStorage error loading state:', e);
+            }
+            return JSON.parse(JSON.stringify(DEFAULT_GAME_STATE));
+        }
+
+        function saveGameData() {
+            try {
+                localStorage.setItem('NEXUS_V_SAVEDATA', JSON.stringify(gameState));
+            } catch(e) {
+                console.warn('LocalStorage error saving state:', e);
+            }
+        }
+
+        function resetSaveData() {
+            try {
+                localStorage.removeItem('NEXUS_V_SAVEDATA');
+            } catch(e) {}
+            gameState = JSON.parse(JSON.stringify(DEFAULT_GAME_STATE));
+            renderNodes();
+            if (document.getElementById('tab-stockmarket').classList.contains('active')) renderStockMarket();
+            if (document.getElementById('tab-financials').classList.contains('active')) renderSpreadsheet();
+            appendTerminal('[!] LOCAL STORAGE RESET: Save data wiped. Restored system defaults.', 'log-warning');
+            alert('Save data reset successfully.');
+        }
 
         function switchTab(tabId) {
             document.querySelectorAll('.viewport').forEach(v => v.classList.remove('active'));
@@ -1065,6 +1308,8 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
             document.getElementById('stat-heat').innerText = gameState.heat + '°C';
             document.getElementById('tele-rootkits').innerText = gameState.rootkitsCount;
             document.getElementById('tele-income').innerText = '₿' + gameState.passiveIncome + ' / min';
+            
+            saveGameData();
         }
 
         function selectTarget(node) {
@@ -1073,6 +1318,7 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
             appendTerminal(`\n[+] Target locked: ${node.name} (${node.ip})`, 'log-info');
             appendTerminal(`    Firewall: ${node.firewall} | Datastore: ${node.data}`, 'log-info');
             renderNodes();
+            playTerminalBeep(650, 0.04, 'triangle');
         }
 
         function appendTerminal(text, className = '') {
@@ -1086,6 +1332,7 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
 
         const terminalInput = document.getElementById('terminal-input');
         terminalInput.addEventListener('keydown', function(e) {
+            playTerminalBeep(1200 + Math.random() * 200, 0.02, 'sine');
             if (e.key === 'Enter') {
                 const fullCmd = terminalInput.value.trim();
                 terminalInput.value = '';
@@ -1127,11 +1374,13 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
                     document.getElementById('admin-pass-input').focus();
                     appendTerminal('[!] Security prompt initiated for Admin Panel...', 'log-warning');
                 }
+                playCommandSound(false);
                 return;
             }
 
             switch(cmd) {
                 case 'help':
+                    playCommandSound(false);
                     appendTerminal(`NEXUS-V 32+ COMMAND SUITE:
   [Core Ops]
   1. scan [ip]        2. connect [ip]    3. exploit [mod]   4. exfil
@@ -1157,10 +1406,12 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
                     break;
 
                 case 'clear':
+                    playCommandSound(false);
                     document.getElementById('terminal-output').innerHTML = '';
                     break;
 
                 case 'nodes':
+                    playCommandSound(false);
                     appendTerminal('ACTIVE MATRIX NODES & FIREWALLS:', 'log-info');
                     gameState.nodes.forEach(n => {
                         appendTerminal(` - ${n.name} | IP: ${n.ip} | Status: ${n.status} | Hacked: ${n.hacked}`);
@@ -1168,6 +1419,7 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
                     break;
 
                 case 'sysmon':
+                    playCommandSound(false);
                     appendTerminal(`SYSTEM DIAGNOSTICS:
  - CPU Load: ${gameState.cpu}% | Thermal: ${gameState.heat}°C
  - Trace Level: ${gameState.traces}% | Credits: ₿${gameState.credits}
@@ -1175,6 +1427,7 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
                     break;
 
                 case 'market':
+                    playCommandSound(false);
                     appendTerminal(`REAL-TIME STOCK EXCHANGE TICKER:
  - AGIS: $${gameState.stocks['AGIS'].price} (${gameState.stocks['AGIS'].change}%)
  - OMNI: $${gameState.stocks['OMNI'].price} (${gameState.stocks['OMNI'].change}%)
@@ -1184,7 +1437,8 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
 
                 // --- 12 BRAND-NEW COMMANDS ---
                 case 'zeroday':
-                    if (!gameState.currentTarget) { appendTerminal('[-] ERROR: No target selected.', 'log-danger'); return; }
+                    if (!gameState.currentTarget) { playCommandSound(true); appendTerminal('[-] ERROR: No target selected.', 'log-danger'); return; }
+                    playCommandSound(false);
                     appendTerminal(`[~] Deploying classified Zero-Day exploit against ${gameState.currentTarget}...`, 'log-warning');
                     addTrace(12);
                     setTimeout(() => {
@@ -1199,6 +1453,7 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
                     break;
 
                 case 'satlink':
+                    playCommandSound(false);
                     appendTerminal(`[~] Establishing connection with Low-Earth Orbit military satellites...`, 'log-info');
                     setTimeout(() => {
                         gameState.credits += 2200;
@@ -1209,7 +1464,8 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
                     break;
 
                 case 'deeptrace':
-                    if (!gameState.currentTarget) { appendTerminal('[-] ERROR: No target selected.', 'log-danger'); return; }
+                    if (!gameState.currentTarget) { playCommandSound(true); appendTerminal('[-] ERROR: No target selected.', 'log-danger'); return; }
+                    playCommandSound(false);
                     appendTerminal(`[~] Running deep vulnerability heuristic scan on ${gameState.currentTarget}...`, 'log-info');
                     setTimeout(() => {
                         const target = gameState.nodes.find(n => n.ip === gameState.currentTarget);
@@ -1218,6 +1474,7 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
                     break;
 
                 case 'singularity':
+                    playCommandSound(false);
                     appendTerminal(`[!] OVERCLOCKING Quantum mining cores into Singularity Mode...`, 'log-purple');
                     setTimeout(() => {
                         const mined = 5000;
@@ -1229,6 +1486,7 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
                     break;
 
                 case 'quantumjam':
+                    playCommandSound(false);
                     appendTerminal(`[~] Broadcasting Quantum Jamming frequencies across target subnets...`, 'log-info');
                     setTimeout(() => {
                         gameState.traces = Math.max(0, gameState.traces - 25);
@@ -1239,7 +1497,8 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
 
                 case 'rootkit':
                     const rTarget = gameState.nodes.find(n => n.ip === gameState.currentTarget);
-                    if (!rTarget || !rTarget.hacked) { appendTerminal('[-] Target must be compromised first.', 'log-danger'); return; }
+                    if (!rTarget || !rTarget.hacked) { playCommandSound(true); appendTerminal('[-] Target must be compromised first.', 'log-danger'); return; }
+                    playCommandSound(false);
                     appendTerminal(`[~] Planting stealth kernel rootkit on ${rTarget.name}...`, 'log-warning');
                     setTimeout(() => {
                         gameState.rootkitsCount++;
@@ -1251,7 +1510,8 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
 
                 case 'syphon':
                     const sTarget = gameState.nodes.find(n => n.ip === gameState.currentTarget);
-                    if (!sTarget || !sTarget.hacked) { appendTerminal('[-] Target requires root access.', 'log-danger'); return; }
+                    if (!sTarget || !sTarget.hacked) { playCommandSound(true); appendTerminal('[-] Target requires root access.', 'log-danger'); return; }
+                    playCommandSound(false);
                     appendTerminal(`[~] Syphoning treasury reserves from ${sTarget.name}...`, 'log-warning');
                     addTrace(15);
                     setTimeout(() => {
@@ -1264,6 +1524,7 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
                     break;
 
                 case 'ghostmode':
+                    playCommandSound(false);
                     gameState.stealthActive = true;
                     appendTerminal(`[+] Ghost Mode engaged. Trace accumulation suspended for 60 seconds.`, 'log-success');
                     document.getElementById('stat-stealth').innerText = 'GHOST MODE';
@@ -1278,7 +1539,8 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
                     break;
 
                 case 'neuralhack':
-                    if (!gameState.currentTarget) { appendTerminal('[-] ERROR: No target selected.', 'log-danger'); return; }
+                    if (!gameState.currentTarget) { playCommandSound(true); appendTerminal('[-] ERROR: No target selected.', 'log-danger'); return; }
+                    playCommandSound(false);
                     appendTerminal(`[~] Uplinked to executive neural implants on ${gameState.currentTarget}...`, 'log-purple');
                     addTrace(8);
                     setTimeout(() => {
@@ -1289,7 +1551,8 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
                     break;
 
                 case 'blackout':
-                    if (!gameState.currentTarget) { appendTerminal('[!] WARNING: Initiating regional power grid blackout...', 'log-danger');
+                    playCommandSound(false);
+                    appendTerminal('[!] WARNING: Initiating regional power grid blackout...', 'log-danger');
                     addTrace(35);
                     setTimeout(() => {
                         gameState.credits += 8000;
@@ -1297,10 +1560,10 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
                         impactTargetStock(gameState.currentTarget, -30);
                         renderNodes();
                     }, 1500);
-                    return; }
                     break;
 
                 case 'cloneserver':
+                    playCommandSound(false);
                     appendTerminal(`[~] Spawning 16 darknet server decoys...`, 'log-info');
                     setTimeout(() => {
                         gameState.traces = 0;
@@ -1310,6 +1573,7 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
                     break;
 
                 case 'overdrive':
+                    playCommandSound(false);
                     appendTerminal(`[!] SYSTEM OVERDRIVE: Terminal processor frequency doubled!`, 'log-purple');
                     setTimeout(() => {
                         gameState.credits += 4000;
@@ -1320,7 +1584,8 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
 
                 // --- STANDARD COMMANDS ---
                 case 'scan':
-                    if (!gameState.currentTarget) { appendTerminal('[-] ERROR: No target selected.', 'log-danger'); return; }
+                    if (!gameState.currentTarget) { playCommandSound(true); appendTerminal('[-] ERROR: No target selected.', 'log-danger'); return; }
+                    playCommandSound(false);
                     appendTerminal(`[I] Probing ports on ${gameState.currentTarget}...`, 'log-info');
                     setTimeout(() => {
                         appendTerminal(`[+] Port 22 (SSH): Open | Port 443 (HTTPS): Vulnerable Proxy`, 'log-success');
@@ -1330,7 +1595,8 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
 
                 case 'brute':
                     const targetBrute = gameState.nodes.find(n => n.ip === gameState.currentTarget);
-                    if (!targetBrute) { appendTerminal('[-] Select a target node first.', 'log-danger'); return; }
+                    if (!targetBrute) { playCommandSound(true); appendTerminal('[-] Select a target node first.', 'log-danger'); return; }
+                    playCommandSound(false);
                     appendTerminal(`[~] Executing brute-force dictionary attack against ${targetBrute.name}...`, 'log-info');
                     addTrace(10);
                     setTimeout(() => {
@@ -1342,7 +1608,8 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
 
                 case 'inject':
                     const targetInject = gameState.nodes.find(n => n.ip === gameState.currentTarget);
-                    if (!targetInject) { appendTerminal('[-] Select a target node first.', 'log-danger'); return; }
+                    if (!targetInject) { playCommandSound(true); appendTerminal('[-] Select a target node first.', 'log-danger'); return; }
+                    playCommandSound(false);
                     appendTerminal(`[~] Injecting payload into ${targetInject.ip} memory stack...`, 'log-info');
                     addTrace(15);
                     setTimeout(() => {
@@ -1355,7 +1622,8 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
 
                 case 'exfil':
                     const targetExfil = gameState.nodes.find(n => n.ip === gameState.currentTarget);
-                    if (!targetExfil || !targetExfil.hacked) { appendTerminal('[-] Target requires root access first.', 'log-danger'); return; }
+                    if (!targetExfil || !targetExfil.hacked) { playCommandSound(true); appendTerminal('[-] Target requires root access first.', 'log-danger'); return; }
+                    playCommandSound(false);
                     appendTerminal(`[~] Extracting: "${targetExfil.data}"...`, 'log-info');
                     setTimeout(() => {
                         const payout = 3000;
@@ -1366,7 +1634,8 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
                     break;
 
                 case 'ddos':
-                    if (!gameState.currentTarget) { appendTerminal('[-] ERROR: No target selected.', 'log-danger'); return; }
+                    if (!gameState.currentTarget) { playCommandSound(true); appendTerminal('[-] ERROR: No target selected.', 'log-danger'); return; }
+                    playCommandSound(false);
                     appendTerminal(`[~] Launching botnet UDP amplification flood against ${gameState.currentTarget}...`, 'log-warning');
                     addTrace(12);
                     setTimeout(() => {
@@ -1376,7 +1645,8 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
                     break;
 
                 case 'ransom':
-                    if (!gameState.currentTarget) { appendTerminal('[-] ERROR: No target selected.', 'log-danger'); return; }
+                    if (!gameState.currentTarget) { playCommandSound(true); appendTerminal('[-] ERROR: No target selected.', 'log-danger'); return; }
+                    playCommandSound(false);
                     appendTerminal(`[!] Deploying AES-256 ransomware payload to ${gameState.currentTarget}...`, 'log-danger');
                     addTrace(22);
                     setTimeout(() => {
@@ -1389,6 +1659,7 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
                     break;
 
                 case 'wipe':
+                    playCommandSound(false);
                     appendTerminal(`[~] Purging local logs and cycling proxy hops...`, 'log-info');
                     setTimeout(() => {
                         gameState.traces = Math.max(0, gameState.traces - 45);
@@ -1398,6 +1669,7 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
                     break;
 
                 default:
+                    playCommandSound(true);
                     appendTerminal(`[-] Command unrecognized: '${cmd}'. Type 'help' for full framework directory.`, 'log-danger');
             }
         }
@@ -1408,7 +1680,7 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
             renderNodes();
             if(gameState.traces >= 100) {
                 alert('TRACE COMPLETE. Counter-offensive launched by cyber defense agencies. Resetting matrix session...');
-                window.location.reload();
+                resetSaveData();
             }
         }
 
@@ -1485,6 +1757,7 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
             gameState.portfolio[ticker] = (gameState.portfolio[ticker] || 0) + 10;
             renderStockMarket();
             renderNodes();
+            playCommandSound(false);
         }
 
         function sellStock(ticker) {
@@ -1496,6 +1769,7 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
             if (gameState.portfolio[ticker] === 0) delete gameState.portfolio[ticker];
             renderStockMarket();
             renderNodes();
+            playCommandSound(false);
         }
 
         function renderPortfolio() {
@@ -1526,6 +1800,7 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
                 gameState.stocks[ticker].change += deltaPercent;
                 gameState.stocks[ticker].price = Math.max(10, gameState.stocks[ticker].price * (1 + deltaPercent / 100));
             }
+            saveGameData();
         }
 
         // Quantum R&B Section
@@ -1555,6 +1830,10 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
             logOut.scrollTop = logOut.scrollHeight;
             gameState.credits += 600;
             renderNodes();
+            
+            // Audio Web API Synthesis
+            const bassFreq = parseFloat(document.getElementById('slider-sub-bass').value) || 92;
+            playQuantumSubBass(bassFreq);
         }
 
         // Passive Income & Thermal Ticker
@@ -1567,7 +1846,10 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
         }, 5000);
 
         renderNodes();
-        selectTarget(gameState.nodes[0]);
+        
+        // Restore Current Target Selection
+        const targetNode = gameState.nodes.find(n => n.ip === gameState.currentTarget) || gameState.nodes[0];
+        selectTarget(targetNode);
 
         /* ==========================================================================
            ADMIN PANEL & ADVANCED FULL COMMAND AUTOPILOT ENGINE
@@ -1581,9 +1863,11 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
                 document.getElementById('hdr-admin-btn').style.display = 'inline-block';
                 toggleAdminPanel(true);
                 appendTerminal('[+] ACCESS GRANTED: Admin Panel & Full Command unlocked!', 'log-gold');
+                playCommandSound(false);
             } else {
                 alert('ACCESS DENIED: Invalid Admin Password.');
                 document.getElementById('admin-pass-input').value = '';
+                playCommandSound(true);
             }
         }
 
@@ -1603,6 +1887,7 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
             if (mode === 'expertise') document.getElementById('mode-btn-expertise').classList.add('active-mode');
             if (mode === 'professionalism') document.getElementById('mode-btn-pro').classList.add('active-mode');
             appendTerminal(`[ADMIN] Autopilot Mode updated to: ${mode.toUpperCase()}`, 'log-gold');
+            saveGameData();
         }
 
         let fullCommandLoopTimer = null;
@@ -1631,6 +1916,7 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
                 if (fullCommandLoopTimer) clearTimeout(fullCommandLoopTimer);
                 appendTerminal('[!] FULL COMMAND AUTOPILOT DISENGAGED.', 'log-warning');
             }
+            saveGameData();
         }
 
         function runFullCommandLoop() {
@@ -2049,6 +2335,7 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
             let idx = 0;
             const interval = setInterval(() => {
                 input.value += text[idx];
+                playTerminalBeep(1100 + Math.random() * 150, 0.02, 'sine');
                 idx++;
                 if (idx >= text.length) {
                     clearInterval(interval);
