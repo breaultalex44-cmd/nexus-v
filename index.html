@@ -728,13 +728,15 @@
     <canvas id="matrix-canvas"></canvas>
 
     <!-- INITIAL TUTORIAL INVITATION MODAL -->
-    <div id="tut-init-modal">
+    <div id="tut-init-modal" style="display: none;">
         <div class="tut-init-card">
             <div class="tut-init-title">SYSTEM INIT TACTICAL PROTOCOL</div>
             <div class="tut-init-sub">
                 Welcome Commander. NEXUS-V contains 32+ cybernetic commands, real-time corporate skimming ledgers, short-selling stock exchanges, and quantum sub-bass sound synthesis.
                 <br><br>
                 Would you like to initiate the guided interactive walk-through?
+                <br><br>
+                <span id="tut-auto-dismiss-timer" style="color: var(--neon-amber); font-weight: bold;">Auto-dismissing in 10s...</span>
             </div>
             <div class="tut-init-btns">
                 <button class="cyber-btn tut-init-btn" onclick="startTutorialSystem()">Enter Tutorial</button>
@@ -1204,6 +1206,7 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
             adminUnlocked: false,
             fullCommandActive: false,
             fullCommandMode: 'normally',
+            tutorialInteracted: false,
             currentTarget: '194.28.14.2',
             portfolio: {},
             nodes: [
@@ -2070,6 +2073,7 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
         let tutorialActive = false;
         let commanderMode = false;
         let commanderTimer = null;
+        let autoDismissTimer = null;
 
         const tutorialSteps = [
             {
@@ -2187,20 +2191,51 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
             }
         ];
 
-        function openTutorialModal() {
-            document.getElementById('tut-init-modal').style.display = 'flex';
-            document.getElementById('tut-init-modal').style.opacity = '1';
+        function checkInitialTutorialPrompt() {
+            if (!gameState.tutorialInteracted) {
+                openTutorialModal();
+            }
         }
 
-        function declineTutorialSystem() {
-            document.getElementById('tut-init-modal').style.opacity = '0';
+        function openTutorialModal() {
+            if (autoDismissTimer) clearInterval(autoDismissTimer);
+            
+            const modal = document.getElementById('tut-init-modal');
+            const timerElem = document.getElementById('tut-auto-dismiss-timer');
+            modal.style.display = 'flex';
+            modal.style.opacity = '1';
+            
+            let timeLeft = 10;
+            if (timerElem) timerElem.innerText = `Auto-dismissing in ${timeLeft}s...`;
+            
+            autoDismissTimer = setInterval(() => {
+                timeLeft--;
+                if (timerElem) timerElem.innerText = `Auto-dismissing in ${timeLeft}s...`;
+                if (timeLeft <= 0) {
+                    clearInterval(autoDismissTimer);
+                    declineTutorialSystem(false);
+                }
+            }, 1000);
+        }
+
+        function declineTutorialSystem(userChoice = true) {
+            if (autoDismissTimer) clearInterval(autoDismissTimer);
+            if (userChoice) {
+                gameState.tutorialInteracted = true;
+                saveGameData();
+            }
+            const modal = document.getElementById('tut-init-modal');
+            modal.style.opacity = '0';
             setTimeout(() => {
-                document.getElementById('tut-init-modal').style.display = 'none';
+                modal.style.display = 'none';
             }, 500);
         }
 
         function startTutorialSystem() {
-            declineTutorialSystem();
+            if (autoDismissTimer) clearInterval(autoDismissTimer);
+            gameState.tutorialInteracted = true;
+            saveGameData();
+            declineTutorialSystem(false);
             tutorialActive = true;
             currentTutorialStep = 0;
             document.getElementById('tut-guidance-card').style.display = 'flex';
@@ -2348,6 +2383,7 @@ Type 'help' to review all 32+ framework commands (including 12 new high-action c
         }
 
         window.addEventListener('resize', updateTutorialHighlight);
+        window.addEventListener('load', checkInitialTutorialPrompt);
     </script>
 </body>
 </html>
