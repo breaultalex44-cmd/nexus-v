@@ -22,146 +22,759 @@
             --font-mono: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: var(--bg-deep); color: var(--text-main); font-family: var(--font-mono); height: 100vh; overflow: hidden; display: flex; flex-direction: column; position: relative; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-        #matrix-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; opacity: 0.22; pointer-events: none; }
-        body::after { content: " "; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.015), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.015)); z-index: 9999; background-size: 100% 3px, 4px 100%; pointer-events: none; }
+        body {
+            background: var(--bg-deep);
+            color: var(--text-main);
+            font-family: var(--font-mono);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
 
-        header { background: linear-gradient(180deg, rgba(6,11,25,0.95) 0%, rgba(3,7,18,0.95) 100%); border-bottom: 2px solid var(--neon-cyan); padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 0 30px rgba(0, 243, 255, 0.2); z-index: 10; backdrop-filter: blur(10px); }
-        .logo { font-size: 1.2rem; font-weight: 800; color: var(--neon-cyan); text-shadow: 0 0 15px var(--neon-cyan); letter-spacing: 3px; display: flex; align-items: center; gap: 12px; }
-        .logo-pulse { width: 12px; height: 12px; background: var(--neon-green); border-radius: 50%; box-shadow: 0 0 12px var(--neon-green); animation: core-pulse 1.2s infinite ease-in-out; }
+        /* Canvas Matrix Rain Background */
+        #matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            opacity: 0.22;
+            pointer-events: none;
+        }
 
-        @keyframes core-pulse { 0%, 100% { transform: scale(0.9); opacity: 0.4; } 50% { transform: scale(1.2); opacity: 1; } }
+        /* Holographic Scanline & Vignette Overlay */
+        body::after {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%), 
+                        linear-gradient(90deg, rgba(255, 0, 0, 0.015), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.015));
+            z-index: 9999;
+            background-size: 100% 3px, 4px 100%;
+            pointer-events: none;
+        }
 
-        .status-metrics { display: flex; gap: 10px; font-size: 0.78rem; align-items: center; }
-        .metric-badge { background: rgba(0, 243, 255, 0.04); border: 1px solid var(--text-dim); padding: 6px 12px; border-radius: 6px; }
-        .metric-badge span { color: var(--neon-amber); font-weight: bold; }
+        /* Modern HUD Header */
+        header {
+            background: linear-gradient(180deg, rgba(6,11,25,0.95) 0%, rgba(3,7,18,0.95) 100%);
+            border-bottom: 2px solid var(--neon-cyan);
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.2);
+            z-index: 10;
+            backdrop-filter: blur(10px);
+        }
 
-        .nav-tabs { display: flex; background: rgba(2, 5, 14, 0.9); border-bottom: 1px solid var(--text-dim); padding: 0 24px; gap: 8px; z-index: 10; }
-        .tab-btn { background: transparent; border: none; color: var(--text-dim); padding: 12px 20px; font-family: var(--font-mono); font-size: 0.8rem; cursor: pointer; text-transform: uppercase; letter-spacing: 1.5px; border-top: 3px solid transparent; transition: all 0.2s; }
-        .tab-btn:hover, .tab-btn.active { color: var(--neon-cyan); border-top-color: var(--neon-cyan); background: var(--bg-panel); }
+        .logo {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--neon-cyan);
+            text-shadow: 0 0 15px var(--neon-cyan);
+            letter-spacing: 4px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
-        .viewport { flex: 1; display: none; padding: 16px; gap: 16px; overflow: hidden; position: relative; z-index: 2; }
-        .viewport.active { display: grid; }
-        #tab-operations { grid-template-columns: 320px 1fr 340px; }
+        .logo-pulse {
+            width: 12px; height: 12px;
+            background: var(--neon-green);
+            border-radius: 50%;
+            box-shadow: 0 0 12px var(--neon-green);
+            animation: core-pulse 1.2s infinite ease-in-out;
+        }
+
+        @keyframes core-pulse {
+            0% { transform: scale(0.9); opacity: 0.4; box-shadow: 0 0 5px var(--neon-green); }
+            50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 20px var(--neon-green); }
+            100% { transform: scale(0.9); opacity: 0.4; box-shadow: 0 0 5px var(--neon-green); }
+        }
+
+        .status-metrics {
+            display: flex;
+            gap: 12px;
+            font-size: 0.8rem;
+            align-items: center;
+        }
+
+        .metric-badge {
+            background: rgba(0, 243, 255, 0.04);
+            border: 1px solid var(--text-dim);
+            padding: 6px 12px;
+            border-radius: 6px;
+            backdrop-filter: blur(5px);
+            box-shadow: inset 0 0 8px rgba(0,243,255,0.05);
+        }
+
+        .metric-badge span {
+            color: var(--neon-amber);
+            font-weight: bold;
+            text-shadow: 0 0 8px rgba(255,170,0,0.4);
+        }
+
+        /* Navigation Tab Bar */
+        .nav-tabs {
+            display: flex;
+            background: rgba(2, 5, 14, 0.9);
+            border-bottom: 1px solid var(--text-dim);
+            padding: 0 24px;
+            gap: 8px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-dim);
+            padding: 12px 24px;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            border-top: 3px solid transparent;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .tab-btn:hover {
+            color: var(--neon-cyan);
+            background: rgba(0, 243, 255, 0.04);
+        }
+
+        .tab-btn.active {
+            color: var(--neon-cyan);
+            border-top-color: var(--neon-cyan);
+            background: var(--bg-panel);
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.6);
+            box-shadow: 0 -4px 20px rgba(0, 243, 255, 0.15);
+        }
+
+        /* Main Viewports */
+        .viewport {
+            flex: 1;
+            display: none;
+            padding: 16px;
+            gap: 16px;
+            overflow: hidden;
+            position: relative;
+            z-index: 2;
+        }
+
+        .viewport.active {
+            display: grid;
+        }
+
+        #tab-operations { grid-template-columns: 340px 1fr 360px; }
         #tab-financials { grid-template-columns: 1fr 1fr; }
         #tab-stockmarket { grid-template-columns: 1fr 400px; }
-        #tab-quantumrb { grid-template-columns: 320px 1fr 340px; }
-        #tab-cyberstore { grid-template-columns: 1fr 360px; }
+        #tab-quantumrb { grid-template-columns: 340px 1fr 360px; }
+        #tab-cyberstore { grid-template-columns: 1fr 380px; }
 
-        .panel { background: var(--bg-panel); border: 1px solid rgba(84, 120, 178, 0.3); border-radius: 10px; display: flex; flex-direction: column; overflow: hidden; backdrop-filter: blur(8px); }
-        .panel-header { background: linear-gradient(90deg, rgba(0, 243, 255, 0.1) 0%, rgba(13, 22, 50, 0.4) 100%); padding: 10px 16px; font-size: 0.8rem; font-weight: 800; color: var(--neon-cyan); border-bottom: 1px solid rgba(84, 120, 178, 0.3); display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; }
-        .panel-body { flex: 1; padding: 16px; overflow-y: auto; font-size: 0.85rem; }
+        /* Universal Glass Panel Style */
+        .panel {
+            background: var(--bg-panel);
+            border: 1px solid rgba(84, 120, 178, 0.3);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+            backdrop-filter: blur(8px);
+        }
 
-        .target-card, .stock-row, .rb-track-card, .shop-item-card { background: var(--bg-card); border: 1px solid var(--text-dim); padding: 12px; margin-bottom: 10px; border-radius: 6px; transition: all 0.2s; }
-        .target-card:hover, .target-card.active, .shop-item-card:hover { border-color: var(--neon-cyan); box-shadow: 0 0 10px rgba(0, 243, 255, 0.15); }
-        .target-title { font-weight: bold; color: var(--neon-cyan); font-size: 0.9rem; }
-        .target-meta { font-size: 0.75rem; color: var(--text-dim); display: flex; justify-content: space-between; margin-top: 4px; }
+        .panel-header {
+            background: linear-gradient(90deg, rgba(0, 243, 255, 0.1) 0%, rgba(13, 22, 50, 0.4) 100%);
+            padding: 10px 16px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            color: var(--neon-cyan);
+            border-bottom: 1px solid rgba(84, 120, 178, 0.3);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
 
-        .sheet-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
-        .sheet-table th, .sheet-table td { border: 1px solid rgba(84, 120, 178, 0.3); padding: 8px 10px; text-align: left; }
-        .sheet-table th { background: rgba(0, 243, 255, 0.12); color: var(--neon-cyan); }
+        .panel-body {
+            flex: 1;
+            padding: 16px;
+            overflow-y: auto;
+            font-size: 0.85rem;
+        }
 
-        #terminal-panel { display: flex; flex-direction: column; }
-        #terminal-output { flex: 1; overflow-y: auto; padding: 16px; font-size: 0.85rem; line-height: 1.5; white-space: pre-wrap; word-break: break-all; }
-        .terminal-input-line { display: flex; padding: 12px 16px; background: rgba(2, 5, 14, 0.8); border-top: 1px solid var(--text-dim); align-items: center; }
-        .prompt-symbol { color: var(--neon-green); margin-right: 10px; font-weight: bold; }
-        #terminal-input { flex: 1; background: transparent; border: none; color: var(--neon-cyan); font-family: var(--font-mono); font-size: 0.9rem; outline: none; }
+        /* Target Cards & Shop Cards */
+        .target-card, .shop-item-card {
+            background: var(--bg-card);
+            border: 1px solid var(--text-dim);
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
 
-        .cyber-btn { background: rgba(0, 243, 255, 0.06); border: 1px solid var(--neon-cyan); color: var(--neon-cyan); padding: 8px 14px; font-family: var(--font-mono); font-size: 0.75rem; cursor: pointer; text-transform: uppercase; font-weight: bold; border-radius: 6px; transition: all 0.2s; text-align: center; }
-        .cyber-btn:hover { background: var(--neon-cyan); color: var(--bg-deep); box-shadow: 0 0 15px var(--neon-cyan); }
-        .cyber-btn.danger { border-color: var(--neon-rose); color: var(--neon-rose); }
-        .cyber-btn.danger:hover { background: var(--neon-rose); color: #000; }
-        .cyber-btn.amber { border-color: var(--neon-amber); color: var(--neon-amber); }
-        .cyber-btn.amber:hover { background: var(--neon-amber); color: #000; }
-        .cyber-btn.purple { border-color: var(--neon-purple); color: var(--neon-purple); }
-        .cyber-btn.purple:hover { background: var(--neon-purple); color: #fff; }
-        .cyber-btn.gold { border-color: var(--neon-gold); color: var(--neon-gold); }
-        .cyber-btn.gold:hover { background: var(--neon-gold); color: #000; }
+        .target-card:hover, .target-card.active, .shop-item-card:hover {
+            border-color: var(--neon-cyan);
+            box-shadow: inset 0 0 15px rgba(0, 243, 255, 0.2), 0 0 10px rgba(0, 243, 255, 0.15);
+            background: rgba(0, 243, 255, 0.04);
+            transform: translateY(-2px);
+        }
 
-        .stock-row, .rb-track-card { display: flex; justify-content: space-between; align-items: center; }
-        .stock-ticker { font-weight: bold; color: var(--neon-cyan); }
-        .stock-price { color: var(--neon-green); font-weight: bold; }
-        .stock-price.down { color: var(--neon-rose); }
+        .target-title {
+            font-weight: bold;
+            color: var(--neon-cyan);
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+        }
 
+        .target-meta {
+            font-size: 0.75rem;
+            color: var(--text-dim);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Spreadsheet Tables */
+        .sheet-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.8rem;
+            margin-top: 8px;
+        }
+
+        .sheet-table th, .sheet-table td {
+            border: 1px solid rgba(84, 120, 178, 0.3);
+            padding: 8px 10px;
+            text-align: left;
+        }
+
+        .sheet-table th {
+            background: rgba(0, 243, 255, 0.12);
+            color: var(--neon-cyan);
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        /* Terminal Console */
+        #terminal-panel {
+            display: flex;
+            flex-direction: column;
+        }
+
+        #terminal-output {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+            font-size: 0.85rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-break: break-all;
+        }
+
+        .terminal-input-line {
+            display: flex;
+            padding: 12px 16px;
+            background: rgba(2, 5, 14, 0.8);
+            border-top: 1px solid var(--text-dim);
+            align-items: center;
+        }
+
+        .prompt-symbol {
+            color: var(--neon-green);
+            margin-right: 10px;
+            font-weight: bold;
+            text-shadow: 0 0 8px var(--neon-green);
+        }
+
+        #terminal-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--neon-cyan);
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            outline: none;
+            text-shadow: 0 0 5px rgba(0, 243, 255, 0.4);
+        }
+
+        /* Cyber Buttons */
+        .cyber-btn {
+            background: rgba(0, 243, 255, 0.06);
+            border: 1px solid var(--neon-cyan);
+            color: var(--neon-cyan);
+            padding: 10px 16px;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1.5px;
+            transition: all 0.2s;
+            text-align: center;
+            border-radius: 6px;
+            box-shadow: 0 0 10px rgba(0,243,255,0.1);
+        }
+
+        .cyber-btn:hover {
+            background: var(--neon-cyan);
+            color: var(--bg-deep);
+            box-shadow: 0 0 20px var(--neon-cyan);
+            transform: translateY(-1px);
+        }
+
+        .cyber-btn.danger {
+            border-color: var(--neon-rose);
+            color: var(--neon-rose);
+            box-shadow: 0 0 10px rgba(255,0,85,0.1);
+        }
+
+        .cyber-btn.danger:hover {
+            background: var(--neon-rose);
+            color: var(--bg-deep);
+            box-shadow: 0 0 20px var(--neon-rose);
+        }
+
+        .cyber-btn.amber {
+            border-color: var(--neon-amber);
+            color: var(--neon-amber);
+            box-shadow: 0 0 10px rgba(255,170,0,0.1);
+        }
+
+        .cyber-btn.amber:hover {
+            background: var(--neon-amber);
+            color: var(--bg-deep);
+            box-shadow: 0 0 20px var(--neon-amber);
+        }
+
+        .cyber-btn.purple {
+            border-color: var(--neon-purple);
+            color: var(--neon-purple);
+            box-shadow: 0 0 10px rgba(176,0,255,0.2);
+        }
+
+        .cyber-btn.purple:hover {
+            background: var(--neon-purple);
+            color: #fff;
+            box-shadow: 0 0 25px var(--neon-purple);
+        }
+
+        .cyber-btn.gold {
+            border-color: var(--neon-gold);
+            color: var(--neon-gold);
+            box-shadow: 0 0 10px rgba(255,215,0,0.2);
+        }
+
+        .cyber-btn.gold:hover {
+            background: var(--neon-gold);
+            color: #000;
+            box-shadow: 0 0 25px var(--neon-gold);
+        }
+
+        /* Stock Market & Track Rows */
+        .stock-row, .rb-track-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: var(--bg-card);
+            border: 1px solid var(--text-dim);
+            border-radius: 6px;
+            margin-bottom: 10px;
+            transition: all 0.2s;
+        }
+
+        .stock-row:hover, .rb-track-card:hover {
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 15px rgba(0,243,255,0.15);
+        }
+
+        .stock-ticker {
+            font-weight: bold;
+            color: var(--neon-cyan);
+            font-size: 1rem;
+        }
+
+        .stock-price {
+            color: var(--neon-green);
+            font-weight: bold;
+        }
+
+        .stock-price.down {
+            color: var(--neon-rose);
+        }
+
+        /* Inventory Row */
+        .inventory-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: rgba(0, 243, 255, 0.04);
+            border: 1px solid var(--text-dim);
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+
+        /* Custom Scrollbars */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: var(--bg-deep); }
         ::-webkit-scrollbar-thumb { background: var(--text-dim); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--neon-cyan); }
 
-        .log-success { color: var(--neon-green); }
-        .log-warning { color: var(--neon-amber); }
-        .log-danger { color: var(--neon-rose); }
-        .log-info { color: var(--neon-cyan); }
-        .log-purple { color: var(--neon-purple); }
-        .log-gold { color: var(--neon-gold); }
+        .log-success { color: var(--neon-green); text-shadow: 0 0 8px rgba(0,255,102,0.3); }
+        .log-warning { color: var(--neon-amber); text-shadow: 0 0 8px rgba(255,170,0,0.3); }
+        .log-danger { color: var(--neon-rose); text-shadow: 0 0 8px rgba(255,0,85,0.3); }
+        .log-info { color: var(--neon-cyan); text-shadow: 0 0 8px rgba(0,243,255,0.3); }
+        .log-purple { color: var(--neon-purple); text-shadow: 0 0 8px rgba(176,0,255,0.3); }
+        .log-gold { color: var(--neon-gold); text-shadow: 0 0 8px rgba(255,215,0,0.4); }
 
-        #tut-init-modal, #admin-login-modal { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(2, 5, 14, 0.92); z-index: 20000; display: flex; align-items: center; justify-content: center; }
+        /* Initial Prompt Modal */
+        #tut-init-modal, #admin-login-modal {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(2, 5, 14, 0.92);
+            backdrop-filter: blur(12px);
+            z-index: 20000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 1;
+            transition: opacity 0.5s ease;
+        }
+
         #admin-login-modal { display: none; }
-        .tut-init-card { background: var(--bg-panel); border: 2px solid var(--neon-cyan); border-radius: 12px; width: 500px; max-width: 90vw; padding: 28px; text-align: center; }
-        .admin-card { border-color: var(--neon-red); }
-        .tut-init-title { font-size: 1.4rem; font-weight: 900; color: var(--neon-cyan); margin-bottom: 12px; }
-        .tut-init-sub { font-size: 0.85rem; color: var(--text-main); line-height: 1.5; margin-bottom: 24px; }
-        .tut-init-btns { display: flex; gap: 12px; justify-content: center; }
 
-        #tut-highlight-box { position: fixed; z-index: 10001; pointer-events: none; border: 2px dashed var(--neon-cyan); border-radius: 8px; display: none; }
-        #tut-cursor { position: fixed; width: 24px; height: 24px; z-index: 10005; pointer-events: none; display: none; transform: translate(-50%, -50%); }
-        #tut-cursor::before { content: "➔"; font-size: 24px; color: var(--neon-green); display: block; transform: rotate(-45deg); }
+        .tut-init-card {
+            background: var(--bg-panel);
+            border: 2px solid var(--neon-cyan);
+            box-shadow: 0 0 50px rgba(0, 243, 255, 0.3), inset 0 0 20px rgba(0, 243, 255, 0.1);
+            border-radius: 12px;
+            width: 520px;
+            max-width: 90vw;
+            padding: 32px;
+            text-align: center;
+            position: relative;
+            animation: modal-enter 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
 
-        #tut-guidance-card { position: fixed; bottom: 20px; right: 20px; width: 420px; max-width: calc(100vw - 40px); background: rgba(6, 11, 25, 0.96); border: 2px solid var(--neon-cyan); border-radius: 12px; z-index: 10002; padding: 16px; display: none; flex-direction: column; gap: 10px; }
-        .tut-card-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(84, 120, 178, 0.3); padding-bottom: 6px; }
-        .tut-step-tag { font-size: 0.7rem; background: rgba(0, 243, 255, 0.12); color: var(--neon-cyan); padding: 2px 6px; border-radius: 4px; font-weight: bold; }
-        .tut-card-title { font-size: 0.9rem; font-weight: 800; color: #fff; }
-        .tut-card-desc { font-size: 0.8rem; color: var(--text-main); line-height: 1.4; }
-        .tut-progress-bar { width: 100%; height: 4px; background: rgba(255, 255, 255, 0.1); border-radius: 2px; overflow: hidden; }
-        .tut-progress-fill { height: 100%; background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple)); width: 0%; }
-        .tut-card-controls { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
-        .commander-btn-active { background: var(--neon-purple) !important; color: #fff !important; }
+        .admin-card {
+            border-color: var(--neon-red);
+            box-shadow: 0 0 50px rgba(255, 34, 34, 0.4), inset 0 0 20px rgba(255, 34, 34, 0.15);
+        }
 
-        #admin-panel-overlay { position: fixed; top: 60px; left: 50%; transform: translateX(-50%); width: 760px; max-width: 95vw; background: rgba(6, 11, 25, 0.97); border: 2px solid var(--neon-red); border-radius: 12px; z-index: 15000; display: none; flex-direction: column; overflow: hidden; }
-        .admin-header { background: linear-gradient(90deg, rgba(255,0,85,0.3), rgba(176,0,255,0.3)); padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--neon-rose); }
-        .admin-title { color: var(--neon-gold); font-weight: 900; font-size: 0.95rem; }
-        .admin-body { padding: 16px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; max-height: 80vh; overflow-y: auto; }
-        .admin-section { background: rgba(255, 0, 85, 0.05); border: 1px solid rgba(255, 0, 85, 0.3); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
-        .admin-section-title { color: var(--neon-rose); font-size: 0.8rem; font-weight: bold; border-bottom: 1px dashed rgba(255,0,85,0.4); padding-bottom: 4px; }
-        .mode-select-btn { padding: 8px; font-size: 0.75rem; display: flex; justify-content: space-between; }
-        .mode-select-btn.active-mode { background: var(--neon-rose); color: #fff; }
-        .admin-grid-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .full-cmd-indicator { padding: 8px; background: rgba(0,0,0,0.4); border: 1px solid var(--neon-green); color: var(--neon-green); border-radius: 6px; font-size: 0.8rem; text-align: center; font-weight: bold; }
-        
-        .inventory-item { display: flex; justify-content: space-between; align-items: center; padding: 8px; background: rgba(0, 243, 255, 0.04); border: 1px solid var(--text-dim); border-radius: 6px; margin-bottom: 6px; }
+        @keyframes modal-enter {
+            0% { transform: scale(0.8) translateY(30px); opacity: 0; }
+            100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+
+        .tut-init-title {
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--neon-cyan);
+            letter-spacing: 3px;
+            margin-bottom: 12px;
+            text-shadow: 0 0 20px var(--neon-cyan);
+        }
+
+        .tut-init-sub {
+            font-size: 0.85rem;
+            color: var(--text-main);
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        .tut-init-btns {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+        }
+
+        .tut-init-btn {
+            flex: 1;
+            padding: 14px 20px;
+            font-size: 0.9rem;
+        }
+
+        /* Active Highlight Box Overlay */
+        #tut-highlight-box {
+            position: fixed;
+            z-index: 10001;
+            pointer-events: none;
+            border: 2px dashed var(--neon-cyan);
+            border-radius: 8px;
+            box-shadow: 0 0 25px rgba(0, 243, 255, 0.5), inset 0 0 15px rgba(0, 243, 255, 0.2);
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            display: none;
+            animation: pulse-border 1.5s infinite ease-in-out;
+        }
+
+        @keyframes pulse-border {
+            0% { border-color: var(--neon-cyan); box-shadow: 0 0 20px rgba(0, 243, 255, 0.4); }
+            50% { border-color: var(--neon-purple); box-shadow: 0 0 35px rgba(176, 0, 255, 0.7); }
+            100% { border-color: var(--neon-cyan); box-shadow: 0 0 20px rgba(0, 243, 255, 0.4); }
+        }
+
+        /* Floating Animated Pointer Cursor */
+        #tut-cursor {
+            position: fixed;
+            width: 28px;
+            height: 28px;
+            z-index: 10005;
+            pointer-events: none;
+            transition: all 0.7s cubic-bezier(0.19, 1, 0.22, 1);
+            display: none;
+            transform: translate(-50%, -50%);
+        }
+
+        #tut-cursor::before {
+            content: "➔";
+            font-size: 26px;
+            color: var(--neon-green);
+            text-shadow: 0 0 15px var(--neon-green);
+            display: block;
+            transform: rotate(-45deg);
+        }
+
+        /* Guidance Card HUD */
+        #tut-guidance-card {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 440px;
+            max-width: calc(100vw - 48px);
+            background: rgba(6, 11, 25, 0.96);
+            border: 2px solid var(--neon-cyan);
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 243, 255, 0.25);
+            backdrop-filter: blur(12px);
+            z-index: 10002;
+            padding: 18px 20px;
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .tut-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(84, 120, 178, 0.3);
+            padding-bottom: 8px;
+        }
+
+        .tut-step-tag {
+            font-size: 0.7rem;
+            background: rgba(0, 243, 255, 0.12);
+            color: var(--neon-cyan);
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .tut-card-title {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #fff;
+            margin-top: 4px;
+        }
+
+        .tut-card-desc {
+            font-size: 0.8rem;
+            color: var(--text-main);
+            line-height: 1.5;
+        }
+
+        .tut-progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .tut-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-purple));
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        .tut-card-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .commander-btn-active {
+            background: var(--neon-purple) !important;
+            color: #fff !important;
+            box-shadow: 0 0 20px var(--neon-purple) !important;
+            animation: commander-glow 1s infinite alternate;
+        }
+
+        @keyframes commander-glow {
+            0% { box-shadow: 0 0 10px var(--neon-purple); }
+            100% { box-shadow: 0 0 30px var(--neon-purple), 0 0 10px var(--neon-cyan); }
+        }
+
+        /* ADMIN CHEAT PANEL HUD WINDOW */
+        #admin-panel-overlay {
+            position: fixed;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 780px;
+            max-width: 95vw;
+            background: rgba(6, 11, 25, 0.97);
+            border: 2px solid var(--neon-red);
+            box-shadow: 0 0 50px rgba(255, 34, 34, 0.5), inset 0 0 30px rgba(255, 0, 85, 0.2);
+            border-radius: 12px;
+            backdrop-filter: blur(15px);
+            z-index: 15000;
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .admin-header {
+            background: linear-gradient(90deg, rgba(255,0,85,0.3) 0%, rgba(176,0,255,0.3) 100%);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--neon-rose);
+        }
+
+        .admin-title {
+            color: var(--neon-gold);
+            font-weight: 900;
+            letter-spacing: 2px;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 0 0 10px var(--neon-gold);
+        }
+
+        .admin-body {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .admin-section {
+            background: rgba(255, 0, 85, 0.05);
+            border: 1px solid rgba(255, 0, 85, 0.3);
+            border-radius: 8px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .admin-section-title {
+            color: var(--neon-rose);
+            font-size: 0.85rem;
+            font-weight: bold;
+            border-bottom: 1px dashed rgba(255,0,85,0.4);
+            padding-bottom: 6px;
+            letter-spacing: 1px;
+        }
+
+        .mode-select-btn {
+            padding: 10px;
+            font-size: 0.75rem;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .mode-select-btn.active-mode {
+            background: var(--neon-rose);
+            color: #fff;
+            box-shadow: 0 0 15px var(--neon-rose);
+        }
+
+        .admin-grid-btns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .full-cmd-indicator {
+            padding: 10px;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid var(--neon-green);
+            color: var(--neon-green);
+            border-radius: 6px;
+            font-size: 0.8rem;
+            text-align: center;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
 
+    <!-- MATRIX CANVAS BACKGROUND -->
     <canvas id="matrix-canvas"></canvas>
 
+    <!-- INITIAL TUTORIAL INVITATION MODAL -->
     <div id="tut-init-modal" style="display: none;">
         <div class="tut-init-card">
             <div class="tut-init-title">SYSTEM INIT TACTICAL PROTOCOL</div>
             <div class="tut-init-sub">
-                Welcome Commander. NEXUS-V contains 32+ cybernetic commands, real-time corporate skimming ledgers, short-selling stock exchanges, quantum audio, and an official Cyberware Shop.
-                <br><br><span id="tut-auto-dismiss-timer" style="color: var(--neon-amber); font-weight: bold;">Auto-dismissing in 10s...</span>
+                Welcome Commander. NEXUS-V contains 32+ cybernetic commands, real-time corporate skimming ledgers, short-selling stock exchanges, quantum sub-bass sound synthesis, and an official Cyberware Shop.
+                <br><br>
+                Would you like to initiate the guided interactive walk-through?
+                <br><br>
+                <span id="tut-auto-dismiss-timer" style="color: var(--neon-amber); font-weight: bold;">Auto-dismissing in 10s...</span>
             </div>
             <div class="tut-init-btns">
-                <button class="cyber-btn" onclick="startTutorialSystem()">Enter Tutorial</button>
-                <button class="cyber-btn danger" onclick="declineTutorialSystem()">Skip Tutorial</button>
+                <button class="cyber-btn tut-init-btn" onclick="startTutorialSystem()">Enter Tutorial</button>
+                <button class="cyber-btn danger tut-init-btn" onclick="declineTutorialSystem()">No Sir</button>
             </div>
         </div>
     </div>
 
+    <!-- ADMIN LOGIN MODAL -->
     <div id="admin-login-modal">
         <div class="tut-init-card admin-card">
-            <div class="tut-init-title" style="color: var(--neon-red);">RESTRICTED ADMIN CLEARANCE</div>
-            <div class="tut-init-sub">SECURITY CHECKPOINT ACTIVATED.<br>Enter Administrator Override Key:</div>
-            <input type="password" id="admin-pass-input" placeholder="Enter Password..." style="width: 100%; padding: 10px; background: #000; border: 1px solid var(--neon-red); color: var(--neon-gold); font-family: var(--font-mono); text-align: center; border-radius: 6px; outline: none; margin-bottom: 16px;">
+            <div class="tut-init-title" style="color: var(--neon-red); text-shadow: 0 0 20px var(--neon-red);">RESTRICTED ADMIN CLEARANCE</div>
+            <div class="tut-init-sub">
+                SECURITY CHECKPOINT ACTIVATED.<br>
+                Enter Administrator Override Key to unlock Full Command & Cheat Matrix:
+            </div>
+            <input type="password" id="admin-pass-input" placeholder="Enter Password..." style="width: 100%; padding: 12px; background: #000; border: 1px solid var(--neon-red); color: var(--neon-gold); font-family: var(--font-mono); text-align: center; font-size: 1.1rem; border-radius: 6px; outline: none; margin-bottom: 20px;">
             <div class="tut-init-btns">
-                <button class="cyber-btn danger" onclick="submitAdminPassword()">Authenticate</button>
-                <button class="cyber-btn" onclick="closeAdminLoginModal()">Cancel</button>
+                <button class="cyber-btn danger tut-init-btn" onclick="submitAdminPassword()">Authenticate</button>
+                <button class="cyber-btn tut-init-btn" onclick="closeAdminLoginModal()">Cancel</button>
             </div>
         </div>
     </div>
 
+    <!-- TUTORIAL OVERLAY ELEMENTS -->
     <div id="tut-highlight-box"></div>
     <div id="tut-cursor"></div>
 
@@ -171,93 +784,119 @@
             <span style="font-size: 0.7rem; color: var(--neon-green);" id="tut-status-indicator">LIVE GUIDANCE ACTIVE</span>
         </div>
         <div class="tut-card-title" id="tut-title">Target Lock Protocol</div>
-        <div class="tut-card-desc" id="tut-desc">Select a target node from the Target Vector Matrix to initiate shell session.</div>
-        <div class="tut-progress-bar"><div class="tut-progress-fill" id="tut-progress"></div></div>
+        <div class="tut-card-desc" id="tut-desc">Select a target node from the Target Vector Matrix to initiate an encrypted operational shell session.</div>
+        <div class="tut-progress-bar">
+            <div class="tut-progress-fill" id="tut-progress"></div>
+        </div>
         <div class="tut-card-controls">
-            <button class="cyber-btn danger" style="padding: 4px 8px; font-size: 0.7rem;" onclick="exitTutorialSystem()">Exit</button>
+            <button class="cyber-btn danger" style="padding: 6px 10px; font-size: 0.7rem;" onclick="exitTutorialSystem()">Exit Tutorial</button>
             <div style="display: flex; gap: 6px;">
-                <button class="cyber-btn purple" style="padding: 4px 8px; font-size: 0.7rem;" id="tut-commander-btn" onclick="toggleCommanderMode()">🤖 Commander</button>
-                <button class="cyber-btn" style="padding: 4px 8px; font-size: 0.7rem;" onclick="nextTutorialStep()">Next ➔</button>
+                <button class="cyber-btn purple" style="padding: 6px 12px; font-size: 0.7rem;" id="tut-commander-btn" onclick="toggleCommanderMode()">🤖 Commander Mode</button>
+                <button class="cyber-btn" style="padding: 6px 12px; font-size: 0.7rem;" onclick="nextTutorialStep()">Next Step ➔</button>
             </div>
         </div>
     </div>
 
+    <!-- ADMIN CHEAT PANEL OVERLAY -->
     <div id="admin-panel-overlay">
         <div class="admin-header">
             <div class="admin-title">⚡ NEXUS-V ADMIN CHEAT &amp; FULL COMMAND MATRIX ⚡</div>
-            <button class="cyber-btn danger" style="padding: 4px 8px; font-size: 0.7rem;" onclick="toggleAdminPanel(false)">X CLOSE</button>
+            <button class="cyber-btn danger" style="padding: 4px 10px; font-size: 0.7rem;" onclick="toggleAdminPanel(false)">X CLOSE</button>
         </div>
         <div class="admin-body">
+            <!-- FULL COMMAND AUTOPILOT SECTION -->
             <div class="admin-section" style="grid-column: span 2;">
                 <div class="admin-section-title">🤖 FULL COMMAND AUTOPILOT SYSTEM</div>
                 <div style="display: flex; gap: 12px; align-items: center;">
-                    <button class="cyber-btn gold" id="btn-toggle-fullcommand" style="padding: 10px 16px;" onclick="toggleFullCommand()">ENABLE FULL COMMAND</button>
-                    <div class="full-cmd-indicator" id="fullcommand-status-text" style="flex: 1; border-color: var(--neon-rose); color: var(--neon-rose);">AUTOPILOT: INACTIVE</div>
+                    <button class="cyber-btn gold" id="btn-toggle-fullcommand" style="padding: 12px 20px; font-size: 0.85rem;" onclick="toggleFullCommand()">ENABLE FULL COMMAND</button>
+                    <div class="full-cmd-indicator" id="fullcommand-status-text" style="flex: 1; border-color: var(--neon-rose); color: var(--neon-rose);">
+                        AUTOPILOT: INACTIVE
+                    </div>
                 </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 6px;">
-                    <button class="cyber-btn mode-select-btn active-mode" id="mode-btn-normal" onclick="setFullCommandMode('normally')"><span>1. Normal</span></button>
-                    <button class="cyber-btn mode-select-btn" id="mode-btn-expertise" onclick="setFullCommandMode('expertise')"><span>2. Expertise</span></button>
-                    <button class="cyber-btn mode-select-btn" id="mode-btn-pro" onclick="setFullCommandMode('professionalism')"><span>3. Pro</span></button>
+                <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 4px;">
+                    Select Autopilot Expertise Mode:
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+                    <button class="cyber-btn mode-select-btn active-mode" id="mode-btn-normal" onclick="setFullCommandMode('normally')">
+                        <span>1. Play Normally</span>
+                        <small style="opacity:0.7">Basic Loop</small>
+                    </button>
+                    <button class="cyber-btn mode-select-btn" id="mode-btn-expertise" onclick="setFullCommandMode('expertise')">
+                        <span>2. Expertise</span>
+                        <small style="opacity:0.7">+Stocks &amp; Rootkits</small>
+                    </button>
+                    <button class="cyber-btn mode-select-btn" id="mode-btn-pro" onclick="setFullCommandMode('professionalism')">
+                        <span>3. Professionalism</span>
+                        <small style="opacity:0.7">Full Matrix Mastery</small>
+                    </button>
                 </div>
             </div>
+
+            <!-- RESOURCES & GOD MODES -->
             <div class="admin-section">
-                <div class="admin-section-title">💎 CHEAT OVERRIDES</div>
+                <div class="admin-section-title">💎 RESOURCE &amp; CHEAT OVERRIDES</div>
                 <div class="admin-grid-btns">
-                    <button class="cyber-btn gold" onclick="adminAddCredits(1000000)">+₿1M</button>
-                    <button class="cyber-btn danger" onclick="adminResetTrace()">Reset Trace</button>
-                    <button class="cyber-btn purple" onclick="adminToggleGodMode()" id="admin-godmode-btn">God: OFF</button>
-                    <button class="cyber-btn" onclick="adminMaxRootkits()">Max Rootkits</button>
-                    <button class="cyber-btn danger" style="grid-column: span 2;" onclick="resetSaveData()">Wipe Save Data</button>
+                    <button class="cyber-btn gold" onclick="adminAddCredits(1000000)">+₿1,000,000</button>
+                    <button class="cyber-btn danger" onclick="adminResetTrace()">Reset Trace 0%</button>
+                    <button class="cyber-btn purple" onclick="adminToggleGodMode()" id="admin-godmode-btn">God Stealth: OFF</button>
+                    <button class="cyber-btn" onclick="adminMaxRootkits()">Max Rootkits (10)</button>
+                    <button class="cyber-btn danger" style="grid-column: span 2;" onclick="resetSaveData()">Wipe Save Data (localStorage)</button>
                 </div>
             </div>
+
+            <!-- INSTANT ATTACK CHEATS -->
             <div class="admin-section">
-                <div class="admin-section-title">🔥 INSTANT EXECUTION</div>
+                <div class="admin-section-title">🔥 INSTANT EXECUTION MATRIX</div>
                 <div class="admin-grid-btns">
-                    <button class="cyber-btn danger" onclick="adminHackAllNodes()">Hack All</button>
-                    <button class="cyber-btn amber" onclick="adminCrashMarket()">Crash Market</button>
-                    <button class="cyber-btn gold" onclick="adminPumpPortfolio()">Pump Stocks</button>
+                    <button class="cyber-btn danger" onclick="adminHackAllNodes()">Hack All Nodes</button>
+                    <button class="cyber-btn amber" onclick="adminCrashMarket()">Crash Stock Market</button>
+                    <button class="cyber-btn gold" onclick="adminPumpPortfolio()">Pump All Stocks</button>
                     <button class="cyber-btn purple" onclick="adminSuperOverdrive()">Super Overdrive</button>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- HEADER HUD -->
     <header>
         <div class="logo">
             <div class="logo-pulse"></div>
-            NEXUS-V // CYBERNETIC OPERATIONS v12.0
+            NEXUS-V // ULTIMATE CYBERNETIC OPERATIONS &amp; QUANTUM R&amp;B MATRIX v12.0
         </div>
         <div class="status-metrics">
-            <button class="cyber-btn purple" id="hdr-audio-btn" style="padding: 4px 8px; font-size: 0.7rem;" onclick="toggleAudioMute()">🔊 Audio: ON</button>
-            <button class="cyber-btn amber" id="hdr-tutorial-btn" style="padding: 4px 8px; font-size: 0.7rem;" onclick="openTutorialModal()">[?] Tutorial</button>
-            <button class="cyber-btn danger" id="hdr-admin-btn" style="padding: 4px 8px; font-size: 0.7rem; display: none;" onclick="toggleAdminPanel(true)">⚡ ADMIN</button>
+            <button class="cyber-btn purple" id="hdr-audio-btn" style="padding: 5px 10px; font-size: 0.7rem; margin-right: 4px;" onclick="toggleAudioMute()">🔊 Audio: ON</button>
+            <button class="cyber-btn amber" id="hdr-tutorial-btn" style="padding: 5px 10px; font-size: 0.7rem; margin-right: 4px;" onclick="openTutorialModal()">[?] Tutorial</button>
+            <button class="cyber-btn danger" id="hdr-admin-btn" style="padding: 5px 10px; font-size: 0.7rem; margin-right: 8px; display: none;" onclick="toggleAdminPanel(true)">⚡ ADMIN PANEL</button>
             <div class="metric-badge">CREDITS: <span id="stat-credits">₿18,500</span></div>
             <div class="metric-badge">TRACE: <span id="stat-traces">0%</span></div>
             <div class="metric-badge">CPU: <span id="stat-cpu">18%</span></div>
             <div class="metric-badge">THERMAL: <span id="stat-heat">37°C</span></div>
-            <div class="metric-badge">STEALTH: <span id="stat-stealth" style="color:var(--neon-green)">ACTIVE</span></div>
+            <div class="metric-badge">STATUS: <span id="stat-stealth" style="color:var(--neon-green)">STEALTH ACTIVE</span></div>
         </div>
     </header>
 
     <div class="nav-tabs" id="main-nav-tabs">
-        <button class="tab-btn active" id="tab-btn-ops" onclick="switchTab('operations')">[01] Ops Shell</button>
-        <button class="tab-btn" id="tab-btn-fin" onclick="switchTab('financials')">[02] Corporate Spreadsheets</button>
-        <button class="tab-btn" id="tab-btn-stk" onclick="switchTab('stockmarket')">[03] Cyber-Exchange</button>
-        <button class="tab-btn" id="tab-btn-qrb" onclick="switchTab('quantumrb')">[04] Quantum R&amp;B</button>
-        <button class="tab-btn" id="tab-btn-shp" onclick="switchTab('cyberstore')">[05] Cyberware Shop</button>
+        <button class="tab-btn active" id="tab-btn-ops" onclick="switchTab('operations')">[01] Terminal &amp; Ops</button>
+        <button class="tab-btn" id="tab-btn-fin" onclick="switchTab('financials')">[02] Corporate Spreadsheets &amp; Skimming</button>
+        <button class="tab-btn" id="tab-btn-stk" onclick="switchTab('stockmarket')">[03] Cyber-Exchange &amp; Shorting</button>
+        <button class="tab-btn" id="tab-btn-qrb" onclick="switchTab('quantumrb')">[04] Quantum R&amp;B Frequency Matrix</button>
+        <button class="tab-btn" id="tab-btn-shp" onclick="switchTab('cyberstore')">[05] Official Cyberware Shop</button>
     </div>
 
+    <!-- TAB 01: TERMINAL & OPS -->
     <div id="tab-operations" class="viewport active">
         <div class="panel" id="panel-target-matrix">
             <div class="panel-header">Target Vector Matrix</div>
             <div class="panel-body" id="node-list"></div>
         </div>
+
         <div class="panel" id="terminal-panel">
             <div class="panel-header">
-                <span>Encrypted Shell [Target: <span id="terminal-target-label">NONE</span>]</span>
-                <span style="font-size: 0.7rem; color: var(--neon-green);">TUNNEL ONLINE</span>
+                <span>Encrypted Shell v12.0 [Target: <span id="terminal-target-label">NONE</span>]</span>
+                <span style="font-size: 0.7rem; color: var(--neon-green);">SECURE TUNNEL ONLINE</span>
             </div>
-            <div id="terminal-output">NEXUS-V Quantum Core initialized. Type 'help' to review commands.
+            <div id="terminal-output">NEXUS-V Quantum Core initialized. 
+Type 'help' to review all 32+ framework commands (including 12 new high-action commands).
 ----------------------------------------------------------------------------------
 </div>
             <div class="terminal-input-line">
@@ -265,98 +904,144 @@
                 <input type="text" id="terminal-input" autofocus autocomplete="off" spellcheck="false">
             </div>
         </div>
+
         <div class="panel" id="panel-macro-console">
-            <div class="panel-header">Macro Console &amp; Telemetry</div>
+            <div class="panel-header">Macro Execution &amp; Telemetry</div>
             <div class="panel-body">
+                <div style="font-size: 0.75rem; color: var(--text-dim); margin-bottom: 6px;">MACRO INSTRUCTION CONSOLE</div>
                 <div style="display: flex; gap: 6px; margin-bottom: 12px;">
-                    <input type="text" id="macro-command-input" placeholder="e.g. macro zeroday" style="flex:1; background: var(--bg-deep); border: 1px solid var(--text-dim); color: var(--neon-cyan); padding: 6px; font-family: var(--font-mono); font-size: 0.8rem; border-radius: 6px; outline: none;">
-                    <button class="cyber-btn" onclick="executeWrittenMacro()">Run</button>
+                    <input type="text" id="macro-command-input" placeholder="e.g. macro zeroday" style="flex:1; background: var(--bg-deep); border: 1px solid var(--text-dim); color: var(--neon-cyan); padding: 8px; font-family: var(--font-mono); font-size: 0.8rem; border-radius: 6px; outline: none;">
+                    <button class="cyber-btn" id="btn-run-macro" onclick="executeWrittenMacro()">Run</button>
                 </div>
-                <div style="font-size: 0.73rem; color: var(--text-dim); line-height: 1.5; margin-bottom: 12px;">
+                <div style="font-size: 0.73rem; color: var(--text-dim); line-height: 1.6; margin-bottom: 12px;">
                     <b>Featured Action Macros:</b><br>
-                    • <code>macro zeroday</code> | <code>macro syphon</code><br>
-                    • <code>macro singularity</code> | <code>macro blackout</code>
+                    • <code>macro zeroday</code> - Zero-day ICE bypass<br>
+                    • <code>macro syphon</code> - Drain corporate treasury<br>
+                    • <code>macro singularity</code> - 3x Mining Overclock<br>
+                    • <code>macro blackout</code> - Regional grid collapse<br>
+                    • <code>macro rootkit</code> - Install passive skimmer<br>
+                    • <code>macro overdrive</code> - Double terminal speed
                 </div>
-                <div style="border-top: 1px solid var(--text-dim); padding-top: 8px; font-size: 0.75rem;">TELEMETRY LOGS</div>
-                <div id="telemetry-box" style="font-size: 0.78rem; line-height: 1.6; margin-top: 4px;">
+                <div style="border-top: 1px solid var(--text-dim); padding-top: 10px; font-size: 0.75rem; color: var(--text-dim);">SYSTEM TELEMETRY</div>
+                <div id="telemetry-box" style="font-size: 0.78rem; line-height: 1.6; margin-top: 6px;">
                     <div>Active Rootkits: <span id="tele-rootkits" style="color:var(--neon-green)">0</span></div>
+                    <div>Proxy Nodes: 12 Hops (Tor + I2P)</div>
                     <div>Passive Income: <span id="tele-income" style="color:var(--neon-amber)">₿0 / min</span></div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- TAB 02: CORPORATE SPREADSHEETS -->
     <div id="tab-financials" class="viewport">
         <div class="panel" id="panel-ledger-table">
-            <div class="panel-header">Corporate Ledger &amp; Skimming Balances</div>
+            <div class="panel-header">Live Corporate Ledger &amp; Skimming Balances</div>
             <div class="panel-body" id="spreadsheet-view"></div>
         </div>
         <div class="panel" id="panel-infra-analysis">
-            <div class="panel-header">Infrastructure Loss Analysis</div>
-            <div class="panel-body" id="infrastructure-details"></div>
+            <div class="panel-header">Advanced Infrastructure Loss Analysis</div>
+            <div class="panel-body" id="infrastructure-details">
+                <div style="color: var(--text-dim);">Select a target node to inspect server racks, operating overhead, and vulnerability ratios.</div>
+            </div>
         </div>
     </div>
 
+    <!-- TAB 03: CYBER-EXCHANGE & STOCK MARKET -->
     <div id="tab-stockmarket" class="viewport">
         <div class="panel" id="panel-gcse-exchange">
             <div class="panel-header">Global Cyber-Stock Exchange (GCSE)</div>
-            <div class="panel-body"><div id="stock-market-list"></div></div>
+            <div class="panel-body">
+                <div style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 12px;">
+                    Buy shares or short-sell stocks before launching cyber-attacks or blackouts to maximize your profits!
+                </div>
+                <div id="stock-market-list"></div>
+            </div>
         </div>
         <div class="panel" id="panel-portfolio">
-            <div class="panel-header">Portfolio &amp; Valuation</div>
+            <div class="panel-header">Portfolio &amp; Dividend Valuation</div>
             <div class="panel-body" id="portfolio-panel">
                 <div style="font-weight: bold; color: var(--neon-cyan); margin-bottom: 8px;">PORTFOLIO SUMMARY</div>
-                <div id="portfolio-list" style="font-size: 0.8rem; margin-bottom: 12px;">No active shares held.</div>
-                <div style="border-top: 1px solid var(--text-dim); padding-top: 8px; font-size: 0.8rem; line-height: 1.6;">
-                    <div>Cash: <span id="portfolio-cash" style="color: var(--neon-amber);">₿18,500</span></div>
-                    <div>Valuation: <span id="portfolio-val" style="color: var(--neon-green);">₿0</span></div>
+                <div id="portfolio-list" style="font-size: 0.8rem; margin-bottom: 15px;">No active shares held.</div>
+                <div style="border-top: 1px solid var(--text-dim); padding-top: 10px; font-size: 0.8rem; line-height: 1.6;">
+                    <div>Available Cash: <span id="portfolio-cash" style="color: var(--neon-amber);">₿18,500</span></div>
+                    <div>Portfolio Valuation: <span id="portfolio-val" style="color: var(--neon-green);">₿0</span></div>
+                    <div>Market Sentiment: <span style="color: var(--neon-cyan);">Volatile / Exploitable</span></div>
+                    <div>Compound Dividend Yield: <span style="color: var(--neon-purple);">6.4% APR</span></div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- TAB 04: QUANTUM R&B FREQUENCY MATRIX -->
     <div id="tab-quantumrb" class="viewport">
         <div class="panel" id="panel-rb-channels">
-            <div class="panel-header">Quantum Channels</div>
+            <div class="panel-header">Quantum Frequency Channels</div>
             <div class="panel-body" id="rb-track-list"></div>
         </div>
+
         <div class="panel" id="panel-rb-sequencer">
-            <div class="panel-header">Neural Modulator</div>
+            <div class="panel-header">Neural Beat Sequencer &amp; Modulator</div>
             <div class="panel-body">
-                <div style="background: var(--bg-card); border: 1px solid var(--text-dim); padding: 10px; border-radius: 6px; margin-bottom: 10px;">
-                    <div style="display:flex; justify-content:space-between; font-size:0.75rem;"><span>SUB-BASS</span><span style="color: var(--neon-purple);" id="rb-val-bass">92.0 Hz</span></div>
+                <div style="font-weight: bold; color: var(--neon-purple); margin-bottom: 8px;">HARMONIC FREQUENCY SYNTHESIS</div>
+                <div style="font-size: 0.8rem; color: var(--text-dim); margin-bottom: 12px; line-height: 1.4;">
+                    Tune quantum sub-bass resonance and groove frequencies to synchronize encrypted cyber-audio signals with terminal operations.
+                </div>
+                <div style="background: var(--bg-card); border: 1px solid var(--text-dim); padding: 12px; border-radius: 6px; margin-bottom: 12px;">
+                    <div style="display:flex; justify-content:space-between; font-size:0.75rem; margin-bottom:4px;">
+                        <span>SUB-BASS RESONANCE</span>
+                        <span style="color: var(--neon-purple);" id="rb-val-bass">92.0 Hz</span>
+                    </div>
                     <input type="range" id="slider-sub-bass" min="20" max="250" value="92" style="width:100%; accent-color: var(--neon-purple);" oninput="updateBassSlider(this.value)">
                 </div>
-                <button class="cyber-btn" style="border-color: var(--neon-purple); color: var(--neon-purple); width:100%;" onclick="broadcastQuantumRB()">Broadcast Signal (+₿600)</button>
+                <div style="background: var(--bg-card); border: 1px solid var(--text-dim); padding: 12px; border-radius: 6px; margin-bottom: 12px;">
+                    <div style="display:flex; justify-content:space-between; font-size:0.75rem; margin-bottom:4px;">
+                        <span>GROOVE SYNCHRONIZATION</span>
+                        <span style="color: var(--neon-cyan);" id="rb-val-groove">128.0 BPM</span>
+                    </div>
+                    <input type="range" id="slider-groove-sync" min="60" max="200" value="128" style="width:100%; accent-color: var(--neon-cyan);" oninput="document.getElementById('rb-val-groove').innerText = this.value + ' BPM'">
+                </div>
+                <button class="cyber-btn" id="btn-broadcast-rb" style="border-color: var(--neon-purple); color: var(--neon-purple); width:100%;" onclick="broadcastQuantumRB()">Broadcast Quantum R&amp;B Signal (+₿600)</button>
             </div>
         </div>
+
         <div class="panel" id="panel-rb-logs">
-            <div class="panel-header">Telemetry Logs</div>
-            <div class="panel-body" id="rb-log-output" style="font-size: 0.78rem; line-height: 1.6; color: var(--text-dim);"><div>[SYSTEM] Audio matrix online...</div></div>
+            <div class="panel-header">Acoustic Telemetry Logs</div>
+            <div class="panel-body" id="rb-log-output" style="font-size: 0.78rem; line-height: 1.6; color: var(--text-dim);">
+                <div>[SYSTEM] Quantum R&amp;B audio matrix online...</div>
+                <div>[STATUS] Harmonic oscillators locked to sub-atomic frequencies.</div>
+            </div>
         </div>
     </div>
 
     <!-- TAB 05: OFFICIAL CYBERWARE SHOP -->
     <div id="tab-cyberstore" class="viewport">
-        <div class="panel">
-            <div class="panel-header">Blackmarket Cyberware &amp; Hardware Catalog</div>
+        <div class="panel" id="panel-cyberware-catalog">
+            <div class="panel-header">Official Cyberware &amp; Blackmarket Hardware Catalog</div>
             <div class="panel-body" id="shop-catalog-list"></div>
         </div>
-        <div class="panel">
-            <div class="panel-header">Acquired Gear &amp; Active Inventory</div>
+        <div class="panel" id="panel-player-inventory">
+            <div class="panel-header">Acquired Gear &amp; Active Inventory Storage</div>
             <div class="panel-body" id="shop-inventory-list">
-                <div style="color: var(--text-dim);">No active items in storage.</div>
+                <div style="color: var(--text-dim);">No active cyberware items held in inventory storage.</div>
             </div>
         </div>
     </div>
 
     <script>
+        // ==========================================
+        // 1. CANVAS MATRIX RAIN BACKGROUND
+        // ==========================================
         const matrixCanvas = document.getElementById('matrix-canvas');
         const mCtx = matrixCanvas.getContext('2d');
-        function resizeMatrixCanvas() { matrixCanvas.width = window.innerWidth; matrixCanvas.height = window.innerHeight; }
-        resizeMatrixCanvas(); window.addEventListener('resize', resizeMatrixCanvas);
 
-        const matrixChars = '01アイウエオカキクケコ0123456789ABCDEF<>[]{}/*=+#';
+        function resizeMatrixCanvas() {
+            matrixCanvas.width = window.innerWidth;
+            matrixCanvas.height = window.innerHeight;
+        }
+        resizeMatrixCanvas();
+        window.addEventListener('resize', resizeMatrixCanvas);
+
+        const matrixChars = '01アイウエオカキクケコサシスセソタチツテトナニヌネノハヒフヘホマミムメモヤユヨラリルレロワヲン0123456789ABCDEF<>[]{}/*=+#';
         const fontSize = 14;
         let columns = Math.floor(matrixCanvas.width / fontSize);
         let drops = Array(columns).fill(1);
@@ -364,90 +1049,212 @@
         function drawMatrixRain() {
             mCtx.fillStyle = 'rgba(2, 5, 14, 0.08)';
             mCtx.fillRect(0, 0, matrixCanvas.width, matrixCanvas.height);
+
+            const newColumns = Math.floor(matrixCanvas.width / fontSize);
+            if (newColumns !== columns) {
+                columns = newColumns;
+                drops = Array(columns).fill(1);
+            }
+
             for (let i = 0; i < drops.length; i++) {
-                mCtx.fillStyle = Math.random() > 0.85 ? '#00f3ff' : '#00ff66';
+                const char = matrixChars[Math.floor(Math.random() * matrixChars.length)];
+                
+                // Color gradient between Cyan and Green
+                if (Math.random() > 0.85) {
+                    mCtx.fillStyle = '#00f3ff';
+                } else {
+                    mCtx.fillStyle = '#00ff66';
+                }
+
                 mCtx.font = fontSize + 'px monospace';
-                mCtx.fillText(matrixChars[Math.floor(Math.random() * matrixChars.length)], i * fontSize, drops[i] * fontSize);
-                if (drops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) drops[i] = 0;
+                mCtx.fillText(char, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > matrixCanvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
                 drops[i]++;
             }
             requestAnimationFrame(drawMatrixRain);
         }
         drawMatrixRain();
 
-        let audioCtx = null, audioMuted = false;
+        // ==========================================
+        // 2. WEB AUDIO API SYNTHESIS ENGINE
+        // ==========================================
+        let audioCtx = null;
+        let audioMuted = false;
+
         function initAudioContext() {
-            if (!audioCtx) { const A = window.AudioContext || window.webkitAudioContext; if (A) audioCtx = new A(); }
-            if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+            if (!audioCtx) {
+                const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+                if (AudioContextClass) {
+                    audioCtx = new AudioContextClass();
+                }
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
         }
+
         function toggleAudioMute() {
             audioMuted = !audioMuted;
             const btn = document.getElementById('hdr-audio-btn');
-            btn.innerText = audioMuted ? '🔇 Audio: OFF' : '🔊 Audio: ON';
-            btn.className = audioMuted ? 'cyber-btn danger' : 'cyber-btn purple';
-            if (!audioMuted) initAudioContext();
+            if (audioMuted) {
+                btn.innerText = '🔇 Audio: OFF';
+                btn.className = 'cyber-btn danger';
+            } else {
+                btn.innerText = '🔊 Audio: ON';
+                btn.className = 'cyber-btn purple';
+                initAudioContext();
+            }
         }
 
+        // Terminal Typing Beep Sound
         function playTerminalBeep(freq = 880, duration = 0.03, type = 'sine') {
-            if (audioMuted) return; initAudioContext(); if (!audioCtx) return;
+            if (audioMuted) return;
+            initAudioContext();
+            if (!audioCtx) return;
+
             try {
-                const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
-                osc.type = type; osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                
                 gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
                 gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-                osc.connect(gain); gain.connect(audioCtx.destination);
-                osc.start(); osc.stop(audioCtx.currentTime + duration);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
             } catch(e) {}
         }
 
+        // Command Execution Audio Feedback
         function playCommandSound(isError = false) {
-            if (audioMuted) return; initAudioContext(); if (!audioCtx) return;
+            if (audioMuted) return;
+            initAudioContext();
+            if (!audioCtx) return;
+
             try {
-                const now = audioCtx.currentTime, osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
-                osc.type = isError ? 'sawtooth' : 'triangle';
-                osc.frequency.setValueAtTime(isError ? 160 : 440, now);
-                if (!isError) osc.frequency.setValueAtTime(880, now + 0.06);
-                gain.gain.setValueAtTime(isError ? 0.08 : 0.06, now);
-                gain.gain.linearRampToValueAtTime(0.001, now + 0.15);
-                osc.connect(gain); gain.connect(audioCtx.destination);
-                osc.start(now); osc.stop(now + 0.18);
+                const now = audioCtx.currentTime;
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+
+                if (isError) {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(160, now);
+                    osc.frequency.exponentialRampToValueAtTime(60, now + 0.18);
+                    gain.gain.setValueAtTime(0.08, now);
+                    gain.gain.linearRampToValueAtTime(0.001, now + 0.18);
+                } else {
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(440, now);
+                    osc.frequency.setValueAtTime(880, now + 0.06);
+                    gain.gain.setValueAtTime(0.06, now);
+                    gain.gain.linearRampToValueAtTime(0.001, now + 0.12);
+                }
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                osc.start(now);
+                osc.stop(now + 0.2);
             } catch(e) {}
         }
 
+        // Quantum R&B Synth Sub-Bass Oscillator Engine
         function playQuantumSubBass(frequency = 92) {
-            if (audioMuted) return; initAudioContext(); if (!audioCtx) return;
+            if (audioMuted) return;
+            initAudioContext();
+            if (!audioCtx) return;
+
             try {
-                const now = audioCtx.currentTime, osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
-                osc.type = 'sine'; osc.frequency.setValueAtTime(frequency, now);
-                gain.gain.setValueAtTime(0.35, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 1.2);
-                osc.connect(gain); gain.connect(audioCtx.destination);
-                osc.start(now); osc.stop(now + 1.2);
+                const now = audioCtx.currentTime;
+                
+                // Deep Sine Sub Oscillator
+                const subOsc = audioCtx.createOscillator();
+                const subGain = audioCtx.createGain();
+                subOsc.type = 'sine';
+                subOsc.frequency.setValueAtTime(frequency, now);
+                subOsc.frequency.exponentialRampToValueAtTime(frequency * 0.75, now + 1.2);
+
+                subGain.gain.setValueAtTime(0.35, now);
+                subGain.gain.exponentialRampToValueAtTime(0.001, now + 1.3);
+
+                subOsc.connect(subGain);
+                subGain.connect(audioCtx.destination);
+
+                // Warm Sawtooth Modulated Layer
+                const warmOsc = audioCtx.createOscillator();
+                const warmGain = audioCtx.createGain();
+                const filter = audioCtx.createBiquadFilter();
+
+                warmOsc.type = 'sawtooth';
+                warmOsc.frequency.setValueAtTime(frequency * 1.5, now);
+                
+                filter.type = 'lowpass';
+                filter.frequency.setValueAtTime(frequency * 2.5, now);
+                filter.frequency.exponentialRampToValueAtTime(60, now + 1.0);
+
+                warmGain.gain.setValueAtTime(0.12, now);
+                warmGain.gain.exponentialRampToValueAtTime(0.001, now + 1.1);
+
+                warmOsc.connect(filter);
+                filter.connect(warmGain);
+                warmGain.connect(audioCtx.destination);
+
+                subOsc.start(now);
+                subOsc.stop(now + 1.3);
+                warmOsc.start(now);
+                warmOsc.stop(now + 1.1);
             } catch(e) {}
         }
-        function updateBassSlider(val) { document.getElementById('rb-val-bass').innerText = val + ' Hz'; playQuantumSubBass(parseFloat(val)); }
+
+        function updateBassSlider(val) {
+            document.getElementById('rb-val-bass').innerText = val + ' Hz';
+            playQuantumSubBass(parseFloat(val));
+        }
 
         // ==========================================
-        // SHOP ITEMS & INVENTORY CATALOG DEFINITION
+        // SHOP CATALOG ITEMS DEFINITION MATRIX
         // ==========================================
         const SHOP_ITEMS = [
-            { id: 'ice_breaker', name: 'Quantum ICE-Breaker v3', cost: 5000, type: 'usable', desc: 'Instantly compromises current target node with zero trace increase.' },
-            { id: 'thermal_sink', name: 'Cryo Thermal Heatsink', cost: 3500, type: 'usable', desc: 'Flushes CPU thermal buildup back to ambient 35°C instantly.' },
-            { id: 'trace_scrubber', name: 'NSA Trace Scrubber Chipset', cost: 8000, type: 'usable', desc: 'Wipes current trace level by 50% immediately upon execution.' },
-            { id: 'mining_rig', name: 'ASIC Cryptomining Node', cost: 12000, type: 'passive', desc: 'Adds permanent +₿450/min passive income generation.' },
-            { id: 'neural_booster', name: 'Neural Processing Injector', cost: 15000, type: 'usable', desc: 'Grants +₿15,000 liquid capital and lowers overall network CPU load.' },
-            { id: 'market_manipulator', name: 'GCSE High-Freq Trading Bot', cost: 20000, type: 'usable', desc: 'Forces an instant 20% price pump across all stocks in your portfolio.' }
+            { id: 'ice_breaker', name: 'Quantum ICE-Breaker v3.0', cost: 5000, type: 'usable', desc: 'Instantly bypasses firewall ICE on your currently targeted node with 0% trace penalty.' },
+            { id: 'thermal_sink', name: 'Cryo Thermal Liquid Sink', cost: 3500, type: 'usable', desc: 'Cools hardware processing temperature back to ambient 35°C instantly.' },
+            { id: 'trace_scrubber', name: 'NSA Trace Scrubber Chipset', cost: 8000, type: 'usable', desc: 'Halves your active network trace accumulation immediately.' },
+            { id: 'mining_rig', name: 'ASIC Cryptomining Rig Cluster', cost: 12000, type: 'passive', desc: 'Adds permanent +₿450/min passive income generation to your network.' },
+            { id: 'neural_booster', name: 'Neural Processing Injector', cost: 15000, type: 'usable', desc: 'Grants immediate +₿15,000 cash injection and reduces terminal CPU strain.' },
+            { id: 'market_manipulator', name: 'GCSE High-Freq Trading Bot', cost: 20000, type: 'usable', desc: 'Forces an instant 20% price pump across all stocks held in your portfolio.' }
         ];
 
+        // ==========================================
+        // 3. GAME STATE & LOCALSTORAGE PERSISTENCE
+        // ==========================================
         const DEFAULT_GAME_STATE = {
-            credits: 18500, traces: 0, cpu: 18, heat: 37, rootkitsCount: 0, passiveIncome: 0,
-            stealthActive: true, godMode: false, adminUnlocked: false, fullCommandActive: false,
-            fullCommandMode: 'normally', tutorialInteracted: false, currentTarget: '194.28.14.2',
-            portfolio: {}, inventory: {},
+            credits: 18500,
+            traces: 0,
+            cpu: 18,
+            heat: 37,
+            rootkitsCount: 0,
+            passiveIncome: 0,
+            stealthActive: true,
+            godMode: false,
+            adminUnlocked: false,
+            fullCommandActive: false,
+            fullCommandMode: 'normally',
+            tutorialInteracted: false,
+            currentTarget: '194.28.14.2',
+            portfolio: {},
+            inventory: {},
             nodes: [
-                { id: 'n1', name: 'Aegis Defense Node', ip: '194.28.14.2', status: 'Secure', firewall: 'Level 3 ICE', data: 'Military Specs', hacked: false, opCost: 1500, losses: 55000, earnings: 140000, stockTicker: 'AGIS', stockPrice: 380.00 },
-                { id: 'n2', name: 'OmniCorp Databank', ip: '82.165.191.1', status: 'Online', firewall: 'Level 5 Neural', data: 'Financial Keys', hacked: false, opCost: 4200, losses: 150000, earnings: 950000, stockTicker: 'OMNI', stockPrice: 790.00 },
-                { id: 'n3', name: 'Neo-Tokyo Power Grid', ip: '45.33.32.156', status: 'Vulnerable', firewall: 'Level 2 Subroutine', data: 'Substation Routines', hacked: false, opCost: 950, losses: 20000, earnings: 110000, stockTicker: 'NEOT', stockPrice: 165.00 },
-                { id: 'n4', name: 'Blackmarket Cluster', ip: '107.189.3.9', status: 'Compromised', firewall: 'None', data: 'Darknet Comms', hacked: true, opCost: 500, losses: 10000, earnings: 50000, stockTicker: 'BMARK', stockPrice: 95.00 }
+                { id: 'n1', name: 'Aegis Defense Node', ip: '194.28.14.2', status: 'Secure', firewall: 'Level 3 ICE', data: 'Military Hardware Specs', hacked: false, opCost: 1500, losses: 55000, earnings: 140000, stockTicker: 'AGIS', stockPrice: 380.00 },
+                { id: 'n2', name: 'OmniCorp Databank', ip: '82.165.191.1', status: 'Online', firewall: 'Level 5 Neural Wall', data: 'Financial Records & Cryptokeys', hacked: false, opCost: 4200, losses: 150000, earnings: 950000, stockTicker: 'OMNI', stockPrice: 790.00 },
+                { id: 'n3', name: 'Neo-Tokyo Power Grid', ip: '45.33.32.156', status: 'Vulnerable', firewall: 'Level 2 Subroutine', data: 'Substation Control Routines', hacked: false, opCost: 950, losses: 20000, earnings: 110000, stockTicker: 'NEOT', stockPrice: 165.00 },
+                { id: 'n4', name: 'Blackmarket Proxy Cluster', ip: '107.189.3.9', status: 'Compromised', firewall: 'None', data: 'Encrypted Darknet Comms', hacked: true, opCost: 500, losses: 10000, earnings: 50000, stockTicker: 'BMARK', stockPrice: 95.00 }
             ],
             stocks: {
                 'AGIS': { name: 'Aegis Defense Corp', price: 380.00, change: +3.2 },
@@ -456,38 +1263,73 @@
                 'BMARK': { name: 'Blackmarket Syndicate', price: 95.00, change: +4.8 }
             },
             quantumTracks: [
-                { id: 't1', title: 'Sub-Zero Velvet', bpm: 84, frequency: '432 Hz', status: 'Synced' },
+                { id: 't1', title: 'Sub-Zero Velvet (808 Matrix)', bpm: 84, frequency: '432 Hz', status: 'Synced' },
                 { id: 't2', title: 'Neon Soul Cipher', bpm: 92, frequency: '528 Hz', status: 'Active' },
-                { id: 't3', title: 'Cipher Groove Protocol', bpm: 110, frequency: '741 Hz', status: 'Standby' }
+                { id: 't3', title: 'Cipher Groove Protocol', bpm: 110, frequency: '741 Hz', status: 'Standby' },
+                { id: 't4', title: 'Quantum Melancholy Jam', bpm: 78, frequency: '396 Hz', status: 'Ready' }
             ]
         };
 
         let gameState = loadSaveData();
+
         function loadSaveData() {
-            try { const saved = localStorage.getItem('NEXUS_V_SAVEDATA'); if (saved) return JSON.parse(saved); } catch(e) {}
+            try {
+                const saved = localStorage.getItem('NEXUS_V_SAVEDATA');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    return parsed;
+                }
+            } catch(e) {
+                console.warn('LocalStorage error loading state:', e);
+            }
             return JSON.parse(JSON.stringify(DEFAULT_GAME_STATE));
         }
-        function saveGameData() { try { localStorage.setItem('NEXUS_V_SAVEDATA', JSON.stringify(gameState)); } catch(e) {} }
+
+        function saveGameData() {
+            try {
+                localStorage.setItem('NEXUS_V_SAVEDATA', JSON.stringify(gameState));
+            } catch(e) {
+                console.warn('LocalStorage error saving state:', e);
+            }
+        }
 
         function resetSaveData() {
-            try { localStorage.removeItem('NEXUS_V_SAVEDATA'); } catch(e) {}
+            try {
+                localStorage.removeItem('NEXUS_V_SAVEDATA');
+            } catch(e) {}
             gameState = JSON.parse(JSON.stringify(DEFAULT_GAME_STATE));
             renderNodes();
+            if (document.getElementById('tab-stockmarket').classList.contains('active')) renderStockMarket();
+            if (document.getElementById('tab-financials').classList.contains('active')) renderSpreadsheet();
+            if (document.getElementById('tab-cyberstore').classList.contains('active')) renderCyberStore();
+            appendTerminal('[!] LOCAL STORAGE RESET: Save data wiped. Restored system defaults.', 'log-warning');
             alert('Save data reset successfully.');
         }
 
         function switchTab(tabId) {
             document.querySelectorAll('.viewport').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(`tab-${tabId}`).classList.add('active');
             
-            const btnMap = { operations: 'ops', financials: 'fin', stockmarket: 'stk', quantumrb: 'qrb', cyberstore: 'shp' };
-            if (btnMap[tabId]) document.getElementById(`tab-btn-${btnMap[tabId]}`).classList.add('active');
-            
-            if (tabId === 'financials') renderSpreadsheet();
-            if (tabId === 'stockmarket') renderStockMarket();
-            if (tabId === 'quantumrb') renderQuantumRB();
-            if (tabId === 'cyberstore') renderCyberStore();
+            if(tabId === 'operations') {
+                document.getElementById('tab-operations').classList.add('active');
+                document.getElementById('tab-btn-ops').classList.add('active');
+            } else if(tabId === 'financials') {
+                document.getElementById('tab-financials').classList.add('active');
+                document.getElementById('tab-btn-fin').classList.add('active');
+                renderSpreadsheet();
+            } else if(tabId === 'stockmarket') {
+                document.getElementById('tab-stockmarket').classList.add('active');
+                document.getElementById('tab-btn-stk').classList.add('active');
+                renderStockMarket();
+            } else if(tabId === 'quantumrb') {
+                document.getElementById('tab-quantumrb').classList.add('active');
+                document.getElementById('tab-btn-qrb').classList.add('active');
+                renderQuantumRB();
+            } else if(tabId === 'cyberstore') {
+                document.getElementById('tab-cyberstore').classList.add('active');
+                document.getElementById('tab-btn-shp').classList.add('active');
+                renderCyberStore();
+            }
             if (tutorialActive) updateTutorialHighlight();
         }
 
@@ -497,16 +1339,25 @@
             gameState.nodes.forEach(node => {
                 const div = document.createElement('div');
                 div.className = `target-card ${gameState.currentTarget === node.ip ? 'active' : ''}`;
-                div.innerHTML = `<div class="target-title">${node.name}</div><div class="target-meta"><span>IP: ${node.ip}</span><span style="color:${node.hacked ? 'var(--neon-green)' : 'var(--neon-amber)'}">${node.status}</span></div>`;
+                div.id = `node-card-${node.id}`;
+                div.innerHTML = `
+                    <div class="target-title">${node.name}</div>
+                    <div class="target-meta">
+                        <span>IP: ${node.ip}</span>
+                        <span style="color: ${node.hacked ? 'var(--neon-green)' : 'var(--neon-amber)'};">${node.status}</span>
+                    </div>
+                `;
                 div.onclick = () => selectTarget(node);
                 container.appendChild(div);
             });
+
             document.getElementById('stat-credits').innerText = '₿' + gameState.credits.toLocaleString();
             document.getElementById('stat-traces').innerText = gameState.traces + '%';
             document.getElementById('stat-cpu').innerText = gameState.cpu + '%';
             document.getElementById('stat-heat').innerText = gameState.heat + '°C';
             document.getElementById('tele-rootkits').innerText = gameState.rootkitsCount;
             document.getElementById('tele-income').innerText = '₿' + gameState.passiveIncome + ' / min';
+            
             saveGameData();
         }
 
@@ -514,97 +1365,368 @@
             gameState.currentTarget = node.ip;
             document.getElementById('terminal-target-label').innerText = node.ip;
             appendTerminal(`\n[+] Target locked: ${node.name} (${node.ip})`, 'log-info');
-            renderNodes(); playTerminalBeep(650, 0.04, 'triangle');
+            appendTerminal(`    Firewall: ${node.firewall} | Datastore: ${node.data}`, 'log-info');
+            renderNodes();
+            playTerminalBeep(650, 0.04, 'triangle');
         }
 
         function appendTerminal(text, className = '') {
-            const out = document.getElementById('terminal-output');
-            const div = document.createElement('div');
-            if (className) div.className = className;
-            div.innerText = text; out.appendChild(div);
-            out.scrollTop = out.scrollHeight;
+            const terminalOutput = document.getElementById('terminal-output');
+            const span = document.createElement('div');
+            if (className) span.className = className;
+            span.innerText = text;
+            terminalOutput.appendChild(span);
+            terminalOutput.scrollTop = terminalOutput.scrollHeight;
         }
 
         const terminalInput = document.getElementById('terminal-input');
-        terminalInput.addEventListener('keydown', (e) => {
-            playTerminalBeep(1200 + Math.random() * 200, 0.02);
+        terminalInput.addEventListener('keydown', function(e) {
+            playTerminalBeep(1200 + Math.random() * 200, 0.02, 'sine');
             if (e.key === 'Enter') {
-                const cmd = terminalInput.value.trim();
+                const fullCmd = terminalInput.value.trim();
                 terminalInput.value = '';
-                if (cmd) { appendTerminal(`root@nexus-v:~# ${cmd}`); processCommand(cmd); }
+                if (!fullCmd) return;
+                appendTerminal(`root@nexus-v:~# ${fullCmd}`);
+                processCommand(fullCmd);
             }
         });
 
         function executeWrittenMacro() {
             const input = document.getElementById('macro-command-input');
-            const cmd = input.value.trim(); input.value = '';
-            if (cmd) { appendTerminal(`root@nexus-v:~# ${cmd}`); processCommand(cmd); }
+            const cmd = input.value.trim();
+            input.value = '';
+            if (!cmd) return;
+            appendTerminal(`root@nexus-v:~# ${cmd}`);
+            processCommand(cmd);
         }
 
         function processCommand(fullCmd) {
-            let cmd = fullCmd.split(' ')[0].toLowerCase();
-            if (cmd === 'macro' && fullCmd.split(' ')[1]) cmd = fullCmd.split(' ')[1].toLowerCase();
+            const parts = fullCmd.split(' ');
+            let cmd = parts[0].toLowerCase();
+
+            if (cmd === 'macro' && parts[1]) {
+                cmd = parts[1].toLowerCase();
+            }
 
             gameState.cpu = Math.min(99, gameState.cpu + 4);
             gameState.heat = Math.min(98, gameState.heat + 1);
             renderNodes();
 
+            // Secret Admin Trigger Command
             if (cmd === 'admin101') {
-                if (gameState.adminUnlocked) { toggleAdminPanel(true); } 
-                else { document.getElementById('admin-login-modal').style.display = 'flex'; }
+                if (gameState.adminUnlocked) {
+                    toggleAdminPanel(true);
+                    appendTerminal('[+] Admin Panel loaded.', 'log-gold');
+                } else {
+                    document.getElementById('admin-login-modal').style.display = 'flex';
+                    document.getElementById('admin-pass-input').value = '';
+                    document.getElementById('admin-pass-input').focus();
+                    appendTerminal('[!] Security prompt initiated for Admin Panel...', 'log-warning');
+                }
+                playCommandSound(false);
                 return;
             }
 
             switch(cmd) {
                 case 'help':
-                    appendTerminal(`COMMAND DIRECTORY: scan, exploit, zeroday, satlink, rootkit, syphon, blackout, clear, nodes, sysmon, shop`, 'log-info');
+                    playCommandSound(false);
+                    appendTerminal(`NEXUS-V 32+ COMMAND SUITE:
+  [Core Ops]
+  1. scan [ip]        2. connect [ip]    3. exploit [mod]   4. exfil
+  5. wipe             6. ddos [ip]       7. spoof [ip]      8. rootfs
+  9. phish [ip]       10. ransom [ip]    11. mitm           12. backdoor [ip]
+  13. scrape          14. cryptomine     15. icebreak       16. sniff
+  17. proxy [node]    18. sysmon         19. market         20. nodes
+  
+  [12 Brand-New Action Commands]
+  21. zeroday [ip]    - Zero-day exploit, instant ICE bypass & market crash
+  22. satlink         - Orbital satellite uplink for clean bonus credits
+  23. deeptrace       - Deep structural analysis of corporate defense grids
+  24. singularity     - 3x Mining overclock for high-yield cryptocurrency
+  25. quantumjam      - Jam target security feeds & boost R&B harmonics
+  26. rootkit [ip]    - Install stealth kernel rootkit for passive income
+  27. syphon [ip]     - Drain corporate treasury directly into your wallet
+  28. ghostmode       - Engage optical stealth, freezing trace accumulation
+  29. neuralhack [ip] - Extract executive neural memories & stock data
+  30. blackout [ip]   - Regional power grid collapse & stock panic
+  31. cloneserver     - Deploy darknet server decoy to absorb traces
+  32. overdrive       - Double terminal output & profit multipliers
+  33. shop            - Open official Cyberware Blackmarket Shop
+  34. clear           - Clear terminal viewport`, 'log-info');
                     break;
+
                 case 'shop':
+                    playCommandSound(false);
                     switchTab('cyberstore');
-                    appendTerminal('[+] Opened Cyberware Shop.', 'log-gold');
+                    appendTerminal('[+] Cyberware Shop matrix loaded.', 'log-gold');
                     break;
-                case 'clear': document.getElementById('terminal-output').innerHTML = ''; break;
+
+                case 'clear':
+                    playCommandSound(false);
+                    document.getElementById('terminal-output').innerHTML = '';
+                    break;
+
+                case 'nodes':
+                    playCommandSound(false);
+                    appendTerminal('ACTIVE MATRIX NODES & FIREWALLS:', 'log-info');
+                    gameState.nodes.forEach(n => {
+                        appendTerminal(` - ${n.name} | IP: ${n.ip} | Status: ${n.status} | Hacked: ${n.hacked}`);
+                    });
+                    break;
+
+                case 'sysmon':
+                    playCommandSound(false);
+                    appendTerminal(`SYSTEM DIAGNOSTICS:
+ - CPU Load: ${gameState.cpu}% | Thermal: ${gameState.heat}°C
+ - Trace Level: ${gameState.traces}% | Credits: ₿${gameState.credits}
+ - Rootkits Active: ${gameState.rootkitsCount} | Passive Income: ₿${gameState.passiveIncome}/min`, 'log-info');
+                    break;
+
+                case 'market':
+                    playCommandSound(false);
+                    appendTerminal(`REAL-TIME STOCK EXCHANGE TICKER:
+ - AGIS: $${gameState.stocks['AGIS'].price} (${gameState.stocks['AGIS'].change}%)
+ - OMNI: $${gameState.stocks['OMNI'].price} (${gameState.stocks['OMNI'].change}%)
+ - NEOT: $${gameState.stocks['NEOT'].price} (${gameState.stocks['NEOT'].change}%)
+ - BMARK: $${gameState.stocks['BMARK'].price} (${gameState.stocks['BMARK'].change}%)`, 'log-purple');
+                    break;
+
+                // --- 12 BRAND-NEW COMMANDS ---
                 case 'zeroday':
-                    if (!gameState.currentTarget) return;
-                    appendTerminal(`[~] Deploying Zero-Day exploit against ${gameState.currentTarget}...`, 'log-warning');
-                    addTrace(10);
+                    if (!gameState.currentTarget) { playCommandSound(true); appendTerminal('[-] ERROR: No target selected.', 'log-danger'); return; }
+                    playCommandSound(false);
+                    appendTerminal(`[~] Deploying classified Zero-Day exploit against ${gameState.currentTarget}...`, 'log-warning');
+                    addTrace(12);
                     setTimeout(() => {
                         const target = gameState.nodes.find(n => n.ip === gameState.currentTarget);
-                        if (target) { target.hacked = true; target.status = 'Root Access'; }
+                        target.hacked = true;
+                        target.status = 'Root Access (0-Day)';
                         gameState.credits += 4500;
-                        appendTerminal(`[+] Zero-day successful! +₿4,500`, 'log-success');
+                        appendTerminal(`[+] Zero-day successful! Full root privileges secured. +₿4,500`, 'log-success');
+                        impactTargetStock(gameState.currentTarget, -18);
+                        renderNodes();
+                    }, 1000);
+                    break;
+
+                case 'satlink':
+                    playCommandSound(false);
+                    appendTerminal(`[~] Establishing connection with Low-Earth Orbit military satellites...`, 'log-info');
+                    setTimeout(() => {
+                        gameState.credits += 2200;
+                        gameState.traces = Math.max(0, gameState.traces - 10);
+                        appendTerminal(`[+] Satellite relay secured! +₿2,200 transferred. Traces reduced by 10%.`, 'log-success');
+                        renderNodes();
+                    }, 900);
+                    break;
+
+                case 'deeptrace':
+                    if (!gameState.currentTarget) { playCommandSound(true); appendTerminal('[-] ERROR: No target selected.', 'log-danger'); return; }
+                    playCommandSound(false);
+                    appendTerminal(`[~] Running deep vulnerability heuristic scan on ${gameState.currentTarget}...`, 'log-info');
+                    setTimeout(() => {
+                        const target = gameState.nodes.find(n => n.ip === gameState.currentTarget);
+                        appendTerminal(`[+] Firewall weakness located: ${target.firewall} has open port 8080 backdoor.`, 'log-success');
+                    }, 800);
+                    break;
+
+                case 'singularity':
+                    playCommandSound(false);
+                    appendTerminal(`[!] OVERCLOCKING Quantum mining cores into Singularity Mode...`, 'log-purple');
+                    setTimeout(() => {
+                        const mined = 5000;
+                        gameState.credits += mined;
+                        gameState.heat += 15;
+                        appendTerminal(`[+] Singularity mining cycle complete! Generated ₿${mined}. (Thermal +15°C)`, 'log-success');
+                        renderNodes();
+                    }, 1200);
+                    break;
+
+                case 'quantumjam':
+                    playCommandSound(false);
+                    appendTerminal(`[~] Broadcasting Quantum Jamming frequencies across target subnets...`, 'log-info');
+                    setTimeout(() => {
+                        gameState.traces = Math.max(0, gameState.traces - 25);
+                        appendTerminal(`[+] Corporate defense feeds jammed! Traces dropped by 25%.`, 'log-success');
                         renderNodes();
                     }, 800);
                     break;
-                case 'satlink':
-                    appendTerminal(`[~] Uplinking with satellite constellation...`, 'log-info');
-                    setTimeout(() => { gameState.credits += 2200; appendTerminal(`[+] Satellite transfer complete: +₿2,200`, 'log-success'); renderNodes(); }, 700);
-                    break;
-                case 'syphon':
-                    const sTarget = gameState.nodes.find(n => n.ip === gameState.currentTarget);
-                    if (!sTarget || !sTarget.hacked) { appendTerminal('[-] Target requires root access.', 'log-danger'); return; }
-                    appendTerminal(`[~] Syphoning treasury...`, 'log-warning');
-                    addTrace(12);
-                    setTimeout(() => { gameState.credits += 6000; appendTerminal(`[+] Extracted ₿6,000.`, 'log-success'); renderNodes(); }, 900);
-                    break;
-                case 'blackout':
-                    appendTerminal('[!] Initiating regional grid blackout...', 'log-danger');
-                    addTrace(25);
-                    setTimeout(() => { gameState.credits += 8000; appendTerminal(`[+] Blackout complete (+₿8,000).`, 'log-success'); renderNodes(); }, 1200);
-                    break;
+
                 case 'rootkit':
                     const rTarget = gameState.nodes.find(n => n.ip === gameState.currentTarget);
-                    if (!rTarget || !rTarget.hacked) return;
-                    gameState.rootkitsCount++; gameState.passiveIncome += 350;
-                    appendTerminal(`[+] Rootkit active! +₿350/min passive income.`, 'log-success');
-                    renderNodes();
+                    if (!rTarget || !rTarget.hacked) { playCommandSound(true); appendTerminal('[-] Target must be compromised first.', 'log-danger'); return; }
+                    playCommandSound(false);
+                    appendTerminal(`[~] Planting stealth kernel rootkit on ${rTarget.name}...`, 'log-warning');
+                    setTimeout(() => {
+                        gameState.rootkitsCount++;
+                        gameState.passiveIncome += 350;
+                        appendTerminal(`[+] Rootkit active! Passive skimming income increased by ₿350/min.`, 'log-success');
+                        renderNodes();
+                    }, 1000);
                     break;
+
+                case 'syphon':
+                    const sTarget = gameState.nodes.find(n => n.ip === gameState.currentTarget);
+                    if (!sTarget || !sTarget.hacked) { playCommandSound(true); appendTerminal('[-] Target requires root access.', 'log-danger'); return; }
+                    playCommandSound(false);
+                    appendTerminal(`[~] Syphoning treasury reserves from ${sTarget.name}...`, 'log-warning');
+                    addTrace(15);
+                    setTimeout(() => {
+                        const bounty = 6000;
+                        gameState.credits += bounty;
+                        appendTerminal(`[+] Treasury syphon complete! ₿${bounty} extracted.`, 'log-success');
+                        impactTargetStock(gameState.currentTarget, -22);
+                        renderNodes();
+                    }, 1100);
+                    break;
+
+                case 'ghostmode':
+                    playCommandSound(false);
+                    gameState.stealthActive = true;
+                    appendTerminal(`[+] Ghost Mode engaged. Trace accumulation suspended for 60 seconds.`, 'log-success');
+                    document.getElementById('stat-stealth').innerText = 'GHOST MODE';
+                    document.getElementById('stat-stealth').style.color = 'var(--neon-purple)';
+                    setTimeout(() => {
+                        if (!gameState.godMode) {
+                            gameState.stealthActive = false;
+                            document.getElementById('stat-stealth').innerText = 'STEALTH ACTIVE';
+                            document.getElementById('stat-stealth').style.color = 'var(--neon-green)';
+                        }
+                    }, 60000);
+                    break;
+
+                case 'neuralhack':
+                    if (!gameState.currentTarget) { playCommandSound(true); appendTerminal('[-] ERROR: No target selected.', 'log-danger'); return; }
+                    playCommandSound(false);
+                    appendTerminal(`[~] Uplinked to executive neural implants on ${gameState.currentTarget}...`, 'log-purple');
+                    addTrace(8);
+                    setTimeout(() => {
+                        gameState.credits += 3000;
+                        appendTerminal(`[+] Neural data harvested! Insider trading tips & cryptokeys acquired (+₿3,000).`, 'log-success');
+                        renderNodes();
+                    }, 1000);
+                    break;
+
+                case 'blackout':
+                    playCommandSound(false);
+                    appendTerminal('[!] WARNING: Initiating regional power grid blackout...', 'log-danger');
+                    addTrace(35);
+                    setTimeout(() => {
+                        gameState.credits += 8000;
+                        appendTerminal(`[+] Regional blackout successful! Grid offline, massive payouts secured (+₿8,000).`, 'log-success');
+                        impactTargetStock(gameState.currentTarget, -30);
+                        renderNodes();
+                    }, 1500);
+                    break;
+
+                case 'cloneserver':
+                    playCommandSound(false);
+                    appendTerminal(`[~] Spawning 16 darknet server decoys...`, 'log-info');
+                    setTimeout(() => {
+                        gameState.traces = 0;
+                        appendTerminal(`[+] All decoy servers deployed. Trace footprint completely wiped to 0%!`, 'log-success');
+                        renderNodes();
+                    }, 800);
+                    break;
+
+                case 'overdrive':
+                    playCommandSound(false);
+                    appendTerminal(`[!] SYSTEM OVERDRIVE: Terminal processor frequency doubled!`, 'log-purple');
+                    setTimeout(() => {
+                        gameState.credits += 4000;
+                        appendTerminal(`[+] Overdrive cycle finished. Multiplier bonus credited (+₿4,000).`, 'log-success');
+                        renderNodes();
+                    }, 1000);
+                    break;
+
+                // --- STANDARD COMMANDS ---
+                case 'scan':
+                    if (!gameState.currentTarget) { playCommandSound(true); appendTerminal('[-] ERROR: No target selected.', 'log-danger'); return; }
+                    playCommandSound(false);
+                    appendTerminal(`[I] Probing ports on ${gameState.currentTarget}...`, 'log-info');
+                    setTimeout(() => {
+                        appendTerminal(`[+] Port 22 (SSH): Open | Port 443 (HTTPS): Vulnerable Proxy`, 'log-success');
+                        addTrace(3);
+                    }, 600);
+                    break;
+
+                case 'brute':
+                    const targetBrute = gameState.nodes.find(n => n.ip === gameState.currentTarget);
+                    if (!targetBrute) { playCommandSound(true); appendTerminal('[-] Select a target node first.', 'log-danger'); return; }
+                    playCommandSound(false);
+                    appendTerminal(`[~] Executing brute-force dictionary attack against ${targetBrute.name}...`, 'log-info');
+                    addTrace(10);
+                    setTimeout(() => {
+                        appendTerminal(`[+] Admin credentials acquired for ${targetBrute.ip}`, 'log-success');
+                        targetBrute.status = 'Compromised';
+                        renderNodes();
+                    }, 1000);
+                    break;
+
+                case 'inject':
+                    const targetInject = gameState.nodes.find(n => n.ip === gameState.currentTarget);
+                    if (!targetInject) { playCommandSound(true); appendTerminal('[-] Select a target node first.', 'log-danger'); return; }
+                    playCommandSound(false);
+                    appendTerminal(`[~] Injecting payload into ${targetInject.ip} memory stack...`, 'log-info');
+                    addTrace(15);
+                    setTimeout(() => {
+                        appendTerminal(`[+] Buffer overflow successful. Bypassed ${targetInject.firewall}`, 'log-success');
+                        targetInject.hacked = true;
+                        targetInject.status = 'Root Access';
+                        renderNodes();
+                    }, 1200);
+                    break;
+
+                case 'exfil':
+                    const targetExfil = gameState.nodes.find(n => n.ip === gameState.currentTarget);
+                    if (!targetExfil || !targetExfil.hacked) { playCommandSound(true); appendTerminal('[-] Target requires root access first.', 'log-danger'); return; }
+                    playCommandSound(false);
+                    appendTerminal(`[~] Extracting: "${targetExfil.data}"...`, 'log-info');
+                    setTimeout(() => {
+                        const payout = 3000;
+                        gameState.credits += payout;
+                        appendTerminal(`[+] Exfiltration complete! Transferred ₿${payout}.`, 'log-success');
+                        renderNodes();
+                    }, 1000);
+                    break;
+
+                case 'ddos':
+                    if (!gameState.currentTarget) { playCommandSound(true); appendTerminal('[-] ERROR: No target selected.', 'log-danger'); return; }
+                    playCommandSound(false);
+                    appendTerminal(`[~] Launching botnet UDP amplification flood against ${gameState.currentTarget}...`, 'log-warning');
+                    addTrace(12);
+                    setTimeout(() => {
+                        appendTerminal(`[+] Target servers overwhelmed! Operational losses incurred.`, 'log-success');
+                        impactTargetStock(gameState.currentTarget, -15);
+                    }, 1000);
+                    break;
+
+                case 'ransom':
+                    if (!gameState.currentTarget) { playCommandSound(true); appendTerminal('[-] ERROR: No target selected.', 'log-danger'); return; }
+                    playCommandSound(false);
+                    appendTerminal(`[!] Deploying AES-256 ransomware payload to ${gameState.currentTarget}...`, 'log-danger');
+                    addTrace(22);
+                    setTimeout(() => {
+                        const payout = 4500;
+                        gameState.credits += payout;
+                        appendTerminal(`[+] Ransom paid! ₿${payout} transferred to anonymous wallet.`, 'log-success');
+                        impactTargetStock(gameState.currentTarget, -25);
+                        renderNodes();
+                    }, 1200);
+                    break;
+
                 case 'wipe':
-                    gameState.traces = Math.max(0, gameState.traces - 40);
-                    renderNodes(); appendTerminal(`[+] Traces purged.`, 'log-success');
+                    playCommandSound(false);
+                    appendTerminal(`[~] Purging local logs and cycling proxy hops...`, 'log-info');
+                    setTimeout(() => {
+                        gameState.traces = Math.max(0, gameState.traces - 45);
+                        renderNodes();
+                        appendTerminal(`[+] Traces successfully masked.`, 'log-success');
+                    }, 700);
                     break;
+
                 default:
-                    appendTerminal(`[-] Command unrecognized: '${cmd}'`, 'log-danger');
+                    playCommandSound(true);
+                    appendTerminal(`[-] Command unrecognized: '${cmd}'. Type 'help' for full framework directory.`, 'log-danger');
             }
         }
 
@@ -612,25 +1734,29 @@
             if (gameState.stealthActive || gameState.godMode) return;
             gameState.traces = Math.min(100, gameState.traces + amount);
             renderNodes();
-            if (gameState.traces >= 100) { alert('TRACE COMPLETE. Resetting matrix session...'); resetSaveData(); }
+            if(gameState.traces >= 100) {
+                alert('TRACE COMPLETE. Counter-offensive launched by cyber defense agencies. Resetting matrix session...');
+                resetSaveData();
+            }
         }
 
         // ==========================================
-        // SHOP ENGINE LOGIC & INVENTORY SYSTEM
+        // CYBERWARE SHOP & INVENTORY LOGIC
         // ==========================================
         function renderCyberStore() {
             const catalog = document.getElementById('shop-catalog-list');
+            if (!catalog) return;
             catalog.innerHTML = '';
             SHOP_ITEMS.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'shop-item-card';
                 card.innerHTML = `
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <span style="font-weight:bold; color:var(--neon-cyan);">${item.name}</span>
-                        <span style="color:var(--neon-gold); font-weight:bold;">₿${item.cost.toLocaleString()}</span>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
+                        <span style="font-weight:bold; color:var(--neon-cyan); font-size: 0.95rem;">${item.name}</span>
+                        <span style="color:var(--neon-gold); font-weight:bold; font-size: 0.95rem;">₿${item.cost.toLocaleString()}</span>
                     </div>
-                    <div style="font-size:0.78rem; color:var(--text-dim); margin:6px 0;">${item.desc}</div>
-                    <button class="cyber-btn gold" style="width:100%;" onclick="buyShopItem('${item.id}')">Acquire Item</button>
+                    <div style="font-size:0.8rem; color:var(--text-main); line-height: 1.4; margin-bottom: 12px;">${item.desc}</div>
+                    <button class="cyber-btn gold" style="width:100%;" onclick="buyShopItem('${item.id}')">ACQUIRE ITEM</button>
                 `;
                 catalog.appendChild(card);
             });
@@ -640,15 +1766,20 @@
         function buyShopItem(itemId) {
             const item = SHOP_ITEMS.find(i => i.id === itemId);
             if (!item) return;
-            if (gameState.credits < item.cost) { alert('Insufficient credits!'); return; }
+            if (gameState.credits < item.cost) {
+                alert('Insufficient credits for acquisition.');
+                playCommandSound(true);
+                return;
+            }
             
             gameState.credits -= item.cost;
             if (item.type === 'passive') {
                 gameState.passiveIncome += 450;
-                appendTerminal(`[SHOP] Purchased ${item.name}! Permanent +₿450/min passive income.`, 'log-gold');
+                appendTerminal(`[SHOP] Acquired ${item.name}! Permanent +₿450/min passive income active.`, 'log-gold');
             } else {
+                if (!gameState.inventory) gameState.inventory = {};
                 gameState.inventory[itemId] = (gameState.inventory[itemId] || 0) + 1;
-                appendTerminal(`[SHOP] Purchased ${item.name} into Inventory.`, 'log-gold');
+                appendTerminal(`[SHOP] Acquired ${item.name}. Transferred to Inventory Storage.`, 'log-gold');
             }
             renderNodes();
             renderCyberStore();
@@ -657,145 +1788,773 @@
 
         function renderInventory() {
             const invContainer = document.getElementById('shop-inventory-list');
+            if (!invContainer) return;
             invContainer.innerHTML = '';
-            const keys = Object.keys(gameState.inventory);
-            if (keys.length === 0) {
-                invContainer.innerHTML = `<div style="color: var(--text-dim);">No active items in storage.</div>`;
+            
+            if (!gameState.inventory || Object.keys(gameState.inventory).length === 0) {
+                invContainer.innerHTML = `<div style="color: var(--text-dim);">No active cyberware items held in inventory storage.</div>`;
                 return;
             }
-            keys.forEach(id => {
+
+            let hasItems = false;
+            for (let id in gameState.inventory) {
                 const qty = gameState.inventory[id];
-                if (qty <= 0) return;
+                if (qty <= 0) continue;
+                hasItems = true;
                 const item = SHOP_ITEMS.find(i => i.id === id);
+                if (!item) continue;
+                
                 const div = document.createElement('div');
                 div.className = 'inventory-item';
                 div.innerHTML = `
                     <div>
-                        <div style="font-weight:bold; color:var(--neon-green);">${item.name} (x${qty})</div>
-                        <div style="font-size:0.75rem; color:var(--text-dim);">${item.desc}</div>
+                        <div style="font-weight:bold; color:var(--neon-green); font-size: 0.85rem;">${item.name} (x${qty})</div>
+                        <div style="font-size:0.75rem; color:var(--text-dim); margin-top:2px;">${item.desc}</div>
                     </div>
-                    <button class="cyber-btn purple" style="padding:4px 8px;" onclick="useInventoryItem('${id}')">Use</button>
+                    <button class="cyber-btn purple" style="padding:6px 12px; font-size: 0.7rem;" onclick="useInventoryItem('${id}')">Deploy</button>
                 `;
                 invContainer.appendChild(div);
-            });
+            }
+
+            if (!hasItems) {
+                invContainer.innerHTML = `<div style="color: var(--text-dim);">No active cyberware items held in inventory storage.</div>`;
+            }
         }
 
         function useInventoryItem(id) {
-            if (!gameState.inventory[id] || gameState.inventory[id] <= 0) return;
+            if (!gameState.inventory || !gameState.inventory[id] || gameState.inventory[id] <= 0) return;
             gameState.inventory[id]--;
             if (gameState.inventory[id] === 0) delete gameState.inventory[id];
 
             if (id === 'ice_breaker') {
-                const t = gameState.nodes.find(n => n.ip === gameState.currentTarget);
-                if (t) { t.hacked = true; t.status = 'Bypassed (ICE-Breaker)'; }
-                appendTerminal('[ITEM USED] Quantum ICE-Breaker bypassed firewall!', 'log-success');
+                const target = gameState.nodes.find(n => n.ip === gameState.currentTarget);
+                if (target) {
+                    target.hacked = true;
+                    target.status = 'Root Access (ICE-Breaker)';
+                    appendTerminal(`[ITEM DEPLOYED] Quantum ICE-Breaker compromised target ${target.ip} with 0% trace!`, 'log-success');
+                } else {
+                    appendTerminal('[ITEM DEPLOYED] Quantum ICE-Breaker executed.', 'log-success');
+                }
             } else if (id === 'thermal_sink') {
                 gameState.heat = 35;
-                appendTerminal('[ITEM USED] Cryo Heatsink flushed thermal system to 35°C.', 'log-success');
+                appendTerminal('[ITEM DEPLOYED] Cryo Thermal Sink flushed system heat down to ambient 35°C.', 'log-success');
             } else if (id === 'trace_scrubber') {
                 gameState.traces = Math.max(0, Math.floor(gameState.traces / 2));
-                appendTerminal('[ITEM USED] Trace Scrubber halved active trace level!', 'log-success');
+                appendTerminal('[ITEM DEPLOYED] NSA Trace Scrubber halved your active trace footprint!', 'log-success');
             } else if (id === 'neural_booster') {
-                gameState.credits += 15000; gameState.cpu = Math.max(10, gameState.cpu - 20);
-                appendTerminal('[ITEM USED] Neural Booster injected +₿15,000!', 'log-success');
+                gameState.credits += 15000;
+                gameState.cpu = Math.max(10, gameState.cpu - 20);
+                appendTerminal('[ITEM DEPLOYED] Neural Processing Injector granted +₿15,000 cash injection!', 'log-success');
             } else if (id === 'market_manipulator') {
-                for (let stk in gameState.stocks) { gameState.stocks[stk].price *= 1.2; }
-                appendTerminal('[ITEM USED] GCSE Trading Bot pumped stock market values by 20%!', 'log-gold');
+                for (let ticker in gameState.stocks) {
+                    gameState.stocks[ticker].price *= 1.20;
+                    gameState.stocks[ticker].change += 20.0;
+                }
+                appendTerminal('[ITEM DEPLOYED] High-Freq Trading Bot pumped all stock portfolio values by 20%!', 'log-gold');
+                if (document.getElementById('tab-stockmarket').classList.contains('active')) renderStockMarket();
             }
+
             renderNodes();
             renderCyberStore();
             playCommandSound(false);
         }
 
+        // Spreadsheet View
         function renderSpreadsheet() {
             const container = document.getElementById('spreadsheet-view');
-            let html = `<table class="sheet-table"><tr><th>Target</th><th>Op Cost</th><th>Losses</th><th>Earnings</th></tr>`;
+            let html = `
+                <table class="sheet-table">
+                    <tr>
+                        <th>Target Corp</th>
+                        <th>Op Cost / Day</th>
+                        <th>Annual Losses</th>
+                        <th>Earnings</th>
+                        <th>Rootkit Skim</th>
+                    </tr>
+            `;
             gameState.nodes.forEach(n => {
-                html += `<tr><td><b>${n.name}</b></td><td>₿${n.opCost}</td><td style="color:var(--neon-rose);">₿${n.losses}</td><td style="color:var(--neon-green);">₿${n.earnings}</td></tr>`;
+                html += `
+                    <tr>
+                        <td><b>${n.name}</b> (${n.stockTicker})</td>
+                        <td>₿${n.opCost.toLocaleString()}</td>
+                        <td style="color: var(--neon-rose);">₿${n.losses.toLocaleString()}</td>
+                        <td style="color: var(--neon-green);">₿${n.earnings.toLocaleString()}</td>
+                        <td style="color: var(--neon-amber);">${n.hacked ? 'Active' : 'Locked'}</td>
+                    </tr>
+                `;
             });
-            container.innerHTML = html + `</table>`;
+            html += `</table>`;
+            container.innerHTML = html;
+
+            document.getElementById('infrastructure-details').innerHTML = `
+                <div style="font-weight: bold; color: var(--neon-cyan); margin-bottom: 10px;">INFRASTRUCTURE LOSS ANALYSIS</div>
+                <p style="font-size: 0.8rem; line-height: 1.6; color: var(--text-main);">
+                    Corporate targets maintain massive operational overhead. Launching ransomware, zero-day exploits, or syphon attacks directly spikes corporate financial losses, depressing their stock value on the GCSE exchange.
+                </p>
+                <div style="margin-top: 15px; font-size: 0.8rem; line-height: 1.6; color: var(--text-dim);">
+                    <div>• Active Rootkits Skimming: <span style="color: var(--neon-green);">${gameState.rootkitsCount} nodes</span></div>
+                    <div>• Total Passive Revenue: <span style="color: var(--neon-amber);">₿${gameState.passiveIncome} / min</span></div>
+                    <div>• Market Vulnerability Index: <span style="color: var(--neon-cyan);">84.2 / 100</span></div>
+                </div>
+            `;
         }
 
+        // Stock Market & Portfolio
         function renderStockMarket() {
-            const container = document.getElementById('stock-market-list');
-            container.innerHTML = '';
-            for (let t in gameState.stocks) {
-                let stock = gameState.stocks[t];
+            const marketList = document.getElementById('stock-market-list');
+            marketList.innerHTML = '';
+
+            for (let ticker in gameState.stocks) {
+                let stock = gameState.stocks[ticker];
                 let div = document.createElement('div');
                 div.className = 'stock-row';
-                div.innerHTML = `<div><span class="stock-ticker">${t}</span> - $${stock.price.toFixed(2)}</div>
-                    <div><button class="cyber-btn" onclick="buyStock('${t}')">Buy 10</button></div>`;
-                container.appendChild(div);
+                div.id = `stock-row-${ticker}`;
+                div.innerHTML = `
+                    <div>
+                        <div class="stock-ticker">${ticker} - ${stock.name}</div>
+                        <div style="font-size: 0.75rem; color: var(--text-dim);">Price: <span class="stock-price ${stock.change < 0 ? 'down' : ''}">$${stock.price.toFixed(2)} (${stock.change > 0 ? '+' : ''}${stock.change}%)</span></div>
+                    </div>
+                    <div style="display: flex; gap: 6px;">
+                        <button class="cyber-btn" id="btn-buy-${ticker}" onclick="buyStock('${ticker}')">Buy (10)</button>
+                        <button class="cyber-btn danger" id="btn-sell-${ticker}" onclick="sellStock('${ticker}')">Sell (10)</button>
+                    </div>
+                `;
+                marketList.appendChild(div);
             }
-        }
-        function buyStock(t) {
-            let cost = gameState.stocks[t].price * 10;
-            if (gameState.credits < cost) return;
-            gameState.credits -= cost;
-            gameState.portfolio[t] = (gameState.portfolio[t] || 0) + 10;
-            renderNodes(); renderStockMarket();
+            renderPortfolio();
         }
 
+        function buyStock(ticker) {
+            let stock = gameState.stocks[ticker];
+            let cost = stock.price * 10;
+            if (gameState.credits < cost) { alert('Insufficient credits.'); return; }
+            gameState.credits -= cost;
+            gameState.portfolio[ticker] = (gameState.portfolio[ticker] || 0) + 10;
+            renderStockMarket();
+            renderNodes();
+            playCommandSound(false);
+        }
+
+        function sellStock(ticker) {
+            if (!gameState.portfolio[ticker] || gameState.portfolio[ticker] < 10) { alert('No shares held.'); return; }
+            let stock = gameState.stocks[ticker];
+            let revenue = stock.price * 10;
+            gameState.credits += revenue;
+            gameState.portfolio[ticker] -= 10;
+            if (gameState.portfolio[ticker] === 0) delete gameState.portfolio[ticker];
+            renderStockMarket();
+            renderNodes();
+            playCommandSound(false);
+        }
+
+        function renderPortfolio() {
+            const pList = document.getElementById('portfolio-list');
+            let html = '';
+            let totalVal = 0;
+
+            if (Object.keys(gameState.portfolio).length === 0) {
+                html = 'No active shares held.';
+            } else {
+                for (let ticker in gameState.portfolio) {
+                    let shares = gameState.portfolio[ticker];
+                    let val = shares * gameState.stocks[ticker].price;
+                    totalVal += val;
+                    html += `<div><b>${ticker}:</b> ${shares} shares ($${val.toFixed(2)})</div>`;
+                }
+            }
+            pList.innerHTML = html;
+            document.getElementById('portfolio-cash').innerText = '₿' + gameState.credits.toLocaleString();
+            document.getElementById('portfolio-val').innerText = '₿' + totalVal.toFixed(2);
+        }
+
+        function impactTargetStock(ip, deltaPercent) {
+            let node = gameState.nodes.find(n => n.ip === ip);
+            if (!node) return;
+            let ticker = node.stockTicker;
+            if (gameState.stocks[ticker]) {
+                gameState.stocks[ticker].change += deltaPercent;
+                gameState.stocks[ticker].price = Math.max(10, gameState.stocks[ticker].price * (1 + deltaPercent / 100));
+            }
+            saveGameData();
+        }
+
+        // Quantum R&B Section
         function renderQuantumRB() {
             const container = document.getElementById('rb-track-list');
             container.innerHTML = '';
-            gameState.quantumTracks.forEach(tr => {
-                const div = document.createElement('div'); div.className = 'rb-track-card';
-                div.innerHTML = `<div><b>${tr.title}</b> (${tr.frequency})</div>`;
+            gameState.quantumTracks.forEach(track => {
+                const div = document.createElement('div');
+                div.className = 'rb-track-card';
+                div.innerHTML = `
+                    <div style="font-weight: bold; color: var(--neon-purple);">${track.title}</div>
+                    <div style="font-size: 0.75rem; color: var(--text-dim); margin-top: 4px; display: flex; justify-content: space-between;">
+                        <span>BPM: ${track.bpm} | Freq: ${track.frequency}</span>
+                        <span style="color: var(--neon-cyan);">${track.status}</span>
+                    </div>
+                `;
                 container.appendChild(div);
             });
         }
+
         function broadcastQuantumRB() {
-            gameState.credits += 600; renderNodes();
-            playQuantumSubBass(parseFloat(document.getElementById('slider-sub-bass').value) || 92);
+            const logOut = document.getElementById('rb-log-output');
+            const time = new Date().toLocaleTimeString();
+            const div = document.createElement('div');
+            div.innerHTML = `<span style="color: var(--neon-purple);">[${time}]</span> Quantum R&amp;B frequency broadcasted! Encrypted harmonic subnets synchronized.`;
+            logOut.appendChild(div);
+            logOut.scrollTop = logOut.scrollHeight;
+            gameState.credits += 600;
+            renderNodes();
+            
+            // Audio Web API Synthesis
+            const bassFreq = parseFloat(document.getElementById('slider-sub-bass').value) || 92;
+            playQuantumSubBass(bassFreq);
         }
 
+        // Passive Income & Thermal Ticker
         setInterval(() => {
+            gameState.heat = Math.max(35, gameState.heat + (Math.random() > 0.5 ? 1 : -1));
             if (gameState.rootkitsCount > 0 || gameState.passiveIncome > 0) {
-                gameState.credits += Math.round(gameState.passiveIncome / 12);
-                renderNodes();
+                gameState.credits += Math.round((gameState.passiveIncome || (gameState.rootkitsCount * 350)) / 12);
             }
+            renderNodes();
         }, 5000);
 
+        renderNodes();
+        
+        // Restore Current Target Selection
+        const targetNode = gameState.nodes.find(n => n.ip === gameState.currentTarget) || gameState.nodes[0];
+        selectTarget(targetNode);
+
+        /* ==========================================================================
+           ADMIN PANEL & ADVANCED FULL COMMAND AUTOPILOT ENGINE
+           ========================================================================== */
+
         function submitAdminPassword() {
-            if (document.getElementById('admin-pass-input').value === 'boogie2007') {
+            const pass = document.getElementById('admin-pass-input').value;
+            if (pass === 'boogie2007') {
                 gameState.adminUnlocked = true;
                 document.getElementById('admin-login-modal').style.display = 'none';
                 document.getElementById('hdr-admin-btn').style.display = 'inline-block';
                 toggleAdminPanel(true);
-            } else { alert('Access Denied'); }
+                appendTerminal('[+] ACCESS GRANTED: Admin Panel & Full Command unlocked!', 'log-gold');
+                playCommandSound(false);
+            } else {
+                alert('ACCESS DENIED: Invalid Admin Password.');
+                document.getElementById('admin-pass-input').value = '';
+                playCommandSound(true);
+            }
         }
-        function closeAdminLoginModal() { document.getElementById('admin-login-modal').style.display = 'none'; }
-        function toggleAdminPanel(show) { document.getElementById('admin-panel-overlay').style.display = show ? 'flex' : 'none'; }
 
-        function setFullCommandMode(m) { gameState.fullCommandMode = m; saveGameData(); }
-        function toggleFullCommand() {
-            gameState.fullCommandActive = !gameState.fullCommandActive;
-            document.getElementById('btn-toggle-fullcommand').innerText = gameState.fullCommandActive ? "DISABLE FULL COMMAND" : "ENABLE FULL COMMAND";
+        function closeAdminLoginModal() {
+            document.getElementById('admin-login-modal').style.display = 'none';
+        }
+
+        function toggleAdminPanel(show) {
+            const panel = document.getElementById('admin-panel-overlay');
+            panel.style.display = show ? 'flex' : 'none';
+        }
+
+        function setFullCommandMode(mode) {
+            gameState.fullCommandMode = mode;
+            document.querySelectorAll('.mode-select-btn').forEach(btn => btn.classList.remove('active-mode'));
+            if (mode === 'normally') document.getElementById('mode-btn-normal').classList.add('active-mode');
+            if (mode === 'expertise') document.getElementById('mode-btn-expertise').classList.add('active-mode');
+            if (mode === 'professionalism') document.getElementById('mode-btn-pro').classList.add('active-mode');
+            appendTerminal(`[ADMIN] Autopilot Mode updated to: ${mode.toUpperCase()}`, 'log-gold');
             saveGameData();
         }
 
-        function adminAddCredits(amt) { gameState.credits += amt; renderNodes(); }
-        function adminResetTrace() { gameState.traces = 0; renderNodes(); }
-        function adminToggleGodMode() { gameState.godMode = !gameState.godMode; renderNodes(); }
-        function adminMaxRootkits() { gameState.rootkitsCount = 10; gameState.passiveIncome += 3500; renderNodes(); }
-        function adminHackAllNodes() { gameState.nodes.forEach(n => n.hacked = true); renderNodes(); }
-        function adminCrashMarket() { for(let t in gameState.stocks) gameState.stocks[t].price *= 0.2; renderStockMarket(); }
-        function adminPumpPortfolio() { for(let t in gameState.stocks) gameState.stocks[t].price *= 2.5; renderStockMarket(); }
-        function adminSuperOverdrive() { gameState.credits += 100000; renderNodes(); }
+        let fullCommandLoopTimer = null;
 
-        let currentTutorialStep = 0, tutorialActive = false, commanderMode = false;
-        function checkInitialTutorialPrompt() { if (!gameState.tutorialInteracted) openTutorialModal(); }
-        function openTutorialModal() { document.getElementById('tut-init-modal').style.display = 'flex'; }
-        function declineTutorialSystem() { gameState.tutorialInteracted = true; saveGameData(); document.getElementById('tut-init-modal').style.display = 'none'; }
-        function startTutorialSystem() { declineTutorialSystem(); tutorialActive = true; switchTab('operations'); }
-        function exitTutorialSystem() { tutorialActive = false; document.getElementById('tut-guidance-card').style.display = 'none'; }
-        function nextTutorialStep() { exitTutorialSystem(); }
-        function toggleCommanderMode() {}
-        function updateTutorialHighlight() {}
+        function toggleFullCommand() {
+            gameState.fullCommandActive = !gameState.fullCommandActive;
+            const btn = document.getElementById('btn-toggle-fullcommand');
+            const statusTxt = document.getElementById('fullcommand-status-text');
 
-        renderNodes();
-        selectTarget(gameState.nodes[0]);
+            if (gameState.fullCommandActive) {
+                btn.innerText = "DISABLE FULL COMMAND";
+                btn.className = "cyber-btn danger";
+                statusTxt.innerText = `AUTOPILOT: ACTIVE (${gameState.fullCommandMode.toUpperCase()})`;
+                statusTxt.style.borderColor = "var(--neon-green)";
+                statusTxt.style.color = "var(--neon-green)";
+                document.getElementById('tut-cursor').style.display = 'block';
+                appendTerminal('[+] FULL COMMAND AUTOPILOT INITIALIZED.', 'log-gold');
+                runFullCommandLoop();
+            } else {
+                btn.innerText = "ENABLE FULL COMMAND";
+                btn.className = "cyber-btn gold";
+                statusTxt.innerText = "AUTOPILOT: INACTIVE";
+                statusTxt.style.borderColor = "var(--neon-rose)";
+                statusTxt.style.color = "var(--neon-rose)";
+                document.getElementById('tut-cursor').style.display = 'none';
+                if (fullCommandLoopTimer) clearTimeout(fullCommandLoopTimer);
+                appendTerminal('[!] FULL COMMAND AUTOPILOT DISENGAGED.', 'log-warning');
+            }
+            saveGameData();
+        }
+
+        function runFullCommandLoop() {
+            if (!gameState.fullCommandActive) return;
+
+            const mode = gameState.fullCommandMode;
+            let actionSequence = [];
+
+            if (mode === 'normally') {
+                actionSequence = [
+                    { tab: 'operations', selector: '#node-card-n1', action: () => selectTarget(gameState.nodes[0]) },
+                    { tab: 'operations', selector: '#terminal-input', typeCmd: 'scan' },
+                    { tab: 'operations', selector: '#terminal-input', typeCmd: 'zeroday' },
+                    { tab: 'operations', selector: '#terminal-input', typeCmd: 'syphon' },
+                    { tab: 'operations', selector: '#terminal-input', typeCmd: 'wipe' }
+                ];
+            } else if (mode === 'expertise') {
+                actionSequence = [
+                    { tab: 'operations', selector: '#node-card-n2', action: () => selectTarget(gameState.nodes[1]) },
+                    { tab: 'operations', selector: '#terminal-input', typeCmd: 'zeroday' },
+                    { tab: 'operations', selector: '#terminal-input', typeCmd: 'rootkit' },
+                    { tab: 'operations', selector: '#terminal-input', typeCmd: 'satlink' },
+                    { tab: 'stockmarket', selector: '#tab-btn-stk', action: () => switchTab('stockmarket') },
+                    { tab: 'stockmarket', selector: '#btn-buy-AGIS', action: () => buyStock('AGIS') },
+                    { tab: 'operations', selector: '#tab-btn-ops', action: () => switchTab('operations') },
+                    { tab: 'operations', selector: '#terminal-input', typeCmd: 'singularity' },
+                    { tab: 'operations', selector: '#terminal-input', typeCmd: 'cloneserver' }
+                ];
+            } else if (mode === 'professionalism') {
+                // Highly complex professional execution across all tabs
+                actionSequence = [
+                    { tab: 'operations', selector: '#node-card-n3', action: () => selectTarget(gameState.nodes[2]) },
+                    { tab: 'operations', selector: '#terminal-input', typeCmd: 'deeptrace' },
+                    { tab: 'operations', selector: '#terminal-input', typeCmd: 'ghostmode' },
+                    { tab: 'operations', selector: '#terminal-input', typeCmd: 'neuralhack' },
+                    { tab: 'operations', selector: '#terminal-input', typeCmd: 'blackout' },
+                    { tab: 'financials', selector: '#tab-btn-fin', action: () => switchTab('financials') },
+                    { tab: 'stockmarket', selector: '#tab-btn-stk', action: () => switchTab('stockmarket') },
+                    { tab: 'stockmarket', selector: '#btn-buy-OMNI', action: () => buyStock('OMNI') },
+                    { tab: 'quantumrb', selector: '#tab-btn-qrb', action: () => switchTab('quantumrb') },
+                    { tab: 'quantumrb', selector: '#btn-broadcast-rb', action: () => broadcastQuantumRB() },
+                    { tab: 'operations', selector: '#tab-btn-ops', action: () => switchTab('operations') },
+                    { tab: 'operations', selector: '#terminal-input', typeCmd: 'overdrive' },
+                    { tab: 'operations', selector: '#terminal-input', typeCmd: 'cloneserver' }
+                ];
+            }
+
+            let seqIdx = 0;
+            function executeNextInSeq() {
+                if (!gameState.fullCommandActive) return;
+
+                const step = actionSequence[seqIdx];
+                if (step.tab) switchTab(step.tab);
+
+                animateCursorTo(step.selector, () => {
+                    if (step.typeCmd) {
+                        typeInTerminal(step.typeCmd, () => {
+                            processCommand(step.typeCmd);
+                            finishStep();
+                        });
+                    } else if (step.action) {
+                        step.action();
+                        finishStep();
+                    } else {
+                        finishStep();
+                    }
+                });
+
+                function finishStep() {
+                    seqIdx = (seqIdx + 1) % actionSequence.length;
+                    fullCommandLoopTimer = setTimeout(executeNextInSeq, 1200);
+                }
+            }
+
+            executeNextInSeq();
+        }
+
+        /* ADMIN CHEAT FUNCTIONS */
+        function adminAddCredits(amt) {
+            gameState.credits += amt;
+            renderNodes();
+            appendTerminal(`[ADMIN CHEAT] Added ₿${amt.toLocaleString()} credits!`, 'log-gold');
+        }
+
+        function adminResetTrace() {
+            gameState.traces = 0;
+            renderNodes();
+            appendTerminal(`[ADMIN CHEAT] Traces completely wiped to 0%!`, 'log-gold');
+        }
+
+        function adminToggleGodMode() {
+            gameState.godMode = !gameState.godMode;
+            const btn = document.getElementById('admin-godmode-btn');
+            btn.innerText = `God Stealth: ${gameState.godMode ? 'ON' : 'OFF'}`;
+            if (gameState.godMode) {
+                document.getElementById('stat-stealth').innerText = 'GOD MODE';
+                document.getElementById('stat-stealth').style.color = 'var(--neon-gold)';
+                appendTerminal(`[ADMIN CHEAT] GOD STEALTH ENGAGED (Infinite trace immunity).`, 'log-gold');
+            } else {
+                document.getElementById('stat-stealth').innerText = 'STEALTH ACTIVE';
+                document.getElementById('stat-stealth').style.color = 'var(--neon-green)';
+            }
+        }
+
+        function adminMaxRootkits() {
+            gameState.rootkitsCount = 10;
+            gameState.passiveIncome = 3500;
+            renderNodes();
+            appendTerminal(`[ADMIN CHEAT] 10 Max Rootkits deployed! Passive income boost active.`, 'log-gold');
+        }
+
+        function adminHackAllNodes() {
+            gameState.nodes.forEach(n => {
+                n.hacked = true;
+                n.status = 'Root Access (Admin)';
+            });
+            renderNodes();
+            appendTerminal(`[ADMIN CHEAT] All network target nodes fully compromised!`, 'log-gold');
+        }
+
+        function adminCrashMarket() {
+            for (let t in gameState.stocks) {
+                gameState.stocks[t].price = Math.max(5, gameState.stocks[t].price * 0.2);
+                gameState.stocks[t].change = -45.0;
+            }
+            if (document.getElementById('tab-stockmarket').classList.contains('active')) renderStockMarket();
+            appendTerminal(`[ADMIN CHEAT] Global stock exchange crashed by 80%! Short positions maximized.`, 'log-gold');
+        }
+
+        function adminPumpPortfolio() {
+            for (let t in gameState.stocks) {
+                gameState.stocks[t].price *= 2.5;
+                gameState.stocks[t].change = +150.0;
+            }
+            if (document.getElementById('tab-stockmarket').classList.contains('active')) renderStockMarket();
+            appendTerminal(`[ADMIN CHEAT] All corporate stock valuations hyper-pumped 250%!`, 'log-gold');
+        }
+
+        function adminSuperOverdrive() {
+            gameState.credits += 100000;
+            gameState.passiveIncome += 2000;
+            renderNodes();
+            appendTerminal(`[ADMIN CHEAT] SUPER OVERDRIVE ACTIVATED (+₿100k Cash & +₿2k/min Income).`, 'log-gold');
+        }
+
+        /* ==========================================================================
+           WORLD-CLASS INTERACTIVE TUTORIAL ENGINE & COMMANDER AI
+           ========================================================================== */
+
+        let currentTutorialStep = 0;
+        let tutorialActive = false;
+        let commanderMode = false;
+        let commanderTimer = null;
+        let autoDismissTimer = null;
+
+        const tutorialSteps = [
+            {
+                title: "1. Target Vector Selection",
+                desc: "Select a target node from the matrix to target an IP. Notice how locking 'Aegis Defense Node' populates the terminal.",
+                tab: "operations",
+                targetId: "node-card-n1",
+                action: () => { selectTarget(gameState.nodes[0]); },
+                commanderAction: (cb) => {
+                    animateCursorTo("#node-card-n1", () => {
+                        selectTarget(gameState.nodes[0]);
+                        cb();
+                    });
+                }
+            },
+            {
+                title: "2. Terminal Command Execution",
+                desc: "The terminal executes cyber attacks. Type 'zeroday' or use Macro Console to bypass ICE & extract immediate payouts.",
+                tab: "operations",
+                targetId: "terminal-panel",
+                action: () => { processCommand('zeroday'); },
+                commanderAction: (cb) => {
+                    animateCursorTo("#terminal-input", () => {
+                        typeInTerminal("zeroday", () => {
+                            processCommand('zeroday');
+                            cb();
+                        });
+                    });
+                }
+            },
+            {
+                title: "3. Action Macro Console",
+                desc: "Macros trigger complex multi-layered attacks instantly. Type 'macro syphon' or click Run to drain corporate treasuries.",
+                tab: "operations",
+                targetId: "panel-macro-console",
+                action: () => { processCommand('syphon'); },
+                commanderAction: (cb) => {
+                    const inp = document.getElementById('macro-command-input');
+                    inp.value = "macro syphon";
+                    animateCursorTo("#btn-run-macro", () => {
+                        executeWrittenMacro();
+                        cb();
+                    });
+                }
+            },
+            {
+                title: "4. Corporate Spreadsheets & Skimming",
+                desc: "Inspect corporate balance sheets in real-time. Successful exploits spike target losses and unlock rootkit skimming streams.",
+                tab: "financials",
+                targetId: "panel-ledger-table",
+                action: () => { switchTab('financials'); },
+                commanderAction: (cb) => {
+                    animateCursorTo("#tab-btn-fin", () => {
+                        switchTab('financials');
+                        cb();
+                    });
+                }
+            },
+            {
+                title: "5. Cyber-Exchange Stock Trading",
+                desc: "Short target stocks prior to launching cyber attacks or blackouts, or acquire shares (e.g. AGIS) to earn compounding yields.",
+                tab: "stockmarket",
+                targetId: "panel-gcse-exchange",
+                action: () => { switchTab('stockmarket'); },
+                commanderAction: (cb) => {
+                    animateCursorTo("#tab-btn-stk", () => {
+                        switchTab('stockmarket');
+                        animateCursorTo("#btn-buy-AGIS", () => {
+                            buyStock('AGIS');
+                            cb();
+                        });
+                    });
+                }
+            },
+            {
+                title: "6. Portfolio & Dividend Valuation",
+                desc: "Track your active equity holdings, cash balances, and portfolio valuations here as market prices fluctuate in real time.",
+                tab: "stockmarket",
+                targetId: "panel-portfolio",
+                action: () => { switchTab('stockmarket'); },
+                commanderAction: (cb) => {
+                    animateCursorTo("#panel-portfolio", () => {
+                        cb();
+                    });
+                }
+            },
+            {
+                title: "7. Quantum R&B Frequency Sequencer",
+                desc: "Tune sub-bass resonance and groove synchronization to stabilize terminal ops and broadcast sub-atomic harmonic signals.",
+                tab: "quantumrb",
+                targetId: "panel-rb-sequencer",
+                action: () => { switchTab('quantumrb'); },
+                commanderAction: (cb) => {
+                    animateCursorTo("#tab-btn-qrb", () => {
+                        switchTab('quantumrb');
+                        animateCursorTo("#btn-broadcast-rb", () => {
+                            broadcastQuantumRB();
+                            cb();
+                        });
+                    });
+                }
+            },
+            {
+                title: "8. Complete Operational Mastery",
+                desc: "You have mastered all core systems of NEXUS-V! Click 'Exit Tutorial' anytime to return to a clean slate.",
+                tab: "operations",
+                targetId: "hdr-tutorial-btn",
+                action: () => { switchTab('operations'); },
+                commanderAction: (cb) => {
+                    animateCursorTo("#tab-btn-ops", () => {
+                        switchTab('operations');
+                        cb();
+                    });
+                }
+            }
+        ];
+
+        function checkInitialTutorialPrompt() {
+            if (!gameState.tutorialInteracted) {
+                openTutorialModal();
+            }
+        }
+
+        function openTutorialModal() {
+            if (autoDismissTimer) clearInterval(autoDismissTimer);
+            
+            const modal = document.getElementById('tut-init-modal');
+            const timerElem = document.getElementById('tut-auto-dismiss-timer');
+            modal.style.display = 'flex';
+            modal.style.opacity = '1';
+            
+            let timeLeft = 10;
+            if (timerElem) timerElem.innerText = `Auto-dismissing in ${timeLeft}s...`;
+            
+            autoDismissTimer = setInterval(() => {
+                timeLeft--;
+                if (timerElem) timerElem.innerText = `Auto-dismissing in ${timeLeft}s...`;
+                if (timeLeft <= 0) {
+                    clearInterval(autoDismissTimer);
+                    declineTutorialSystem(false);
+                }
+            }, 1000);
+        }
+
+        function declineTutorialSystem(userChoice = true) {
+            if (autoDismissTimer) clearInterval(autoDismissTimer);
+            if (userChoice) {
+                gameState.tutorialInteracted = true;
+                saveGameData();
+            }
+            const modal = document.getElementById('tut-init-modal');
+            modal.style.opacity = '0';
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 500);
+        }
+
+        function startTutorialSystem() {
+            if (autoDismissTimer) clearInterval(autoDismissTimer);
+            gameState.tutorialInteracted = true;
+            saveGameData();
+            declineTutorialSystem(false);
+            tutorialActive = true;
+            currentTutorialStep = 0;
+            document.getElementById('tut-guidance-card').style.display = 'flex';
+            document.getElementById('tut-highlight-box').style.display = 'block';
+            document.getElementById('tut-cursor').style.display = 'block';
+            renderTutorialStep();
+        }
+
+        function exitTutorialSystem() {
+            tutorialActive = false;
+            commanderMode = false;
+            if (commanderTimer) clearTimeout(commanderTimer);
+            document.getElementById('tut-guidance-card').style.display = 'none';
+            document.getElementById('tut-highlight-box').style.display = 'none';
+            if (!gameState.fullCommandActive) {
+                document.getElementById('tut-cursor').style.display = 'none';
+            }
+            const cmdBtn = document.getElementById('tut-commander-btn');
+            cmdBtn.classList.remove('commander-btn-active');
+            cmdBtn.innerText = "🤖 Commander Mode";
+        }
+
+        function renderTutorialStep() {
+            if (!tutorialActive) return;
+            const step = tutorialSteps[currentTutorialStep];
+            
+            // Ensure target tab is active
+            if (step.tab) {
+                switchTab(step.tab);
+            }
+
+            document.getElementById('tut-step-badge').innerText = `STEP ${currentTutorialStep + 1} / ${tutorialSteps.length}`;
+            document.getElementById('tut-title').innerText = step.title;
+            document.getElementById('tut-desc').innerText = step.desc;
+            
+            const progressPct = ((currentTutorialStep + 1) / tutorialSteps.length) * 100;
+            document.getElementById('tut-progress').style.width = `${progressPct}%`;
+
+            updateTutorialHighlight();
+
+            if (commanderMode) {
+                runCommanderStep();
+            }
+        }
+
+        function updateTutorialHighlight() {
+            const step = tutorialSteps[currentTutorialStep];
+            if (!step || !step.targetId) return;
+
+            const targetElem = document.getElementById(step.targetId);
+            if (!targetElem) return;
+
+            const rect = targetElem.getBoundingClientRect();
+            const highlightBox = document.getElementById('tut-highlight-box');
+            
+            highlightBox.style.top = `${rect.top - 6}px`;
+            highlightBox.style.left = `${rect.left - 6}px`;
+            highlightBox.style.width = `${rect.width + 12}px`;
+            highlightBox.style.height = `${rect.height + 12}px`;
+
+            if (!commanderMode && !gameState.fullCommandActive) {
+                const cursor = document.getElementById('tut-cursor');
+                cursor.style.top = `${rect.top + rect.height / 2}px`;
+                cursor.style.left = `${rect.left + rect.width / 2}px`;
+            }
+        }
+
+        function nextTutorialStep() {
+            if (currentTutorialStep < tutorialSteps.length - 1) {
+                currentTutorialStep++;
+                renderTutorialStep();
+            } else {
+                exitTutorialSystem();
+            }
+        }
+
+        function toggleCommanderMode() {
+            commanderMode = !commanderMode;
+            const cmdBtn = document.getElementById('tut-commander-btn');
+            if (commanderMode) {
+                cmdBtn.classList.add('commander-btn-active');
+                cmdBtn.innerText = "🤖 Commander AUTO";
+                document.getElementById('tut-status-indicator').innerText = "COMMANDER AI ACTIVE";
+                document.getElementById('tut-status-indicator').style.color = "var(--neon-purple)";
+                runCommanderStep();
+            } else {
+                cmdBtn.classList.remove('commander-btn-active');
+                cmdBtn.innerText = "🤖 Commander Mode";
+                document.getElementById('tut-status-indicator').innerText = "LIVE GUIDANCE ACTIVE";
+                document.getElementById('tut-status-indicator').style.color = "var(--neon-green)";
+                if (commanderTimer) clearTimeout(commanderTimer);
+            }
+        }
+
+        function runCommanderStep() {
+            if (!commanderMode || !tutorialActive) return;
+            const step = tutorialSteps[currentTutorialStep];
+            if (step && step.commanderAction) {
+                step.commanderAction(() => {
+                    commanderTimer = setTimeout(() => {
+                        if (commanderMode && tutorialActive) {
+                            if (currentTutorialStep < tutorialSteps.length - 1) {
+                                currentTutorialStep++;
+                                renderTutorialStep();
+                            } else {
+                                exitTutorialSystem();
+                            }
+                        }
+                    }, 1800);
+                });
+            }
+        }
+
+        function animateCursorTo(selector, callback) {
+            const elem = document.querySelector(selector);
+            if (!elem) { if(callback) callback(); return; }
+            const rect = elem.getBoundingClientRect();
+            const cursor = document.getElementById('tut-cursor');
+            
+            cursor.style.display = 'block';
+            cursor.style.top = `${rect.top + rect.height / 2}px`;
+            cursor.style.left = `${rect.left + rect.width / 2}px`;
+
+            setTimeout(() => {
+                if (callback) callback();
+            }, 800);
+        }
+
+        function typeInTerminal(text, callback) {
+            const input = document.getElementById('terminal-input');
+            input.value = '';
+            let idx = 0;
+            const interval = setInterval(() => {
+                input.value += text[idx];
+                playTerminalBeep(1100 + Math.random() * 150, 0.02, 'sine');
+                idx++;
+                if (idx >= text.length) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        input.value = '';
+                        if (callback) callback();
+                    }, 300);
+                }
+            }, 80);
+        }
+
+        window.addEventListener('resize', updateTutorialHighlight);
         window.addEventListener('load', checkInitialTutorialPrompt);
     </script>
 </body>
